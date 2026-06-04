@@ -19,6 +19,7 @@ export function Footer() {
           <h4 className="text-sm font-medium tracking-wider uppercase mb-4">Explore</h4>
           <ul className="space-y-2 text-sm text-taupe">
             {NAV.map(n => <li key={n.to}><Link to={n.to} className="hover:text-primary">{n.label}</Link></li>)}
+            <li><Link to="/contact" className="hover:text-primary">Contact</Link></li>
             <li><Link to="/faq" className="hover:text-primary">FAQ</Link></li>
             <li><Link to="/policies" className="hover:text-primary">Policies</Link></li>
           </ul>

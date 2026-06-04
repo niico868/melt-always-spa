@@ -36,9 +36,9 @@ function Index() {
         <div className="absolute top-20 -right-32 w-[480px] h-[480px] rounded-full bg-rose/40 blur-3xl -z-10" />
         <div className="mx-auto max-w-7xl px-5 lg:px-10 pt-12 lg:pt-20 pb-16 lg:pb-24 grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <p className="font-script text-4xl lg:text-5xl text-gold leading-none">Welcome to Melt Aways</p>
-            <h1 className="mt-4 text-5xl lg:text-7xl font-light tracking-tight text-ink leading-[1.05]">
-              Plan your body sculpting before <em className="not-italic font-script text-primary text-5xl lg:text-7xl">Carnival, Christmas, summer trips, weddings,</em> and special events.
+            <p className="font-script text-5xl lg:text-7xl text-gold leading-none">Welcome to Melt Aways</p>
+            <h1 className="mt-5 text-xl lg:text-2xl font-light tracking-tight text-ink leading-snug">
+              Plan your body sculpting before <em className="not-italic font-script text-primary text-3xl lg:text-4xl">Carnival, Christmas, summer trips, weddings,</em> and special events.
             </h1>
             <p className="mt-6 text-lg text-taupe max-w-xl leading-relaxed">
               Not every treatment is right for every body. We start with consultation, then recommend the
@@ -90,7 +90,7 @@ function Index() {
           <div className="absolute -right-24 -top-24 w-[420px] h-[420px] rounded-full bg-rose/30 blur-3xl" />
           <div className="relative grid lg:grid-cols-2 gap-10 p-10 lg:p-16 items-center">
             <div>
-              <p className="font-script text-3xl text-gold leading-none">In Season Now</p>
+              <p className="font-script text-4xl lg:text-5xl text-gold leading-none">In Season Now</p>
               <h2 className="mt-2 text-3xl lg:text-5xl font-light text-ink leading-tight">{season.title}</h2>
               <p className="mt-5 text-taupe leading-relaxed">{season.description}</p>
               <div className="mt-7 flex flex-wrap gap-3">
@@ -140,7 +140,7 @@ function Index() {
       <Section>
         <div className="rounded-[2.5rem] bg-cream p-10 lg:p-16 grid lg:grid-cols-2 gap-10 items-center">
           <div>
-            <p className="font-script text-3xl text-gold leading-none">Visiting Trinidad?</p>
+            <p className="font-script text-4xl lg:text-5xl text-gold leading-none">Visiting Trinidad & Tobago 🇹🇹</p>
             <h2 className="mt-2 text-3xl lg:text-5xl font-light text-ink leading-tight">Plan your treatment before you arrive.</h2>
             <p className="mt-5 text-taupe leading-relaxed">
               Visiting Trinidad for Carnival, Christmas, or vacation? Book your consultation before you
@@ -180,8 +180,8 @@ function Index() {
               and wellness treatments without judgement. We combine body contouring, anti aging support, and
               personal consultation so you can make informed decisions and feel confident in your results.
             </p>
-            <Link to="/about" className="mt-8 inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all">
-              Read our story <ArrowRight className="w-4 h-4" />
+            <Link to="/booking" className="mt-8 inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all">
+              Book your consultation <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -221,7 +221,7 @@ function Index() {
             <img src={heroSpa} alt="" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div className="relative max-w-2xl">
-            <p className="font-script text-3xl text-background/95">Ready When You Are</p>
+            <p className="font-script text-4xl lg:text-5xl text-background/95">Ready When You Are</p>
             <h2 className="mt-2 text-3xl lg:text-5xl font-light leading-tight">Start with a consultation. We will guide the rest.</h2>
             <p className="mt-5 text-background/90 leading-relaxed">
               Not sure where to begin? Book a personal consultation and we will help you find the right

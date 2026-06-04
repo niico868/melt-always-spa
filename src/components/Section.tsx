@@ -9,5 +9,5 @@ export function Section({ children, className = "", id }: { children: ReactNode;
 }
 
 export function Eyebrow({ children }: { children: ReactNode }) {
-  return <p className="font-script text-3xl text-gold leading-none mb-2">{children}</p>;
+  return <p className="font-script text-4xl lg:text-5xl text-gold leading-none mb-3">{children}</p>;
 }
