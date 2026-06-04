@@ -19,6 +19,7 @@ import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as JournalRouteImport } from './routes/journal'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -78,6 +79,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -148,6 +155,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/gallery'
+    | '/journal'
     | '/login'
     | '/packages'
     | '/policies'
@@ -211,6 +221,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/gallery'
+    | '/journal'
     | '/login'
     | '/packages'
     | '/policies'
@@ -231,6 +242,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/gallery'
+    | '/journal'
     | '/login'
     | '/packages'
     | '/policies'
@@ -252,6 +264,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
+  JournalRoute: typeof JournalRoute
   LoginRoute: typeof LoginRoute
   PackagesRoute: typeof PackagesRoute
   PoliciesRoute: typeof PoliciesRoute
@@ -336,6 +349,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gallery': {
       id: '/gallery'
       path: '/gallery'
@@ -404,6 +424,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
+  JournalRoute: JournalRoute,
   LoginRoute: LoginRoute,
   PackagesRoute: PackagesRoute,
   PoliciesRoute: PoliciesRoute,
