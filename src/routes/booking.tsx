@@ -153,10 +153,11 @@ function Booking() {
 
   return (
     <Section className="max-w-3xl">
-      <div className="text-center mb-12">
+      <div className="text-center mb-12 bg-cream rounded-3xl px-6 py-10 border border-border/60">
         <Eyebrow>Find Your Treatment Path</Eyebrow>
-        <h1 className="text-4xl lg:text-5xl font-light text-ink">Take the guesswork out of your body journey.</h1>
-        <p className="mt-4 text-taupe leading-relaxed">
+        <h1 className="text-4xl lg:text-5xl font-light text-ink">Start with a consultation.</h1>
+        <p className="mt-3 text-ink/70 font-medium">Take the guesswork out of your body journey.</p>
+        <p className="mt-4 text-ink/70 leading-relaxed max-w-xl mx-auto">
           Fill out the form below and receive a tailored starting package based on your goals, plus
           personalised tips from our team. Honest guidance, no pressure, no diagnosis. Just a clear
           first step toward feeling confident in your body.
