@@ -83,10 +83,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Melt Aways — Body Contouring & Wellness Spa | Trinidad & Tobago" },
       { name: "description", content: "Body-contouring, fat melting, skin tightening, anti-aging & wellness treatments in Woodbrook and St Augustine, Trinidad & Tobago. Consultation-led, respectful, premium." },
       { name: "author", content: "Melt Aways" },
-      { property: "og:title", content: "Melt Aways — Reveal the You Inside" },
-      { property: "og:description", content: "Luxury body-contouring & wellness spa in Trinidad & Tobago." },
+      { property: "og:title", content: "Melt Aways — Body Contouring & Wellness Spa | Trinidad & Tobago" },
+      { property: "og:description", content: "Body-contouring, fat melting, skin tightening, anti-aging & wellness treatments in Woodbrook and St Augustine, Trinidad & Tobago. Consultation-led, respectful, premium." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Melt Aways — Body Contouring & Wellness Spa | Trinidad & Tobago" },
+      { name: "twitter:description", content: "Body-contouring, fat melting, skin tightening, anti-aging & wellness treatments in Woodbrook and St Augustine, Trinidad & Tobago. Consultation-led, respectful, premium." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/1oLizYD3jPdpD8eRPF5rvL3aAS23/social-images/social-1780560137740-ChatGPT_Image_Jun_2,_2026,_04_00_39_PM_(4).webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/1oLizYD3jPdpD8eRPF5rvL3aAS23/social-images/social-1780560137740-ChatGPT_Image_Jun_2,_2026,_04_00_39_PM_(4).webp" },
     ],
     links: [
       {
