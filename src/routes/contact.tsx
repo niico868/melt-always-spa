@@ -17,7 +17,7 @@ function Contact() {
   return (
     <Section>
       <div className="text-center max-w-2xl mx-auto mb-14">
-        <Eyebrow>get in touch</Eyebrow>
+        <Eyebrow>Get In Touch</Eyebrow>
         <h1 className="text-4xl lg:text-6xl font-light text-ink">We'd love to hear from you.</h1>
       </div>
       <div className="grid lg:grid-cols-2 gap-10">
@@ -27,9 +27,21 @@ function Contact() {
               <h3 className="text-xl text-ink">{l.name}</h3>
               <p className="mt-2 flex gap-2 text-taupe text-sm"><MapPin className="w-4 h-4 mt-0.5 text-primary" />{l.address}</p>
               <p className="mt-1 flex gap-2 text-taupe text-sm"><Clock className="w-4 h-4 mt-0.5 text-primary" />{SITE.hours}</p>
-              <div className="mt-4 aspect-[16/9] rounded-2xl bg-cream flex items-center justify-center text-sm text-taupe">
-                Google map placeholder — {l.name}
+              <div className="mt-4 aspect-[16/10] rounded-2xl overflow-hidden bg-cream w-full">
+                <iframe
+                  src={l.embed}
+                  title={`Map of Melt Aways ${l.name}`}
+                  width="100%" height="100%"
+                  style={{ border: 0, display: "block" }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
+              <a href={l.mapsUrl} target="_blank" rel="noopener noreferrer"
+                className="mt-3 inline-flex text-sm text-primary font-medium hover:underline">
+                Open in Google Maps
+              </a>
             </div>
           ))}
           <div className="bg-blush/60 rounded-3xl p-7">
@@ -39,12 +51,12 @@ function Contact() {
               <li className="flex gap-2"><Mail className="w-4 h-4 mt-0.5 text-primary" /><a href={`mailto:${SITE.email}`} className="hover:text-primary">{SITE.email}</a></li>
             </ul>
             <div className="flex gap-3 mt-5">
-              <a href={SITE.instagram} target="_blank" rel="noreferrer" className="p-2.5 rounded-full bg-background hover:bg-background/70" aria-label="Instagram"><Instagram className="w-4 h-4" /></a>
-              <a href={SITE.facebook} target="_blank" rel="noreferrer" className="p-2.5 rounded-full bg-background hover:bg-background/70" aria-label="Facebook"><Facebook className="w-4 h-4" /></a>
-              <a href={SITE.tiktok} target="_blank" rel="noreferrer" className="p-2.5 rounded-full bg-background text-xs font-bold w-9 h-9 flex items-center justify-center" aria-label="TikTok">TT</a>
+              <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full bg-background hover:bg-background/70" aria-label="Instagram"><Instagram className="w-4 h-4" /></a>
+              <a href={SITE.facebook} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full bg-background hover:bg-background/70" aria-label="Facebook"><Facebook className="w-4 h-4" /></a>
+              <a href={SITE.tiktok} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full bg-background text-xs font-bold w-9 h-9 flex items-center justify-center" aria-label="TikTok">TT</a>
             </div>
             <div className="flex gap-3 mt-6">
-              <a href={SITE.whatsapp} target="_blank" rel="noreferrer" className="rounded-full bg-[#25D366] text-white px-5 py-3 text-sm font-medium inline-flex items-center gap-2"><MessageCircle className="w-4 h-4" />WhatsApp</a>
+              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#25D366] text-white px-5 py-3 text-sm font-medium inline-flex items-center gap-2"><MessageCircle className="w-4 h-4" />WhatsApp</a>
               <Link to="/booking" className="rounded-full bg-primary text-primary-foreground px-5 py-3 text-sm font-medium">Book Consultation</Link>
             </div>
           </div>
