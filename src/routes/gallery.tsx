@@ -1,55 +1,67 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { X } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import a from "@/assets/hero-spa.jpg";
-import b from "@/assets/woman-confident.jpg";
-import c from "@/assets/equipment.jpg";
-import d from "@/assets/petals.jpg";
-import e from "@/assets/treatment.jpg";
-import f from "@/assets/reception.jpg";
-import g from "@/assets/portrait-1.jpg";
-import h from "@/assets/products.jpg";
+import { GALLERY } from "@/lib/ba";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({ meta: [
-    { title: "Gallery — Melt Aways" },
-    { name: "description", content: "A look inside Melt Aways: treatment rooms, behind the scenes, client results, and lifestyle." },
+    { title: "Before & After Gallery — Melt Aways" },
+    { name: "description", content: "Before and after photos from Melt Aways clients organised by treatment category. Results vary. Consultation required." },
   ]}),
   component: Gallery,
 });
 
-const sections = [
-  { title: "Treatment Room", imgs: [a, c, f] },
-  { title: "Behind the Scenes", imgs: [d, e, c] },
-  { title: "Client Results", imgs: [g, b, g] },
-  { title: "Before & After", imgs: [b, g, b], note: "Results vary by client. Consultation is required to determine suitable treatment options." },
-  { title: "Lifestyle & Brand", imgs: [d, h, a] },
-];
-
 function Gallery() {
+  const [lightbox, setLightbox] = useState<string | null>(null);
+  const cats = Object.entries(GALLERY);
   return (
     <Section>
-      <div className="text-center max-w-2xl mx-auto mb-16">
-        <Eyebrow>Gallery</Eyebrow>
-        <h1 className="text-4xl lg:text-6xl font-light text-ink">Step inside Melt Aways.</h1>
+      <div className="text-center max-w-2xl mx-auto mb-12">
+        <Eyebrow>Client Results</Eyebrow>
+        <h1 className="text-4xl lg:text-6xl font-light text-ink leading-tight">Before & After Gallery</h1>
+        <p className="mt-5 text-taupe leading-relaxed">
+          Real Melt Aways clients, organised by treatment category. Tap any photo to view it larger.
+        </p>
+        <p className="mt-3 text-xs italic text-taupe">Results vary. Consultation required.</p>
       </div>
-      <div className="space-y-20">
-        {sections.map(s => (
-          <div key={s.title}>
+
+      <div className="space-y-16">
+        {cats.map(([title, items]) => (
+          <section key={title}>
             <div className="flex items-end justify-between mb-6">
-              <h2 className="text-2xl lg:text-3xl text-ink">{s.title}</h2>
-              <span className="text-xs text-taupe">Client proof pending</span>
+              <h2 className="text-2xl lg:text-3xl text-ink">{title}</h2>
+              <span className="text-xs text-taupe italic">Results vary. Consultation required.</span>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {s.imgs.map((src, i) => (
-                <div key={i} className="aspect-[4/5] rounded-3xl overflow-hidden card-shadow">
-                  <img src={src} alt="" loading="lazy" className="w-full h-full object-cover hover:scale-105 transition duration-700" />
-                </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {items.map((it, i) => (
+                <button key={i} onClick={() => setLightbox(it.src)}
+                  className="group text-left bg-background rounded-2xl overflow-hidden border border-border/60 card-shadow hover:-translate-y-0.5 transition">
+                  <div className="aspect-[3/4] overflow-hidden bg-blush">
+                    <img src={it.src} alt={`${title} before and after`} loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+                  </div>
+                  <div className="p-3 text-[11px] text-taupe space-y-0.5">
+                    <div className="text-ink font-medium text-xs">{it.category}</div>
+                    <div>{it.sessions}</div>
+                    <div>{it.timeframe}</div>
+                  </div>
+                </button>
               ))}
             </div>
-            {s.note && <p className="mt-4 text-xs italic text-taupe">{s.note}</p>}
-          </div>
+          </section>
         ))}
       </div>
+
+      {lightbox && (
+        <div onClick={() => setLightbox(null)}
+          className="fixed inset-0 z-50 bg-ink/80 backdrop-blur-sm flex items-center justify-center p-6 cursor-zoom-out">
+          <button onClick={() => setLightbox(null)} className="absolute top-5 right-5 text-white p-2" aria-label="Close">
+            <X className="w-6 h-6" />
+          </button>
+          <img src={lightbox} alt="Before and after enlarged" className="max-h-[90vh] max-w-full rounded-2xl shadow-2xl" />
+        </div>
+      )}
     </Section>
   );
 }

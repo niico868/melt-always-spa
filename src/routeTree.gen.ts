@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VisitingRouteImport } from './routes/visiting'
+import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -17,6 +19,7 @@ import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as JournalRouteImport } from './routes/journal'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -25,7 +28,18 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 
+const VisitingRoute = VisitingRouteImport.update({
+  id: '/visiting',
+  path: '/visiting',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -64,6 +78,11 @@ const PackagesRoute = PackagesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GalleryRoute = GalleryRouteImport.update({
@@ -106,6 +125,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LocationsSlugRoute = LocationsSlugRouteImport.update({
+  id: '/locations/$slug',
+  path: '/locations/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -116,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -124,6 +149,9 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/timeline': typeof TimelineRoute
+  '/visiting': typeof VisitingRoute
+  '/locations/$slug': typeof LocationsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,6 +162,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -142,6 +171,9 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/timeline': typeof TimelineRoute
+  '/visiting': typeof VisitingRoute
+  '/locations/$slug': typeof LocationsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -153,6 +185,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -161,6 +194,9 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/timeline': typeof TimelineRoute
+  '/visiting': typeof VisitingRoute
+  '/locations/$slug': typeof LocationsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -173,6 +209,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/gallery'
+    | '/journal'
     | '/login'
     | '/packages'
     | '/policies'
@@ -181,6 +218,9 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/timeline'
+    | '/visiting'
+    | '/locations/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -191,6 +231,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/gallery'
+    | '/journal'
     | '/login'
     | '/packages'
     | '/policies'
@@ -199,6 +240,9 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/timeline'
+    | '/visiting'
+    | '/locations/$slug'
   id:
     | '__root__'
     | '/'
@@ -209,6 +253,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/gallery'
+    | '/journal'
     | '/login'
     | '/packages'
     | '/policies'
@@ -217,6 +262,9 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/timeline'
+    | '/visiting'
+    | '/locations/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -228,6 +276,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
+  JournalRoute: typeof JournalRoute
   LoginRoute: typeof LoginRoute
   PackagesRoute: typeof PackagesRoute
   PoliciesRoute: typeof PoliciesRoute
@@ -236,10 +285,27 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TimelineRoute: typeof TimelineRoute
+  VisitingRoute: typeof VisitingRoute
+  LocationsSlugRoute: typeof LocationsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/visiting': {
+      id: '/visiting'
+      path: '/visiting'
+      fullPath: '/visiting'
+      preLoaderRoute: typeof VisitingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -294,6 +360,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gallery': {
@@ -352,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/locations/$slug': {
+      id: '/locations/$slug'
+      path: '/locations/$slug'
+      fullPath: '/locations/$slug'
+      preLoaderRoute: typeof LocationsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -364,6 +444,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
+  JournalRoute: JournalRoute,
   LoginRoute: LoginRoute,
   PackagesRoute: PackagesRoute,
   PoliciesRoute: PoliciesRoute,
@@ -372,6 +453,9 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TimelineRoute: TimelineRoute,
+  VisitingRoute: VisitingRoute,
+  LocationsSlugRoute: LocationsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
