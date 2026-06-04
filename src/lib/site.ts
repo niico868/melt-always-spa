@@ -70,7 +70,7 @@ export const PACKAGES = [
 ];
 
 export const REVIEWS = [
-  { initials: "K.M.", service: "Body-Contouring", text: "From my first consultation I felt heard and respected. The team explained every step before treatment — I never felt pressured." },
+  { initials: "K.M.", service: "Body Contouring", text: "From my first consultation I felt heard and respected. The team explained every step before treatment, and I never felt pressured." },
   { initials: "A.J.", service: "Cavitation", text: "Calm, clean, and so welcoming. I love how personable everyone is. The space feels truly premium." },
   { initials: "R.S.", service: "Skin Tightening", text: "I was nervous to start but they walked me through everything. I genuinely feel more confident in my skin." },
   { initials: "T.D.", service: "Wellness", text: "What I appreciate most is the genuine care. It's wellness without judgement." },

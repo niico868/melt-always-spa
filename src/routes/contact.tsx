@@ -67,7 +67,7 @@ function Contact() {
         >
           <h3 className="text-2xl font-light text-ink">Send us a message</h3>
           {sent ? (
-            <p className="text-ink">Thank you — we've received your message and will be in touch soon.</p>
+            <p className="text-ink">Thank you. We've received your message and will be in touch soon.</p>
           ) : (
             <>
               <input required name="name" placeholder="Full name" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
