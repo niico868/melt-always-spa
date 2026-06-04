@@ -35,13 +35,20 @@ export function waLink(message?: string) {
     : SITE.whatsapp;
 }
 
+// Concierge prefilled message for visiting / foreign clients.
+export const CONCIERGE_MESSAGE =
+  "Hi Melt Aways, I’m interested in planning treatment before visiting Trinidad. My travel dates are ___ and I’d like help choosing the right service.";
+
+export const CONCIERGE_WA = waLink(CONCIERGE_MESSAGE);
+
 export const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/services", label: "Services" },
   { to: "/packages", label: "Packages" },
+  { to: "/visiting", label: "Visiting Trinidad" },
+  { to: "/journal", label: "Journal" },
   { to: "/gallery", label: "Gallery" },
-  { to: "/reviews", label: "Reviews" },
   { to: "/booking", label: "Booking" },
   { to: "/contact", label: "Contact" },
 ] as const;
