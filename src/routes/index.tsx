@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { MessageCircle, MapPin, Clock, Heart, Sparkles, ArrowRight } from "lucide-react";
+import { MessageCircle, MapPin, Clock, Heart, Sparkles, ArrowRight, Plane } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { SERVICES, REVIEWS, SITE } from "@/lib/site";
+import { SERVICES, REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
+import { getActiveSeason } from "@/lib/season";
 import heroSpa from "@/assets/hero-spa.jpg";
 import womanConfident from "@/assets/woman-confident.jpg";
 import equipment from "@/assets/equipment.jpg";
 import petals from "@/assets/petals.jpg";
 import treatment from "@/assets/treatment.jpg";
 import reception from "@/assets/reception.jpg";
+import { BA_IMAGES } from "@/lib/ba";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,6 +25,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const season = getActiveSeason();
   return (
     <div>
       {/* HERO */}
@@ -33,12 +36,11 @@ function Index() {
           <div>
             <p className="font-script text-4xl lg:text-5xl text-gold leading-none">Welcome to Melt Aways</p>
             <h1 className="mt-4 text-5xl lg:text-7xl font-light tracking-tight text-ink leading-[1.05]">
-              Reveal the <em className="not-italic font-script text-primary text-6xl lg:text-8xl">You</em> Inside.
+              Plan your body sculpting before <em className="not-italic font-script text-primary text-5xl lg:text-7xl">Carnival, Christmas, summer trips, weddings,</em> and special events.
             </h1>
             <p className="mt-6 text-lg text-taupe max-w-xl leading-relaxed">
-              At Melt Aways, we help clients feel more confident in their body through guided
-              body contouring, fat melting, skin tightening, anti aging, and wellness treatments.
-              Honest consultation, personal care, real support from start to finish.
+              Not every treatment is right for every body. We start with consultation, then recommend the
+              best direction based on your goals, timeline, body concerns, and health history.
             </p>
             <p className="mt-3 text-sm uppercase tracking-[0.2em] text-primary/80">
               Personable care · Respectful service · Empowering results
@@ -47,8 +49,8 @@ function Index() {
               <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-7 py-4 font-medium hover:opacity-90 transition soft-shadow">
                 Book Consultation <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link to="/services" className="inline-flex items-center rounded-full border border-ink/20 px-7 py-4 font-medium hover:bg-blush transition">
-                View Treatments
+              <Link to="/visiting" className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-7 py-4 font-medium hover:bg-blush transition">
+                <Plane className="w-4 h-4" /> Visiting Trinidad?
               </Link>
               <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-4 text-sm text-taupe hover:text-primary">
                 <MessageCircle className="w-4 h-4" /> Message us on WhatsApp
@@ -57,7 +59,7 @@ function Index() {
           </div>
           <div className="relative mx-auto w-full max-w-md lg:max-w-sm">
             <div className="aspect-[4/5] rounded-[2rem] overflow-hidden card-shadow">
-              <img src={womanConfident} alt="Woman in silk robe" className="w-full h-full object-cover" width={1200} height={1500} />
+              <img src={BA_IMAGES[0]} alt="Real Melt Aways client, before and after body contouring" className="w-full h-full object-cover" width={1200} height={1500} />
             </div>
             <div className="absolute -bottom-6 -left-6 w-36 h-36 rounded-3xl overflow-hidden card-shadow hidden md:block">
               <img src={petals} alt="Rose petals" className="w-full h-full object-cover" loading="lazy" width={400} height={400} />
@@ -80,15 +82,37 @@ function Index() {
         </div>
       </section>
 
+      {/* SEASONAL CAMPAIGN BLOCK */}
+      <Section className="!py-16">
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-blush via-background to-cream border border-border/60 card-shadow">
+          <div className="absolute -right-24 -top-24 w-[420px] h-[420px] rounded-full bg-rose/30 blur-3xl" />
+          <div className="relative grid lg:grid-cols-2 gap-10 p-10 lg:p-16 items-center">
+            <div>
+              <p className="font-script text-3xl text-gold leading-none">In Season Now</p>
+              <h2 className="mt-2 text-3xl lg:text-5xl font-light text-ink leading-tight">{season.title}</h2>
+              <p className="mt-5 text-taupe leading-relaxed">{season.description}</p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link to={season.href} className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">{season.cta}</Link>
+                <Link to="/timeline" className="rounded-full border border-ink/20 px-6 py-3 font-medium hover:bg-blush transition">See Treatment Timeline</Link>
+              </div>
+            </div>
+            <div className="aspect-[4/5] rounded-3xl overflow-hidden card-shadow max-w-sm mx-auto w-full">
+              <img src={BA_IMAGES[6]} alt="Melt Aways client preparing for the season" className="w-full h-full object-cover" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </Section>
+
       {/* INTRO */}
       <Section className="text-center max-w-3xl">
         <Eyebrow>Our Philosophy</Eyebrow>
         <h2 className="text-3xl lg:text-5xl font-light text-ink leading-tight">
-          More than a treatment. A guided experience.
+          Not every treatment is right for every body.
         </h2>
         <p className="mt-6 text-lg text-taupe leading-relaxed">
-          At Melt Aways, every treatment begins with a real conversation. We take the time to understand
-          your goals, recommend the right path, and walk with you from consultation through results.
+          We start with consultation, then recommend the best direction based on your goals, timeline,
+          and health history. We help clients plan ahead of Carnival, Christmas, weddings, vacations,
+          birthdays, and everyday confidence moments.
         </p>
       </Section>
 
@@ -107,6 +131,36 @@ function Index() {
           {SERVICES.slice(0, 6).map((s, i) => (
             <ServiceCard key={s.slug} service={s} image={[treatment, equipment, petals, womanConfident, reception, heroSpa][i]} />
           ))}
+        </div>
+      </Section>
+
+      {/* VISITING TRINIDAD */}
+      <Section>
+        <div className="rounded-[2.5rem] bg-cream p-10 lg:p-16 grid lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <p className="font-script text-3xl text-gold leading-none">Visiting Trinidad?</p>
+            <h2 className="mt-2 text-3xl lg:text-5xl font-light text-ink leading-tight">Plan your treatment before you arrive.</h2>
+            <p className="mt-5 text-taupe leading-relaxed">
+              Visiting Trinidad for Carnival, Christmas, or vacation? Book your consultation before you
+              arrive and let our team help you plan the right treatment schedule around your trip, event
+              dates, and availability.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link to="/visiting" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">
+                <Plane className="w-4 h-4" /> Plan My Visit
+              </Link>
+              <Link to="/timeline" className="rounded-full border border-ink/20 px-6 py-3 font-medium hover:bg-blush transition">
+                Treatment Timeline
+              </Link>
+              <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 transition">
+                <MessageCircle className="w-4 h-4" /> Speak With Our Treatment Concierge
+              </a>
+            </div>
+          </div>
+          <div className="aspect-[4/5] rounded-3xl overflow-hidden card-shadow max-w-sm mx-auto w-full">
+            <img src={BA_IMAGES[4]} alt="Melt Aways client result" className="w-full h-full object-cover" loading="lazy" />
+          </div>
         </div>
       </Section>
 
@@ -175,8 +229,8 @@ function Index() {
               <Link to="/booking" className="rounded-full bg-background text-ink px-7 py-4 font-medium hover:opacity-90 transition">
                 Find My Treatment Path
               </Link>
-              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="rounded-full border border-background/60 px-7 py-4 font-medium hover:bg-background/10 transition">
-                Continue on WhatsApp
+              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-7 py-4 font-medium hover:opacity-90 transition">
+                <MessageCircle className="w-4 h-4" /> Continue on WhatsApp
               </a>
             </div>
           </div>
