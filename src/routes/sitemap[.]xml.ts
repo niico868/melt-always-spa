@@ -2,7 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
 const BASE_URL = "";
-const paths = ["/","/about","/services","/packages","/products","/gallery","/reviews","/booking","/contact","/faq","/policies"];
+const paths = [
+  "/","/about","/services","/packages","/products","/gallery","/reviews","/booking","/contact","/faq","/policies",
+  "/visiting","/timeline","/journal",
+  "/locations/body-contouring-trinidad",
+  "/locations/fat-melting-treatments-trinidad",
+  "/locations/skin-tightening-trinidad",
+  "/locations/morpheus8-trinidad",
+  "/locations/anti-aging-facial-trinidad",
+  "/locations/body-sculpting-before-carnival",
+  "/locations/beauty-clinic-woodbrook",
+  "/locations/body-contouring-st-augustine",
+];
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
