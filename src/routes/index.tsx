@@ -10,7 +10,9 @@ import equipment from "@/assets/equipment.jpg";
 import petals from "@/assets/petals.jpg";
 import treatment from "@/assets/treatment.jpg";
 import reception from "@/assets/reception.jpg";
-import { BA_IMAGES } from "@/lib/ba";
+import homeModel1 from "@/assets/home-model-1.jpg";
+import homeModel2 from "@/assets/home-model-2.jpg";
+import homeModel3 from "@/assets/home-model-3.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -59,7 +61,7 @@ function Index() {
           </div>
           <div className="relative mx-auto w-full max-w-md lg:max-w-sm">
             <div className="aspect-[4/5] rounded-[2rem] overflow-hidden card-shadow">
-              <img src={BA_IMAGES[0]} alt="Real Melt Aways client, before and after body contouring" className="w-full h-full object-cover" width={1200} height={1500} />
+              <img src={homeModel1} alt="Melt Aways client portrait" className="w-full h-full object-cover" width={1024} height={1280} />
             </div>
             <div className="absolute -bottom-6 -left-6 w-36 h-36 rounded-3xl overflow-hidden card-shadow hidden md:block">
               <img src={petals} alt="Rose petals" className="w-full h-full object-cover" loading="lazy" width={400} height={400} />
@@ -97,7 +99,7 @@ function Index() {
               </div>
             </div>
             <div className="aspect-[4/5] rounded-3xl overflow-hidden card-shadow max-w-sm mx-auto w-full">
-              <img src={BA_IMAGES[6]} alt="Melt Aways client preparing for the season" className="w-full h-full object-cover" loading="lazy" />
+              <img src={homeModel2} alt="Melt Aways client preparing for the season" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
         </div>
@@ -159,7 +161,7 @@ function Index() {
             </div>
           </div>
           <div className="aspect-[4/5] rounded-3xl overflow-hidden card-shadow max-w-sm mx-auto w-full">
-            <img src={BA_IMAGES[4]} alt="Melt Aways client result" className="w-full h-full object-cover" loading="lazy" />
+            <img src={homeModel3} alt="Melt Aways visiting client" className="w-full h-full object-cover" loading="lazy" />
           </div>
         </div>
       </Section>
