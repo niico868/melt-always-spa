@@ -24,9 +24,9 @@ function Products() {
   return (
     <Section>
       <div className="text-center max-w-2xl mx-auto mb-16">
-        <Eyebrow>products</Eyebrow>
+        <Eyebrow>Products</Eyebrow>
         <h1 className="text-4xl lg:text-6xl font-light text-ink">A curated shop is on the way.</h1>
-        <p className="mt-5 text-taupe">Aftercare, wellness, and home support — designed to extend your in-spa results.</p>
+        <p className="mt-5 text-taupe">Aftercare, wellness, and home support designed to extend your in-spa results.</p>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {placeholders.map((p, i) => (

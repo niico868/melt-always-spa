@@ -24,7 +24,7 @@ function Services() {
   return (
     <Section>
       <div className="text-center max-w-2xl mx-auto mb-16">
-        <Eyebrow>our treatments</Eyebrow>
+        <Eyebrow>Our Treatments</Eyebrow>
         <h1 className="text-4xl lg:text-6xl font-light text-ink leading-tight">Treatments designed around you.</h1>
         <p className="mt-5 text-taupe">Each service begins with a consultation so we can recommend the right path for your goals.</p>
       </div>

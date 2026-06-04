@@ -14,9 +14,9 @@ function Policies() {
   return (
     <Section className="max-w-4xl">
       <div className="text-center mb-14">
-        <Eyebrow>policies</Eyebrow>
+        <Eyebrow>Policies</Eyebrow>
         <h1 className="text-4xl lg:text-5xl font-light text-ink">Our policies.</h1>
-        <p className="mt-4 text-sm text-taupe italic">Final policy approval pending — sections will be finalised with the client.</p>
+        <p className="mt-4 text-sm text-taupe italic">Final policy approval pending. Sections will be finalised with the client.</p>
       </div>
       <div className="space-y-6">
         {POLICIES.map(p => (

@@ -17,7 +17,7 @@ function Faq() {
   return (
     <Section className="max-w-3xl">
       <div className="text-center mb-12">
-        <Eyebrow>questions</Eyebrow>
+        <Eyebrow>Questions</Eyebrow>
         <h1 className="text-4xl lg:text-5xl font-light text-ink">Things clients often ask.</h1>
       </div>
       <div className="divide-y divide-border border-y border-border">

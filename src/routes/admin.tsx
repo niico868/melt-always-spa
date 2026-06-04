@@ -23,9 +23,9 @@ function Admin() {
   return (
     <Section>
       <div className="mb-10">
-        <Eyebrow>admin</Eyebrow>
+        <Eyebrow>Admin</Eyebrow>
         <h1 className="text-3xl lg:text-5xl font-light text-ink">Dashboard</h1>
-        <p className="mt-2 text-sm text-taupe">Private foundation — leads currently stored in browser. Connect Lovable Cloud to persist across devices.</p>
+        <p className="mt-2 text-sm text-taupe">Private foundation. Leads are currently stored in this browser. Connect Lovable Cloud to persist across devices.</p>
       </div>
       <div className="grid lg:grid-cols-[260px_1fr] gap-8">
         <aside className="bg-background rounded-3xl border border-border/60 p-4 h-fit">
@@ -41,8 +41,8 @@ function Admin() {
             <LeadsTable leads={leads} onChange={() => setTick(t => t+1)} />
           ) : (
             <div className="bg-background rounded-3xl border border-border/60 p-10 text-center text-taupe">
-              <p className="font-script text-3xl text-gold mb-2">coming soon</p>
-              <p>{active} — foundation in place, ready to be expanded.</p>
+              <p className="font-script text-3xl text-gold mb-2">Coming Soon</p>
+              <p>{active}. Foundation in place, ready to be expanded.</p>
             </div>
           )}
         </div>
@@ -75,7 +75,11 @@ function LeadsTable({ leads, onChange }: { leads: Lead[]; onChange: () => void }
                 <td className="px-4 py-3"><div className="font-medium text-ink">{l.fullName}</div><div className="text-xs text-taupe">{new Date(l.createdAt).toLocaleString()}</div></td>
                 <td className="px-4 py-3 text-taupe"><div>{l.phone}</div><div>{l.email}</div></td>
                 <td className="px-4 py-3 text-taupe">{l.location}</td>
-                <td className="px-4 py-3 text-taupe">{l.concern}<div className="text-xs">{l.targetArea}</div></td>
+                <td className="px-4 py-3 text-taupe">
+                  {l.concern}
+                  <div className="text-xs">{l.targetArea}</div>
+                  {l.suggestedPackage && <div className="text-xs text-primary mt-1">Suggested: {l.suggestedPackage}</div>}
+                </td>
                 <td className="px-4 py-3 text-taupe">{l.preferredDate} {l.preferredTime}</td>
                 <td className="px-4 py-3">
                   <select defaultValue={l.status}
