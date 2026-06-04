@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VisitingRouteImport } from './routes/visiting'
+import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -30,6 +31,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const VisitingRoute = VisitingRouteImport.update({
   id: '/visiting',
   path: '/visiting',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/timeline': typeof TimelineRoute
   '/visiting': typeof VisitingRoute
 }
 export interface FileRoutesByTo {
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/timeline': typeof TimelineRoute
   '/visiting': typeof VisitingRoute
 }
 export interface FileRoutesById {
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/timeline': typeof TimelineRoute
   '/visiting': typeof VisitingRoute
 }
 export interface FileRouteTypes {
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/timeline'
     | '/visiting'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/timeline'
     | '/visiting'
   id:
     | '__root__'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/timeline'
     | '/visiting'
   fileRoutesById: FileRoutesById
 }
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TimelineRoute: typeof TimelineRoute
   VisitingRoute: typeof VisitingRoute
 }
 
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/visiting'
       fullPath: '/visiting'
       preLoaderRoute: typeof VisitingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -392,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TimelineRoute: TimelineRoute,
   VisitingRoute: VisitingRoute,
 }
 export const routeTree = rootRouteImport
