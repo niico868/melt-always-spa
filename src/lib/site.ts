@@ -43,14 +43,12 @@ export const CONCIERGE_WA = waLink(CONCIERGE_MESSAGE);
 
 export const NAV = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
   { to: "/services", label: "Services" },
   { to: "/packages", label: "Packages" },
-  { to: "/visiting", label: "Visiting Trinidad" },
+  { to: "/visiting", label: "Visiting 🇹🇹" },
   { to: "/journal", label: "Journal" },
   { to: "/gallery", label: "Gallery" },
   { to: "/booking", label: "Booking" },
-  { to: "/contact", label: "Contact" },
 ] as const;
 
 export const SERVICES = [
