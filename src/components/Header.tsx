@@ -8,9 +8,9 @@ export function Header() {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border/60">
-      <div className="mx-auto max-w-7xl px-5 lg:px-10 h-20 flex items-center justify-between gap-6">
-        <Link to="/" className="flex items-center gap-2">
-          <Logo className="h-12 w-auto" />
+      <div className="mx-auto max-w-7xl px-5 lg:px-10 h-24 flex items-center justify-between gap-6">
+        <Link to="/" className="flex items-center -my-2" aria-label="Melt Aways home">
+          <Logo className="h-20 lg:h-24 w-auto" />
         </Link>
         <nav className="hidden lg:flex items-center gap-7">
           {NAV.map(n => (
@@ -24,7 +24,7 @@ export function Header() {
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-3">
-          <a href={SITE.whatsapp} target="_blank" rel="noreferrer"
+          <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-taupe hover:text-primary">
             <MessageCircle className="w-4 h-4" /> WhatsApp
           </a>
