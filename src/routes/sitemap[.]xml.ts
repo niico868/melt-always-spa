@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 
 const BASE_URL = "";
 const paths = [
-  "/","/about","/services","/packages","/products","/gallery","/reviews","/booking","/contact","/faq","/policies",
+  "/","/services","/packages","/products","/gallery","/reviews","/booking","/contact","/faq","/policies",
   "/visiting","/timeline","/journal",
   "/locations/body-contouring-trinidad",
   "/locations/fat-melting-treatments-trinidad",
