@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, MessageCircle, User } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { Logo } from "./Logo";
-import { NAV, SITE } from "@/lib/site";
+import { NAV } from "@/lib/site";
 import { getSession, signOut, type ClientProfile } from "@/lib/auth";
 
 export function Header() {
@@ -35,10 +35,6 @@ export function Header() {
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-3">
-          <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-taupe hover:text-primary">
-            <MessageCircle className="w-4 h-4" /> WhatsApp
-          </a>
           {user ? (
             <>
               <Link to={accountLink} className="inline-flex items-center gap-2 text-sm text-taupe hover:text-primary">
