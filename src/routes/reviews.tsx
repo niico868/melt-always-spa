@@ -14,9 +14,9 @@ function Reviews() {
   return (
     <Section>
       <div className="text-center max-w-2xl mx-auto mb-16">
-        <Eyebrow>kind words</Eyebrow>
+        <Eyebrow>Kind Words</Eyebrow>
         <h1 className="text-4xl lg:text-6xl font-light text-ink">Reviews from our clients.</h1>
-        <p className="mt-5 text-taupe text-sm">Client proof pending — testimonials will be replaced with verified reviews and screenshots.</p>
+        <p className="mt-5 text-taupe text-sm">Client proof pending. Testimonials will be replaced with verified reviews and screenshots.</p>
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {REVIEWS.map(r => (

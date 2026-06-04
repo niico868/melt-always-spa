@@ -8,10 +8,10 @@ export function Footer() {
     <footer className="mt-24 bg-cream border-t border-border">
       <div className="mx-auto max-w-7xl px-5 lg:px-10 py-16 grid gap-12 md:grid-cols-4">
         <div className="md:col-span-2">
-          <Logo className="h-14 w-auto" />
+          <Logo className="h-24 w-auto -ml-2" />
           <p className="mt-4 max-w-sm text-sm text-taupe leading-relaxed">
-            A wellness, body-contouring, and aesthetic spa in Trinidad & Tobago — guiding women toward
-            confidence through respectful, consultation-led care.
+            A wellness, body-contouring, and aesthetic spa in Trinidad & Tobago. We guide women and men
+            toward confidence through respectful, consultation-led care.
           </p>
           <p className="font-script text-2xl text-gold mt-4">{SITE.tagline}</p>
         </div>
@@ -34,9 +34,9 @@ export function Footer() {
             <li className="flex gap-2"><Mail className="w-4 h-4 mt-0.5 text-primary" /><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
           </ul>
           <div className="flex gap-3 mt-5">
-            <a href={SITE.instagram} target="_blank" rel="noreferrer" className="p-2 rounded-full bg-background hover:bg-blush transition" aria-label="Instagram"><Instagram className="w-4 h-4" /></a>
-            <a href={SITE.facebook} target="_blank" rel="noreferrer" className="p-2 rounded-full bg-background hover:bg-blush transition" aria-label="Facebook"><Facebook className="w-4 h-4" /></a>
-            <a href={SITE.tiktok} target="_blank" rel="noreferrer" className="p-2 rounded-full bg-background hover:bg-blush transition text-xs font-bold w-8 h-8 flex items-center justify-center" aria-label="TikTok">TT</a>
+            <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-background hover:bg-blush transition" aria-label="Instagram"><Instagram className="w-4 h-4" /></a>
+            <a href={SITE.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-background hover:bg-blush transition" aria-label="Facebook"><Facebook className="w-4 h-4" /></a>
+            <a href={SITE.tiktok} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-background hover:bg-blush transition text-xs font-bold w-8 h-8 flex items-center justify-center" aria-label="TikTok">TT</a>
           </div>
         </div>
       </div>

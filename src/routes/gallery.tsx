@@ -29,7 +29,7 @@ function Gallery() {
   return (
     <Section>
       <div className="text-center max-w-2xl mx-auto mb-16">
-        <Eyebrow>gallery</Eyebrow>
+        <Eyebrow>Gallery</Eyebrow>
         <h1 className="text-4xl lg:text-6xl font-light text-ink">Step inside Melt Aways.</h1>
       </div>
       <div className="space-y-20">
