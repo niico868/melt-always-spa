@@ -156,11 +156,10 @@ function Booking() {
       <div className="text-center mb-12 bg-cream rounded-3xl px-6 py-10 border border-border/60">
         <Eyebrow>Find Your Treatment Path</Eyebrow>
         <h1 className="text-4xl lg:text-5xl font-light text-ink">Start with a consultation.</h1>
-        <p className="mt-3 text-ink/70 font-medium">Take the guesswork out of your body journey.</p>
         <p className="mt-4 text-ink/70 leading-relaxed max-w-xl mx-auto">
-          Fill out the form below and receive a tailored starting package based on your goals, plus
-          personalised tips from our team. Honest guidance, no pressure, no diagnosis. Just a clear
-          first step toward feeling confident in your body.
+          Answer a few questions so our team can recommend the best treatment direction for your goals.
+          We do not provide medical diagnosis online, and no specific results are guaranteed. This is a
+          guided starting point, not a prescription.
         </p>
       </div>
       <form onSubmit={onSubmit} className="bg-background rounded-3xl border border-border/60 card-shadow p-7 lg:p-10 space-y-6">
