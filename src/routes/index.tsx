@@ -92,7 +92,7 @@ function Index() {
               <h2 className="mt-2 text-3xl lg:text-5xl font-light text-ink leading-tight">{season.title}</h2>
               <p className="mt-5 text-taupe leading-relaxed">{season.description}</p>
               <div className="mt-7 flex flex-wrap gap-3">
-                <Link to={season.href} className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">{season.cta}</Link>
+                <Link to="/booking" className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">{season.cta}</Link>
                 <Link to="/timeline" className="rounded-full border border-ink/20 px-6 py-3 font-medium hover:bg-blush transition">See Treatment Timeline</Link>
               </div>
             </div>
