@@ -17,7 +17,7 @@ const articles = [
   { slug: "fat-vs-tightening", title: "Fat Melting vs Skin Tightening", excerpt: "Two different treatment goals. Here is how we help clients understand the difference." },
   { slug: "first-consultation", title: "What To Know Before Your First Consultation", excerpt: "Simple guidance so you can feel comfortable and prepared at your first visit." },
   { slug: "prep-body-contouring", title: "How To Prepare For Body Contouring Treatments", excerpt: "Hydration, lifestyle, and the small steps that support your treatment plan." },
-  { slug: "visiting-clients", title: "Treatment Planning For Visiting Clients", excerpt: "A simple guide for clients flying in for Carnival, Christmas, weddings, and vacation." },
+  { slug: "visiting-clients", title: "Treatment Planning For Visiting Clients", excerpt: "A simple guide for clients flying in for Carnival, Christmas, Summer Trips, and Weddings." },
 ];
 
 function Journal() {
