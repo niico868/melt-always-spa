@@ -38,7 +38,7 @@ function Index() {
           <div>
             <p className="font-script text-5xl lg:text-7xl text-gold leading-none">Welcome to Melt Aways</p>
             <h1 className="mt-5 text-xl lg:text-2xl font-light tracking-tight text-ink leading-snug">
-              Plan your body sculpting before <em className="not-italic font-script text-primary lg:text-4xl text-base">Carnival, Christmas, Summer Trips, Weddings,</em> and special events.
+              Plan your body sculpting before <em className="not-italic font-script text-primary lg:text-4xl text-2xl">Carnival, Christmas, Summer Trips, Weddings,</em> and special events.
             </h1>
             <p className="mt-6 text-lg text-taupe max-w-xl leading-relaxed">
               Not every treatment is right for every body. We start with consultation, then recommend the
