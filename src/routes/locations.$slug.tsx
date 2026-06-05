@@ -21,7 +21,7 @@ const PAGES: Record<string, Page> = {
     slug: "body-contouring-trinidad",
     title: "Body Contouring in Trinidad — Melt Aways",
     h1: "Body Contouring in Trinidad",
-    meta: "Consultation led body contouring in Trinidad. Treatment planning for body confidence, Carnival prep, weddings, and special events.",
+    meta: "Consultation led body contouring in Trinidad. Treatment planning for body confidence, Carnival prep, Weddings, and special events.",
     about: "Body contouring at Melt Aways supports clients looking for smoother, more sculpted body shape through non surgical treatment paths planned around your goals.",
     suitable: "Clients targeting stubborn areas, post pregnancy changes, fluctuating weight, or anyone wanting a more confident silhouette before a major event.",
     consultation: "Every body contouring plan begins with consultation. We review your goals, timeline, health history, and lifestyle before recommending a direction.",

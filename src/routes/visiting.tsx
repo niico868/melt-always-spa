@@ -7,7 +7,7 @@ import { CONCIERGE_WA, waLink } from "@/lib/site";
 export const Route = createFileRoute("/visiting")({
   head: () => ({ meta: [
     { title: "Visiting Trinidad — Plan Your Treatment | Melt Aways" },
-    { name: "description", content: "Visiting Trinidad for Carnival, Christmas, or vacation? Book your consultation before you arrive and let our team plan the right treatment schedule." },
+    { name: "description", content: "Visiting Trinidad for Carnival, Christmas, Summer Trips, or Weddings? Book your consultation before you arrive and let our team plan the right treatment schedule." },
     { property: "og:title", content: "Visiting Trinidad — Plan Your Treatment | Melt Aways" },
     { property: "og:description", content: "Plan body sculpting, skin tightening and facial treatments before you land in Trinidad." },
   ]}),
@@ -48,7 +48,7 @@ function Visiting() {
         <Eyebrow>Visiting Trinidad?</Eyebrow>
         <h1 className="text-4xl lg:text-6xl font-light text-ink leading-tight">Plan your treatment before you arrive.</h1>
         <p className="mt-5 text-taupe leading-relaxed">
-          Visiting Trinidad for Carnival, Christmas, or vacation? Share a few details and our team will help
+          Visiting Trinidad for Carnival, Christmas, Summer Trips, or Weddings? Share a few details and our team will help
           you plan the right treatment schedule around your trip, event dates, and availability.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">

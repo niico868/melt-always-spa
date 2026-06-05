@@ -6,7 +6,7 @@ import { CONCIERGE_WA } from "@/lib/site";
 export const Route = createFileRoute("/timeline")({
   head: () => ({ meta: [
     { title: "Plan Your Treatment Before You Arrive — Melt Aways" },
-    { name: "description", content: "Treatment timeline for visiting clients planning body sculpting, skin tightening and facial care before Carnival, Christmas, weddings, summer trips and birthdays." },
+    { name: "description", content: "Treatment timeline for visiting clients planning body sculpting, skin tightening and facial care before Carnival, Christmas, Weddings, Summer Trips and birthdays." },
     { property: "og:title", content: "Plan Your Treatment Before You Arrive — Melt Aways" },
     { property: "og:description", content: "How far ahead to plan body contouring, skin tightening, lymphatic drainage and facial treatments before your event in Trinidad." },
   ]}),
@@ -46,7 +46,7 @@ function Timeline() {
         <p className="mt-5 text-taupe leading-relaxed">
           Not every treatment is right for every body. We start with consultation, then recommend the best
           direction based on your goals, timeline, and health history. Use the guide below to see how early
-          most clients begin planning before Carnival, Christmas, weddings, vacations, and birthdays.
+          most clients begin planning before Carnival, Christmas, Weddings, Summer Trips, and Birthdays.
         </p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <Link to="/visiting" className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">
