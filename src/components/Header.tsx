@@ -17,9 +17,9 @@ export function Header() {
     return () => { window.removeEventListener("meltaways:auth", sync); window.removeEventListener("storage", sync); };
   }, []);
   const accountLink: "/account" | "/admin" = user?.role === "client" ? "/account" : "/admin";
-  const linkClass = "text-[13px] tracking-[0.08em] uppercase text-foreground/75 hover:text-primary transition-colors";
+  const linkClass = "nav-underline text-[13px] tracking-[0.08em] uppercase text-foreground/75 hover:text-primary transition-colors";
   return (
-    <header className="sticky top-0 z-40 glass-nav border-b border-border/40">
+    <header className="sticky top-0 z-40 glass-nav border-b border-border/40 header-fade">
       <div className="mx-auto max-w-[1400px] px-5 lg:px-10 h-24 grid grid-cols-[1fr_auto_1fr] items-center gap-6">
         {/* LEFT NAV */}
         <nav className="hidden lg:flex items-center justify-start gap-8">

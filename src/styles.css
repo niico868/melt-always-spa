@@ -210,3 +210,67 @@
   50%      { transform: translateY(-12px); }
 }
 .float-slow { animation: float-slow 7s ease-in-out infinite; }
+
+@utility lift-on-hover {
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.4s ease;
+}
+.lift-on-hover:hover { box-shadow: 0 18px 50px -22px color-mix(in oklab, var(--rose) 55%, transparent); }
+
+/* Center-out underline for nav links */
+.nav-underline { position: relative; }
+.nav-underline::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  height: 1px;
+  width: 0;
+  background-color: var(--color-primary);
+  transition: width 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), left 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.nav-underline:hover::after { width: 100%; left: 0; }
+
+/* Premium CTA glow */
+.btn-lux {
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease, filter 0.35s ease;
+  box-shadow: 0 10px 30px -12px color-mix(in oklab, var(--primary) 45%, transparent);
+}
+.btn-lux:hover {
+  transform: translateY(-2px) scale(1.01);
+  filter: brightness(1.05);
+  box-shadow: 0 18px 44px -14px color-mix(in oklab, var(--primary) 60%, transparent);
+}
+
+/* Ambient background bloom — slow drifting blush gradient */
+@keyframes bloom-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.55; }
+  50%      { transform: translate3d(2%, -3%, 0) scale(1.08); opacity: 0.75; }
+}
+.bg-bloom {
+  position: absolute;
+  inset: -10%;
+  pointer-events: none;
+  background:
+    radial-gradient(35% 30% at 18% 22%, color-mix(in oklab, var(--rose) 35%, transparent), transparent 70%),
+    radial-gradient(40% 35% at 82% 78%, color-mix(in oklab, var(--blush) 60%, transparent), transparent 70%);
+  animation: bloom-drift 22s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Header initial fade-in */
+@keyframes header-fade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.header-fade { animation: header-fade 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+/* Respect reduced motion across the system */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .float-slow, .bg-bloom { animation: none !important; }
+}
