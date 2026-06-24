@@ -5,7 +5,6 @@ import {
 } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { SERVICES, REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
-import heroSpa from "@/assets/hero-spa.jpg";
 import womanConfident from "@/assets/woman-confident.jpg";
 import equipment from "@/assets/equipment.jpg";
 import treatment from "@/assets/treatment.jpg";
@@ -601,6 +600,3 @@ function FinalCta() {
     </Section>
   );
 }
-
-// silence unused warnings if assets ever change
-export const _heroSpa = heroSpa;

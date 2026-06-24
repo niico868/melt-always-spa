@@ -26,6 +26,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 
 const VisitingRoute = VisitingRouteImport.update({
@@ -113,6 +114,11 @@ const AccountRoute = AccountRouteImport.update({
   path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LocationsSlugRoute = LocationsSlugRouteImport.update({
   id: '/locations/$slug',
   path: '/locations/$slug',
@@ -120,6 +126,7 @@ const LocationsSlugRoute = LocationsSlugRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/booking': typeof BookingRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/locations/$slug': typeof LocationsSlugRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/booking': typeof BookingRoute
@@ -161,6 +169,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/booking': typeof BookingRoute
@@ -183,6 +192,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/account'
     | '/admin'
     | '/booking'
@@ -203,6 +213,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/account'
     | '/admin'
     | '/booking'
@@ -223,6 +234,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
   id:
     | '__root__'
+    | '/'
     | '/account'
     | '/admin'
     | '/booking'
@@ -244,6 +256,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRoute
   BookingRoute: typeof BookingRoute
@@ -385,6 +398,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/locations/$slug': {
       id: '/locations/$slug'
       path: '/locations/$slug'
@@ -396,6 +416,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
   AdminRoute: AdminRoute,
   BookingRoute: BookingRoute,
