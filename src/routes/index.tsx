@@ -10,9 +10,6 @@ import equipment from "@/assets/equipment.jpg";
 import petals from "@/assets/petals.jpg";
 import treatment from "@/assets/treatment.jpg";
 import reception from "@/assets/reception.jpg";
-import homeModel1 from "@/assets/home-model-1.jpg";
-import homeModel2 from "@/assets/home-model-2.jpg";
-import homeModel3 from "@/assets/home-model-3.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,20 +31,20 @@ function Index() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blush via-background to-cream" />
         <div className="absolute top-20 -right-32 w-[480px] h-[480px] rounded-full bg-rose/40 blur-3xl -z-10" />
-        <div className="mx-auto max-w-7xl px-5 lg:px-10 pt-12 lg:pt-20 pb-16 lg:pb-24 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="mx-auto max-w-3xl px-5 lg:px-10 pt-12 lg:pt-20 pb-16 lg:pb-24 text-center">
           <div>
             <p className="font-script text-5xl lg:text-7xl text-gold leading-none">Welcome to Melt Aways</p>
             <h1 className="mt-5 text-xl lg:text-2xl font-light tracking-tight text-ink leading-snug">
               Plan your body sculpting before <em className="not-italic font-script text-primary lg:text-4xl text-2xl">Carnival, Christmas, Summer Trips, Weddings,</em> and special events.
             </h1>
-            <p className="mt-6 text-lg text-taupe max-w-xl leading-relaxed">
+            <p className="mt-6 text-lg text-taupe max-w-xl mx-auto leading-relaxed">
               Not every treatment is right for every body. We start with consultation, then recommend the
               best direction based on your goals, timeline, body concerns, and health history.
             </p>
             <p className="mt-3 text-sm uppercase tracking-[0.2em] text-primary/80">
               Personable care · Respectful service · Empowering results
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-9 flex flex-wrap gap-3 justify-center">
               <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-7 py-4 font-medium hover:opacity-90 transition soft-shadow">
                 Book Consultation <ArrowRight className="w-4 h-4" />
               </Link>
@@ -57,18 +54,6 @@ function Index() {
               <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-4 text-sm text-taupe hover:text-primary">
                 <MessageCircle className="w-4 h-4" /> Message us on WhatsApp
               </a>
-            </div>
-          </div>
-          <div className="relative mx-auto w-full max-w-md lg:max-w-sm">
-            <div className="aspect-[4/5] rounded-[2rem] overflow-hidden card-shadow">
-              <img src={homeModel1} alt="Melt Aways client portrait" className="w-full h-full object-cover" width={1024} height={1280} />
-            </div>
-            <div className="absolute -bottom-6 -left-6 w-36 h-36 rounded-3xl overflow-hidden card-shadow hidden md:block">
-              <img src={petals} alt="Rose petals" className="w-full h-full object-cover" loading="lazy" width={400} height={400} />
-            </div>
-            <div className="absolute -top-4 -right-4 bg-background rounded-2xl px-4 py-3 card-shadow hidden md:flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-gold" />
-              <div className="text-xs"><div className="font-medium">Consultation led</div><div className="text-taupe">no diagnosis, no pressure</div></div>
             </div>
           </div>
         </div>
@@ -88,18 +73,15 @@ function Index() {
       <Section className="!py-16">
         <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-blush via-background to-cream border border-border/60 card-shadow">
           <div className="absolute -right-24 -top-24 w-[420px] h-[420px] rounded-full bg-rose/30 blur-3xl" />
-          <div className="relative grid lg:grid-cols-2 gap-10 p-10 lg:p-16 items-center">
+          <div className="relative p-10 lg:p-16 text-center max-w-2xl mx-auto">
             <div>
               <p className="font-script text-4xl lg:text-5xl text-gold leading-none">In Season Now</p>
               <h2 className="mt-2 text-3xl lg:text-5xl font-light text-ink leading-tight">{season.title}</h2>
               <p className="mt-5 text-taupe leading-relaxed">{season.description}</p>
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="mt-7 flex flex-wrap gap-3 justify-center">
                 <Link to="/booking" className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">{season.cta}</Link>
                 <Link to="/timeline" className="rounded-full border border-ink/20 px-6 py-3 font-medium hover:bg-blush transition">See Treatment Timeline</Link>
               </div>
-            </div>
-            <div className="aspect-[4/5] rounded-3xl overflow-hidden card-shadow max-w-sm mx-auto w-full">
-              <img src={homeModel2} alt="Melt Aways client preparing for the season" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
         </div>
@@ -138,7 +120,7 @@ function Index() {
 
       {/* VISITING TRINIDAD */}
       <Section>
-        <div className="rounded-[2.5rem] bg-cream p-10 lg:p-16 grid lg:grid-cols-2 gap-10 items-center">
+        <div className="rounded-[2.5rem] bg-cream p-10 lg:p-16 text-center max-w-2xl mx-auto">
           <div>
             <p className="font-script text-4xl lg:text-5xl text-gold leading-none">Visiting Trinidad & Tobago 🇹🇹</p>
             <h2 className="mt-2 text-3xl lg:text-5xl font-light text-ink leading-tight">Plan your treatment before you arrive.</h2>
@@ -147,7 +129,7 @@ function Index() {
               arrive and let our team help you plan the right treatment schedule around your trip, event
               dates, and availability.
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap gap-3 justify-center">
               <Link to="/visiting" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">
                 <Plane className="w-4 h-4" /> Plan My Visit
               </Link>
@@ -160,18 +142,12 @@ function Index() {
               </a>
             </div>
           </div>
-          <div className="aspect-[4/5] rounded-3xl overflow-hidden card-shadow max-w-sm mx-auto w-full">
-            <img src={homeModel3} alt="Melt Aways visiting client" className="w-full h-full object-cover" loading="lazy" />
-          </div>
         </div>
       </Section>
 
       {/* SPLIT FEATURE */}
       <Section>
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="rounded-[2rem] overflow-hidden card-shadow aspect-[5/4] max-w-xl">
-            <img src={reception} alt="Reception" className="w-full h-full object-cover" loading="lazy" width={1400} height={900} />
-          </div>
+        <div className="max-w-3xl mx-auto text-center border-t border-b border-border/60 py-12 lg:py-16">
           <div>
             <Eyebrow>About Melt Aways</Eyebrow>
             <h2 className="text-3xl lg:text-5xl font-light text-ink leading-tight">A space where clients feel seen, respected, and guided.</h2>
