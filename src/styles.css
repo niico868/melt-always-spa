@@ -68,7 +68,10 @@
   --color-taupe: var(--taupe);
   --color-gold: var(--gold);
   --color-ink: var(--ink);
+  --color-fresh: var(--fresh);
+  --color-fresh-foreground: var(--fresh-foreground);
   --font-sans: "Inter", system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
   --font-script: "Great Vibes", cursive;
 }
 
@@ -104,6 +107,9 @@
   --rose: oklch(0.82 0.05 20);
   --taupe: oklch(0.6 0.015 40);
   --gold: oklch(0.74 0.09 80);
+  /* Fresh affirmative green for primary conversion (sage-fresh) */
+  --fresh: oklch(0.68 0.12 150);
+  --fresh-foreground: oklch(0.99 0.005 60);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -168,6 +174,8 @@
   }
   html { scroll-behavior: smooth; }
   .font-script { font-family: var(--font-script); font-weight: 400; }
+  .font-serif { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.01em; }
+  h1, h2, h3 { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.015em; }
   .script-accent {
     font-family: var(--font-script);
     color: var(--color-gold);
@@ -182,3 +190,23 @@
 @utility card-shadow {
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 12px 32px -16px color-mix(in oklab, var(--rose) 35%, transparent);
 }
+@utility glass-nav {
+  background-color: color-mix(in oklab, var(--background) 70%, transparent);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+}
+@utility lift-on-hover {
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.4s ease;
+}
+@utility reveal {
+  animation: reveal-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes reveal-up {
+  0%   { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+  100% { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+.float-slow { animation: float-slow 7s ease-in-out infinite; }
