@@ -41,15 +41,20 @@ export const CONCIERGE_MESSAGE =
 
 export const CONCIERGE_WA = waLink(CONCIERGE_MESSAGE);
 
-export const NAV = [
+export const NAV_LEFT = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
   { to: "/packages", label: "Packages" },
+] as const;
+
+export const NAV_RIGHT = [
   { to: "/visiting", label: "Visiting 🇹🇹" },
   { to: "/journal", label: "Journal" },
   { to: "/gallery", label: "Gallery" },
   { to: "/booking", label: "Booking" },
 ] as const;
+
+export const NAV = [...NAV_LEFT, ...NAV_RIGHT] as const;
 
 export const SERVICES = [
   { slug: "fat-melting", name: "Fat Melting", desc: "Target stubborn areas with non-surgical body-contouring treatments designed to support a slimmer, more sculpted look." },
