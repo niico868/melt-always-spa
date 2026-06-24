@@ -5,6 +5,12 @@ import {
 } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { SERVICES, REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
+import { Reveal } from "@/components/motion/Reveal";
+import { RevealText } from "@/components/motion/RevealText";
+import { Stagger } from "@/components/motion/Stagger";
+import { FloatImage } from "@/components/motion/FloatImage";
+import { CountUp } from "@/components/motion/CountUp";
+import { HoverCard } from "@/components/motion/HoverCard";
 import womanConfident from "@/assets/woman-confident.jpg";
 import equipment from "@/assets/equipment.jpg";
 import treatment from "@/assets/treatment.jpg";
@@ -31,17 +37,17 @@ function Index() {
   return (
     <div className="overflow-hidden">
       <Hero />
-      <RealResults />
-      <Method />
-      <WhoWeHelp />
-      <FeaturedTreatments />
-      <ClientReviews />
-      <TreatmentFinder />
-      <SafetyTrust />
-      <VisitingTrinidad />
-      <About />
-      <JournalPreview />
-      <FinalCta />
+      <Reveal><RealResults /></Reveal>
+      <Reveal><Method /></Reveal>
+      <Reveal><WhoWeHelp /></Reveal>
+      <Reveal><FeaturedTreatments /></Reveal>
+      <Reveal><ClientReviews /></Reveal>
+      <Reveal><TreatmentFinder /></Reveal>
+      <Reveal><SafetyTrust /></Reveal>
+      <Reveal><VisitingTrinidad /></Reveal>
+      <Reveal><About /></Reveal>
+      <Reveal><JournalPreview /></Reveal>
+      <Reveal><FinalCta /></Reveal>
     </div>
   );
 }
@@ -51,49 +57,68 @@ function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blush via-background to-cream" />
+      <div className="bg-bloom" aria-hidden />
       <div className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full bg-rose/30 blur-3xl -z-10" />
       <div className="absolute top-40 -right-40 w-[600px] h-[600px] rounded-full bg-blush blur-3xl -z-10" />
 
       <div className="mx-auto max-w-[1400px] px-5 lg:px-12 pt-16 lg:pt-24 pb-20 lg:pb-28 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <div className="lg:col-span-6 reveal">
-          <p className="font-script text-3xl lg:text-4xl text-primary/80 leading-none mb-5">Welcome to Melt Aways</p>
-          <h1 className="font-serif text-[2.6rem] sm:text-5xl lg:text-[4.2rem] leading-[1.02] text-ink">
-            Personalized Body Contouring
-            <span className="block italic text-primary"> for Real Bodies</span>
-            <span className="block">and Real Goals.</span>
-          </h1>
-          <p className="mt-7 text-lg text-taupe leading-relaxed max-w-xl">
-            You don't need to fit a mold to walk through our doors. Melt Aways is a space for real bodies,
-            real concerns, and honest conversations.
-          </p>
-          <p className="mt-4 text-base text-taupe/90 leading-relaxed max-w-xl">
-            Every treatment journey begins by listening first: understanding what feels important, what's
-            realistic, and what kind of support would actually help. From there, a personal care plan is
-            shaped with patience, respect, and guidance that feels genuinely made for the person in front of us.
-          </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium hover:opacity-90 lift-on-hover hover:shadow-lg soft-shadow">
-              Book a Consultation <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link to="/gallery" className="inline-flex items-center gap-2 rounded-full bg-background border border-ink/15 px-7 py-4 font-medium hover:bg-blush lift-on-hover">
-              See Transformations
-            </Link>
-            <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-4 text-sm text-taupe hover:text-primary">
-              <MessageCircle className="w-4 h-4" /> Message on WhatsApp
-            </a>
-          </div>
+        <div className="lg:col-span-6">
+          <Reveal delay={0.1}>
+            <p className="font-script text-3xl lg:text-4xl text-primary/80 leading-none mb-5">Welcome to Melt Aways</p>
+          </Reveal>
+          <RevealText
+            as="h1"
+            className="font-serif text-[2.6rem] sm:text-5xl lg:text-[4.2rem] leading-[1.02] text-ink"
+            stagger={0.12}
+            delay={0.25}
+            lines={[
+              <>Personalized Body Contouring</>,
+              <em className="not-italic italic text-primary">for Real Bodies</em>,
+              <>and Real Goals.</>,
+            ]}
+          />
+          <Reveal delay={0.7}>
+            <p className="mt-7 text-lg text-taupe leading-relaxed max-w-xl">
+              You don't need to fit a mold to walk through our doors. Melt Aways is a space for real bodies,
+              real concerns, and honest conversations.
+            </p>
+          </Reveal>
+          <Reveal delay={0.85}>
+            <p className="mt-4 text-base text-taupe/90 leading-relaxed max-w-xl">
+              Every treatment journey begins by listening first: understanding what feels important, what's
+              realistic, and what kind of support would actually help. From there, a personal care plan is
+              shaped with patience, respect, and guidance that feels genuinely made for the person in front of us.
+            </p>
+          </Reveal>
+          <Reveal delay={1.0}>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium btn-lux soft-shadow">
+                Book a Consultation <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link to="/gallery" className="inline-flex items-center gap-2 rounded-full bg-background border border-ink/15 px-7 py-4 font-medium hover:bg-blush lift-on-hover">
+                See Transformations
+              </Link>
+              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-4 text-sm text-taupe hover:text-primary">
+                <MessageCircle className="w-4 h-4" /> Message on WhatsApp
+              </a>
+            </div>
+          </Reveal>
 
-          <p className="mt-8 text-xs uppercase tracking-[0.22em] text-primary/70">
-            Personalized care · Real bodies · Consultation first
-          </p>
+          <Reveal delay={1.15}>
+            <p className="mt-8 text-xs uppercase tracking-[0.22em] text-primary/70">
+              Personalized care · Real bodies · Consultation first
+            </p>
+          </Reveal>
         </div>
 
         {/* Image cluster */}
         <div className="lg:col-span-6 relative">
           <div className="relative max-w-[560px] mx-auto">
-            <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden card-shadow reveal">
-              <img src={homeModel1} alt="A Melt Aways client during a consultation" className="w-full h-full object-cover" width={1024} height={1280} />
-            </div>
+            <Reveal duration={1.1} variants={{ hidden: { opacity: 0, scale: 0.97 }, show: { opacity: 1, scale: 1 } }}>
+              <FloatImage amplitude={6} duration={9} className="aspect-[4/5] rounded-[2.5rem] overflow-hidden card-shadow">
+                <img src={homeModel1} alt="A Melt Aways client during a consultation" className="w-full h-full object-cover" width={1024} height={1280} />
+              </FloatImage>
+            </Reveal>
 
             <div className="absolute -bottom-8 -left-6 lg:-left-12 w-44 h-56 rounded-3xl overflow-hidden card-shadow hidden sm:block float-slow">
               <img src={homeModel2} alt="Personalized care moment" className="w-full h-full object-cover" loading="lazy" />
@@ -197,13 +222,24 @@ function ResultCard({ name, treatment, duration, quote, image }: { name: string;
 }
 
 function Stat({ value, label, sub, icon, large = true }: { value: string; label: string; sub: string; icon?: React.ReactNode; large?: boolean }) {
+  // Detect a leading numeric in the value (e.g. "500+", "4.9") for CountUp animation.
+  const m = value.match(/^(\d+(?:\.\d+)?)(.*)$/);
+  const numeric = m ? parseFloat(m[1]) : null;
+  const decimals = m && m[1].includes(".") ? (m[1].split(".")[1]?.length ?? 0) : 0;
+  const suffix = m ? m[2] : "";
   return (
     <div className="flex items-center justify-center gap-4 px-4 py-5 rounded-2xl">
       <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blush text-primary">
         {icon ?? <Heart className="w-6 h-6" />}
       </div>
       <div className="text-left">
-        <div className={`font-serif text-ink ${large ? "text-4xl" : "text-2xl"}`}>{value}</div>
+        <div className={`font-serif text-ink ${large ? "text-4xl" : "text-2xl"}`}>
+          {numeric !== null ? (
+            <CountUp value={numeric} decimals={decimals} suffix={suffix} />
+          ) : (
+            value
+          )}
+        </div>
         <div className="text-sm font-medium text-ink/80">{label}</div>
         <div className="text-xs text-primary/70">{sub}</div>
       </div>
