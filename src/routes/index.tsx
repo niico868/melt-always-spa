@@ -389,64 +389,6 @@ function Method() {
   );
 }
 
-/* ─────────────────── WHO WE HELP ─────────────────── */
-function WhoWeHelp() {
-  const people = [
-    { label: "New Mothers",                       hash: "new-mothers" },
-    { label: "Busy Professionals",                hash: "busy-professionals" },
-    { label: "Carnival Preparation",              hash: "carnival" },
-    { label: "Wedding Preparation",               hash: "wedding" },
-    { label: "Vacation Preparation",              hash: "vacation" },
-    { label: "Confidence Rebuilding",             hash: "confidence" },
-    { label: "Stubborn Areas Despite Exercise",   hash: "stubborn-areas" },
-    { label: "Visiting Trinidad",                 hash: "visiting" },
-  ];
-  return (
-    <section className="bg-cream py-24 lg:py-28">
-      <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="rounded-[2rem] overflow-hidden border border-border/60 bg-background card-shadow lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:items-stretch">
-          <div className="p-8 lg:p-10">
-            <div className="max-w-2xl">
-              <Eyebrow>Who We Help</Eyebrow>
-              <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-                Care designed around your <em className="not-italic text-primary">season of life</em>.
-              </h2>
-              <p className="mt-4 text-taupe leading-relaxed">
-                Whatever brought you here, you are not the first to walk in with this question. We help clients at every stage.
-              </p>
-            </div>
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-3">
-              {people.map((p, i) => (
-                <Link
-                  key={p.label}
-                  to="/faq"
-                  hash={p.hash}
-                  className="group bg-background rounded-2xl border border-border/60 px-4 py-3.5 lift-on-hover hover:-translate-y-0.5 hover:bg-blush/40 flex items-center gap-3"
-                >
-                  <span className="w-7 h-7 rounded-full bg-blush flex items-center justify-center text-primary shrink-0">
-                    <Heart className="w-3.5 h-3.5" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[10px] uppercase tracking-[0.18em] text-primary/70">0{i + 1}</span>
-                    <span className="block font-serif text-sm lg:text-base text-ink leading-snug truncate">{p.label}</span>
-                  </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-primary/40 ml-auto group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative min-h-[260px] lg:min-h-full bg-cream">
-            <img src={maCarnival.url} alt="Carnival travel planning inspiration for Melt Aways clients" className="w-full h-full object-cover" loading="lazy" />
-            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background via-background/70 to-transparent lg:hidden" aria-hidden />
-            <div className="absolute inset-y-0 left-0 hidden lg:block w-28 bg-gradient-to-r from-background via-background/72 to-transparent" aria-hidden />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ─────────────────── FEATURED TREATMENTS ─────────────────── */
 function FeaturedTreatments() {
   const featured = SERVICES.slice(0, 4);
@@ -664,44 +606,6 @@ function About() {
         </Reveal>
       </div>
     </Section>
-  );
-}
-
-/* ─────────────────── JOURNAL PREVIEW ─────────────────── */
-function JournalPreview() {
-  return (
-    <section className="bg-cream py-24 lg:py-28">
-      <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-          <div className="max-w-2xl">
-            <Eyebrow>Journal & Education</Eyebrow>
-            <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-              Read, learn, and arrive prepared.
-            </h2>
-          </div>
-          <Link to="/journal" className="text-sm font-medium text-primary inline-flex items-center gap-2 hover:gap-3 transition-all">
-            Visit the journal <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {JOURNAL_POSTS.map((post) => (
-            <Link key={post.slug} to="/journal/$slug" params={{ slug: post.slug }} className="group bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow lift-on-hover hover:-translate-y-1">
-              <div className="aspect-[5/3] overflow-hidden bg-blush">
-                <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" width={1280} height={720} />
-              </div>
-              <div className="p-6">
-                <div className="text-xs uppercase tracking-[0.22em] text-primary/70">{post.category}</div>
-                <h3 className="mt-2 font-serif text-xl text-ink leading-snug">{post.title}</h3>
-                <p className="mt-3 text-sm text-taupe leading-relaxed">{post.excerpt}</p>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary">
-                  {post.ctaText} <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 
