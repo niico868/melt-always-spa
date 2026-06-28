@@ -239,6 +239,17 @@ function Method() {
   const vineLen = useTransform(scrollYProgress, [0, 0.92], [0, 1]);
   const bloomScale = useTransform(scrollYProgress, [0.85, 1], [0.4, 1]);
   const bloomOpacity = useTransform(scrollYProgress, [0.85, 1], [0, 1]);
+  // Pre-compute leaf opacities (hooks cannot live inside .map)
+  const leaf0 = useTransform(scrollYProgress, [0.13, 0.23], [0, 1]);
+  const leaf1 = useTransform(scrollYProgress, [0.31, 0.41], [0, 1]);
+  const leaf2 = useTransform(scrollYProgress, [0.50, 0.60], [0, 1]);
+  const leaf3 = useTransform(scrollYProgress, [0.69, 0.79], [0, 1]);
+  const leaves = [
+    { cx: 18, cy: 180, op: leaf0 },
+    { cx: 42, cy: 360, op: leaf1 },
+    { cx: 18, cy: 550, op: leaf2 },
+    { cx: 42, cy: 740, op: leaf3 },
+  ];
   return (
     <Section>
       <div className="text-center max-w-3xl mx-auto">
@@ -271,14 +282,14 @@ function Method() {
             style={{ pathLength: vineLen }}
           />
           {/* Tiny leaves along the vine */}
-          {[0.18, 0.36, 0.55, 0.74].map((t, i) => (
+          {leaves.map((l, i) => (
             <motion.circle
               key={i}
-              cx={i % 2 === 0 ? 18 : 42}
-              cy={t * 1000}
+              cx={l.cx}
+              cy={l.cy}
               r="4"
               className="fill-fresh"
-              style={{ opacity: useTransform(scrollYProgress, [t - 0.05, t + 0.05], [0, 1]) }}
+              style={{ opacity: l.op }}
             />
           ))}
           {/* Final bloom */}
