@@ -42,13 +42,13 @@ export const CONCIERGE_MESSAGE =
 export const CONCIERGE_WA = waLink(CONCIERGE_MESSAGE);
 
 export const NAV_LEFT = [
+  { to: "/visiting", label: "Visiting", flag: true },
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
   { to: "/packages", label: "Packages" },
 ] as const;
 
 export const NAV_RIGHT = [
-  { to: "/visiting", label: "Visiting 🇹🇹" },
   { to: "/journal", label: "Journal" },
   { to: "/gallery", label: "Gallery" },
   { to: "/booking", label: "Booking" },
@@ -80,12 +80,41 @@ export const PACKAGES = [
 ];
 
 export const REVIEWS = [
-  { initials: "K.M.", service: "Body Contouring", text: "From my first consultation I felt heard and respected. The team explained every step before treatment, and I never felt pressured." },
-  { initials: "A.J.", service: "Cavitation", text: "Calm, clean, and so welcoming. I love how personable everyone is. The space feels truly premium." },
-  { initials: "R.S.", service: "Skin Tightening", text: "I was nervous to start but they walked me through everything. I genuinely feel more confident in my skin." },
-  { initials: "T.D.", service: "Wellness", text: "What I appreciate most is the genuine care. It's wellness without judgement." },
-  { initials: "L.P.", service: "Anti-Aging", text: "The results speak for themselves but it's the experience that makes me come back." },
-  { initials: "S.B.", service: "Lymphatic Drainage", text: "A beautiful, restorative space. I leave every visit feeling lighter and clearer." },
+  {
+    initials: "K.B.",
+    service: "Body Contouring",
+    text: "Melt away spa, 10/10, It's the place to be. Mrs. Krystal comes highly trained and very professional in everything she does. Even though she has a busy schedule, she answers questions very promptly, putting her clients first always. Ladies, if you lack body self-esteem like myself, rest assured everything is private, heard and confidential with her. Her staff is just as warm and inviting, bursting with positive energy. I always leave the spa laughing hard. Some times I feel I am highly favored by Krystal, by the love, attention and care she gives me — but that's just her overall genuine character to everyone that crosses her path. I cannot speak highly enough of this exceptional service from the staff and management of Melt Away Spa.",
+  },
+  {
+    initials: "D.S.",
+    service: "Transformation Journey",
+    text: "Good morning. I just want to let you know that I'm so happy I made the decision one day to get up and get started. At the beginning it felt like I wasn't getting anywhere, and then came this week where the changes and effort are really starting to show. The compliments are coming in, clothes are fitting differently. I owe it all to you and your skills, knowing how passionate you are about your work and bringing confidence back into people's lives. I'm so proud of you, from the day I stepped through your doors, and now coming into the beautiful ambiance you've created for your customers. Here's to a great flourishing business venture. Can't wait to continue my journey with you.",
+  },
+  {
+    initials: "A.R.",
+    service: "Slimming Injections",
+    text: "Good evening! I'm so glad I made the decision to start these injections. At first I was skeptical and didn't think it would help my specific circumstances. In the first couple weeks I got a bit discouraged because I wasn't seeing the results I hoped for, but now I'm seeing changes. The change that shocked me the most was the change to my cycle — it was much lighter and the pain was much less. I kept waiting for it to get worse but it never did. My cravings are non-existent and I eat till I'm satisfied and no more. I feel overall so much better, not sluggish and sleepy after meals. I just feel like a new person. I can't wait for the rest of my journey.",
+  },
+  {
+    initials: "M.J.",
+    service: "Weight Loss Program",
+    text: "Just want to send out a special thank you to Melt Away Spa. I have been on my weight loss journey for three weeks now, started at 188.6 lbs and I can proudly say I am currently at 170.4 lbs. I have tried all sorts of diets and weight loss programs, and nothing worked for me until I discovered Melt Away Spa. I am so happy to be on this journey with them — they are the most motivating people who encourage your success. Thank you.",
+  },
+  {
+    initials: "C.P.",
+    service: "Visceral Fat & Waist Training",
+    text: "Good night. I just wanted to give this honest testimonial of Meltaways Spa because truly, this is the first time I've received positive results on my midsection from any weight loss regime. I'm peri-menopausal and suffered with visceral fat on my tummy for over 10 years that seemed like it wouldn't go away. I tried exercising and I would lose weight everywhere except my stomach. Krystal and her staff are very dedicated, knowledgeable and caring in what they do, and they are very keen on making sure you get positive results. I have to stress though, if you are not willing to put in the work with them, you will not see the desired outcome. This is not an easy fix — waist training, drinking water and good eating habits are key, and I have lost inches, my clothes fit much better and my confidence in my body has returned. I will definitely be recommending others to visit her facility.",
+  },
+  {
+    initials: "N.G.",
+    service: "GLP-1 (Tirzepatide)",
+    text: "For anyone who's struggling with their weight loss I just want to give a quick update about my experience. I'm in my early 40s and I've been struggling to lose the stubborn pounds — nothing seemed to be working until I decided to try the GLP-1 medication with the assistance of Meltaways Spa. Initially I started with the lowest dose semaglutide which didn't work, until I switched to tirzepatide, which kick-started my metabolism. Within a month I've lost 13 pounds, and that's without rigorous exercise — but you still have to be in a calorie deficit and be mindful of what you eat. Anyone thinking about looking fabulous in your 40s, check out Krystal at Meltaway Spa. She's knowledgeable and friendly, and she'll guide you to jump-start your weight loss journey.",
+  },
+  {
+    initials: "L.W.",
+    service: "Weight Loss Program",
+    text: "Good day Melt Away family. I want to just come on here to express my deepest gratitude to Melt Away Spa. I have been on my weight loss journey for one month now and I must say I am so impressed by the way I have been shedding those pounds. I am finally feeling comfortable in my own skin after years of trying all sorts of diets. I am successful today because of Melt Away Spa. From the bottom of my heart, thank you. I look forward to continuing this journey with you.",
+  },
 ];
 
 export const FAQS = [
