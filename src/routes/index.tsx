@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import {
   MessageCircle, ArrowRight, Plane, Sparkles, Heart,
   ClipboardList, UserCog, Wand2, LineChart, Sprout, Star, Quote,
@@ -10,16 +10,15 @@ import { SERVICES, REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealText } from "@/components/motion/RevealText";
 import { CountUp } from "@/components/motion/CountUp";
-import { HeroCarousel } from "@/components/HeroCarousel";
 import { BA_IMAGES } from "@/lib/ba";
-import { JOURNAL_POSTS } from "@/lib/journal";
+import { FloralAccent, GoldDivider } from "@/components/FloralAccent";
 import equipment from "@/assets/equipment.jpg";
 import treatment from "@/assets/treatment.jpg";
 import petals from "@/assets/petals.jpg";
 import womanConfident from "@/assets/woman-confident.jpg";
 import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
-import maCarnival from "@/assets/ma-carnival.png.asset.json";
 import maVisiting from "@/assets/ma-visiting.png.asset.json";
+import heroVideo from "@/assets/hero-video.mp4.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,77 +37,126 @@ function Index() {
   return (
     <div className="overflow-hidden">
       <Hero />
+      <GoldDivider />
       <Reveal><RealResults /></Reveal>
+      <GoldDivider />
       <Reveal><Method /></Reveal>
-      <Reveal><WhoWeHelp /></Reveal>
+      <GoldDivider />
       <Reveal><FeaturedTreatments /></Reveal>
+      <GoldDivider />
       <Reveal><ClientReviews /></Reveal>
+      <GoldDivider />
       <Reveal><TreatmentFinder /></Reveal>
+      <GoldDivider />
       <Reveal><VisitingTrinidad /></Reveal>
+      <GoldDivider />
       <Reveal><About /></Reveal>
-      <Reveal><JournalPreview /></Reveal>
       <Reveal><FinalCta /></Reveal>
     </div>
   );
 }
 
 /* ───────────────────────── HERO ───────────────────────── */
-function Hero() {
-  return (
-    <section className="relative overflow-hidden min-h-[640px] lg:min-h-[760px]">
-      <HeroCarousel />
-      <div className="bg-bloom" aria-hidden />
+const HERO_TYPE_TEXT = "Personalized Body Contouring for Real Bodies and Real Goals.";
 
-      <div className="relative mx-auto max-w-[1400px] px-5 lg:px-12 pt-16 lg:pt-28 pb-20 lg:pb-32 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <div className="lg:col-span-7">
+function Hero() {
+  const ref = useRef<HTMLDivElement>(null);
+  // Drives the typewriter (0 → typed → pause → 1)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  // Type until 0.45 of scroll, then hold steady until end (= "pause" before leaving).
+  const charCount = useTransform(scrollYProgress, [0, 0.45, 1], [0, HERO_TYPE_TEXT.length, HERO_TYPE_TEXT.length]);
+  const [typed, setTyped] = useState("");
+  useMotionValueEvent(charCount, "change", (v) => {
+    setTyped(HERO_TYPE_TEXT.slice(0, Math.round(v)));
+  });
+
+  return (
+    <section ref={ref} className="relative overflow-hidden min-h-[88vh] lg:min-h-[92vh] flex items-center">
+      {/* DESKTOP / TABLET ≥ 800px: video background */}
+      <div className="absolute inset-0 -z-10 hidden min-[800px]:block">
+        <video
+          src={heroVideo.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={heroBanner.url}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Rose blossom lightening overlay for text contrast */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(60% 80% at 30% 50%, rgba(242,196,206,0.55) 0%, rgba(232,220,200,0.55) 45%, rgba(232,220,200,0.78) 100%)",
+          }}
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-cream/35" aria-hidden />
+      </div>
+      {/* MOBILE < 800px: blossom→gold gradient */}
+      <div
+        className="absolute inset-0 -z-10 min-[800px]:hidden"
+        style={{
+          background:
+            "linear-gradient(160deg, #F2C4CE 0%, #EAC8B4 45%, #E8DCC8 75%, #D9B86A 100%)",
+        }}
+        aria-hidden
+      />
+
+      <FloralAccent variant="hero" opacity={0.18} />
+
+      <div className="relative mx-auto max-w-[1400px] w-full px-5 lg:px-12 pt-16 lg:pt-24 pb-24 lg:pb-32">
+        <div className="max-w-3xl">
           <Reveal delay={0.1}>
-            <p className="script-hero text-primary/85 mb-5">Welcome to Melt Aways</p>
+            <p className="script-hero text-gold mb-6 leading-none">
+              Your most confident self lives here.
+            </p>
           </Reveal>
-          <RevealText
-            as="h1"
-            className="font-serif text-[2.6rem] sm:text-5xl lg:text-[4.2rem] leading-[1.02] text-ink"
-            stagger={0.12}
-            delay={0.25}
-            lines={[
-              <>Personalized Body Contouring</>,
-              <em className="not-italic italic text-primary">for Real Bodies</em>,
-              <>and Real Goals.</>,
-            ]}
-          />
+
+          {/* Typewriter, driven by scroll */}
+          <h1
+            className="font-serif text-[clamp(2rem,5vw,4.5rem)] leading-[1.08] text-espresso"
+            style={{ letterSpacing: "0.03em" }}
+          >
+            <span aria-label={HERO_TYPE_TEXT}>{typed || "\u00A0"}</span>
+            <span
+              aria-hidden
+              className="inline-block w-[2px] h-[0.95em] align-middle ml-1 bg-gold animate-pulse"
+            />
+          </h1>
+
           <Reveal delay={0.7}>
-            <p className="mt-7 text-lg text-ink/88 leading-relaxed max-w-xl">
+            <p className="mt-7 font-sans font-light text-lg text-espresso/90 leading-[1.75] max-w-xl">
               You don't need to fit a mold to walk through our doors. Melt Aways is a space for real bodies,
               real concerns, and honest conversations.
             </p>
           </Reveal>
-          <Reveal delay={0.85}>
-            <p className="mt-4 text-base text-ink/78 leading-relaxed max-w-xl">
-              Every treatment journey begins by listening first: understanding what feels important, what's
-              realistic, and what kind of support would actually help. From there, a personal care plan is
-              shaped with patience, respect, and guidance that feels genuinely made for the person in front of us.
-            </p>
-          </Reveal>
           <Reveal delay={1.0}>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium btn-lux soft-shadow">
+              <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-gold text-espresso px-7 py-4 text-[12px] tracking-[0.14em] uppercase font-medium btn-lux hover:bg-rose hover:text-cream transition">
                 Book a Consultation <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link to="/gallery" className="inline-flex items-center gap-2 rounded-full bg-background border border-ink/15 px-7 py-4 font-medium hover:bg-blush lift-on-hover">
+              <Link to="/gallery" className="inline-flex items-center gap-2 rounded-full bg-transparent border border-gold text-gold px-7 py-4 text-[12px] tracking-[0.14em] uppercase font-medium hover:bg-gold/10 transition">
                 See Transformations
               </Link>
-              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-4 text-sm font-medium text-ink/90 hover:text-primary">
+              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-4 text-sm font-medium text-espresso/90 hover:text-gold">
                 <MessageCircle className="w-4 h-4" /> Message on WhatsApp
               </a>
             </div>
           </Reveal>
 
           <Reveal delay={1.15}>
-            <p className="mt-8 text-xs uppercase tracking-[0.22em] text-ink/70">
+            <p className="mt-10 text-[11px] uppercase tracking-[0.32em] text-espresso/75">
               Personalized care · Real bodies · Consultation first
             </p>
           </Reveal>
         </div>
-        <div className="hidden lg:block lg:col-span-5" aria-hidden />
+      </div>
+
+      {/* Scroll hint to indicate page must scroll to finish typing */}
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.3em] text-espresso/60 animate-pulse">
+        Scroll
       </div>
     </section>
   );
@@ -340,64 +388,6 @@ function Method() {
   );
 }
 
-/* ─────────────────── WHO WE HELP ─────────────────── */
-function WhoWeHelp() {
-  const people = [
-    { label: "New Mothers",                       hash: "new-mothers" },
-    { label: "Busy Professionals",                hash: "busy-professionals" },
-    { label: "Carnival Preparation",              hash: "carnival" },
-    { label: "Wedding Preparation",               hash: "wedding" },
-    { label: "Vacation Preparation",              hash: "vacation" },
-    { label: "Confidence Rebuilding",             hash: "confidence" },
-    { label: "Stubborn Areas Despite Exercise",   hash: "stubborn-areas" },
-    { label: "Visiting Trinidad",                 hash: "visiting" },
-  ];
-  return (
-    <section className="bg-cream py-24 lg:py-28">
-      <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="rounded-[2rem] overflow-hidden border border-border/60 bg-background card-shadow lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:items-stretch">
-          <div className="p-8 lg:p-10">
-            <div className="max-w-2xl">
-              <Eyebrow>Who We Help</Eyebrow>
-              <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-                Care designed around your <em className="not-italic text-primary">season of life</em>.
-              </h2>
-              <p className="mt-4 text-taupe leading-relaxed">
-                Whatever brought you here, you are not the first to walk in with this question. We help clients at every stage.
-              </p>
-            </div>
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-3">
-              {people.map((p, i) => (
-                <Link
-                  key={p.label}
-                  to="/faq"
-                  hash={p.hash}
-                  className="group bg-background rounded-2xl border border-border/60 px-4 py-3.5 lift-on-hover hover:-translate-y-0.5 hover:bg-blush/40 flex items-center gap-3"
-                >
-                  <span className="w-7 h-7 rounded-full bg-blush flex items-center justify-center text-primary shrink-0">
-                    <Heart className="w-3.5 h-3.5" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[10px] uppercase tracking-[0.18em] text-primary/70">0{i + 1}</span>
-                    <span className="block font-serif text-sm lg:text-base text-ink leading-snug truncate">{p.label}</span>
-                  </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-primary/40 ml-auto group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative min-h-[260px] lg:min-h-full bg-cream">
-            <img src={maCarnival.url} alt="Carnival travel planning inspiration for Melt Aways clients" className="w-full h-full object-cover" loading="lazy" />
-            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background via-background/70 to-transparent lg:hidden" aria-hidden />
-            <div className="absolute inset-y-0 left-0 hidden lg:block w-28 bg-gradient-to-r from-background via-background/72 to-transparent" aria-hidden />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ─────────────────── FEATURED TREATMENTS ─────────────────── */
 function FeaturedTreatments() {
   const featured = SERVICES.slice(0, 4);
@@ -615,44 +605,6 @@ function About() {
         </Reveal>
       </div>
     </Section>
-  );
-}
-
-/* ─────────────────── JOURNAL PREVIEW ─────────────────── */
-function JournalPreview() {
-  return (
-    <section className="bg-cream py-24 lg:py-28">
-      <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-          <div className="max-w-2xl">
-            <Eyebrow>Journal & Education</Eyebrow>
-            <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-              Read, learn, and arrive prepared.
-            </h2>
-          </div>
-          <Link to="/journal" className="text-sm font-medium text-primary inline-flex items-center gap-2 hover:gap-3 transition-all">
-            Visit the journal <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {JOURNAL_POSTS.map((post) => (
-            <Link key={post.slug} to="/journal/$slug" params={{ slug: post.slug }} className="group bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow lift-on-hover hover:-translate-y-1">
-              <div className="aspect-[5/3] overflow-hidden bg-blush">
-                <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" width={1280} height={720} />
-              </div>
-              <div className="p-6">
-                <div className="text-xs uppercase tracking-[0.22em] text-primary/70">{post.category}</div>
-                <h3 className="mt-2 font-serif text-xl text-ink leading-snug">{post.title}</h3>
-                <p className="mt-3 text-sm text-taupe leading-relaxed">{post.excerpt}</p>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary">
-                  {post.ctaText} <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 
