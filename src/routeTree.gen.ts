@@ -28,6 +28,7 @@ import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as JournalIndexRouteImport } from './routes/journal.index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 
@@ -126,6 +127,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalIndexRoute = JournalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => JournalRoute,
+} as any)
 const LocationsSlugRoute = LocationsSlugRouteImport.update({
   id: '/locations/$slug',
   path: '/locations/$slug',
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/visiting': typeof VisitingRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/journal/': typeof JournalIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -168,7 +175,6 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
-  '/journal': typeof JournalRouteWithChildren
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -182,6 +188,7 @@ export interface FileRoutesByTo {
   '/visiting': typeof VisitingRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/journal': typeof JournalIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -206,6 +213,7 @@ export interface FileRoutesById {
   '/visiting': typeof VisitingRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/journal/': typeof JournalIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -231,6 +239,7 @@ export interface FileRouteTypes {
     | '/visiting'
     | '/journal/$slug'
     | '/locations/$slug'
+    | '/journal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -240,7 +249,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/gallery'
-    | '/journal'
     | '/login'
     | '/packages'
     | '/policies'
@@ -254,6 +262,7 @@ export interface FileRouteTypes {
     | '/visiting'
     | '/journal/$slug'
     | '/locations/$slug'
+    | '/journal'
   id:
     | '__root__'
     | '/'
@@ -277,6 +286,7 @@ export interface FileRouteTypes {
     | '/visiting'
     | '/journal/$slug'
     | '/locations/$slug'
+    | '/journal/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -437,6 +447,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal/': {
+      id: '/journal/'
+      path: '/'
+      fullPath: '/journal/'
+      preLoaderRoute: typeof JournalIndexRouteImport
+      parentRoute: typeof JournalRoute
+    }
     '/locations/$slug': {
       id: '/locations/$slug'
       path: '/locations/$slug'
@@ -456,10 +473,12 @@ declare module '@tanstack/react-router' {
 
 interface JournalRouteChildren {
   JournalSlugRoute: typeof JournalSlugRoute
+  JournalIndexRoute: typeof JournalIndexRoute
 }
 
 const JournalRouteChildren: JournalRouteChildren = {
   JournalSlugRoute: JournalSlugRoute,
+  JournalIndexRoute: JournalIndexRoute,
 }
 
 const JournalRouteWithChildren =
