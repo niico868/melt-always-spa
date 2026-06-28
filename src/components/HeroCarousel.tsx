@@ -7,9 +7,9 @@ import heroBanner3 from "@/assets/hero-banner3-consult.png.asset.json";
 
 // Order matches the brief: hero-banner2 → hero-banner3 → hero-banner.
 const SLIDES = [
-  { src: heroBanner2.url, tint: "rgba(245, 226, 226, 0.5)" },
-  { src: heroBanner3.url, tint: "rgba(250, 240, 226, 0.48)" },
-  { src: heroBanner.url, tint: "rgba(232, 209, 196, 0.42)" },
+  { src: heroBanner2.url, tint: "rgba(245, 226, 226, 0.22)" },
+  { src: heroBanner3.url, tint: "rgba(250, 240, 226, 0.20)" },
+  { src: heroBanner.url, tint: "rgba(232, 209, 196, 0.18)" },
 ];
 
 export function HeroCarousel() {
