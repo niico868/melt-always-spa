@@ -361,6 +361,9 @@ function ClientReviews() {
     "L.W.": "Leah",
   };
   const fourReviews = REVIEWS.slice(0, 4);
+  const [open, setOpen] = useState<number | null>(null);
+  const active = open !== null ? fourReviews[open] : null;
+  const activeName = active ? (REVIEW_NAMES[active.initials] ?? active.initials) : "";
   return (
     <section className="bg-gradient-to-b from-background via-blush/30 to-background py-24 lg:py-28">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
@@ -371,18 +374,23 @@ function ClientReviews() {
           </h2>
         </div>
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {fourReviews.map((r) => {
+          {fourReviews.map((r, i) => {
             const name = REVIEW_NAMES[r.initials] ?? r.initials;
             return (
-              <div key={r.initials} className="bg-background rounded-3xl p-8 card-shadow lift-on-hover hover:-translate-y-1 relative">
+              <button
+                key={r.initials}
+                onClick={() => setOpen(i)}
+                className="text-left bg-background rounded-3xl p-8 card-shadow lift-on-hover hover:-translate-y-1 relative focus:outline-none focus:ring-2 focus:ring-primary/40"
+              >
                 <Quote className="w-7 h-7 text-primary/40 absolute top-6 right-6" />
                 <StarRow />
-                <p className="mt-5 font-serif text-lg text-ink/90 leading-relaxed">{truncateWords(r.text, 16)}</p>
+                <p className="mt-5 font-serif text-lg text-ink/90 leading-relaxed line-clamp-2">{r.text}</p>
+                <span className="mt-3 inline-block text-xs uppercase tracking-[0.2em] text-primary/70">Read full review →</span>
                 <div className="mt-6 text-sm">
                   <div className="font-medium text-ink">{name}</div>
                   <div className="text-taupe text-xs">{r.service}</div>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
@@ -392,6 +400,22 @@ function ClientReviews() {
           </Link>
         </div>
       </div>
+      <Dialog open={open !== null} onOpenChange={(v) => !v && setOpen(null)}>
+        <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto">
+          {active && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-serif text-2xl text-ink">{activeName}</DialogTitle>
+                <p className="text-xs uppercase tracking-[0.2em] text-primary/70">{active.service}</p>
+              </DialogHeader>
+              <StarRow />
+              <p className="mt-2 font-serif text-base lg:text-lg text-ink/90 leading-relaxed whitespace-pre-line">
+                {active.text}
+              </p>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
