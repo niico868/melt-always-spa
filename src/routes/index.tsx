@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import {
   MessageCircle, ArrowRight, Plane, Sparkles, Heart,
@@ -19,7 +19,6 @@ import womanConfident from "@/assets/woman-confident.jpg";
 import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
 import maVisiting from "@/assets/ma-visiting.png.asset.json";
 import heroVideo from "@/assets/hero-video.mp4.asset.json";
-import { useState } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
