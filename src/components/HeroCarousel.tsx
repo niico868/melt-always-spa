@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { easeLux } from "@/lib/motion";
-import heroBanner from "@/assets/hero-banner.jpg";
-import heroBanner2 from "@/assets/hero-banner-2.jpg";
-import heroBanner3 from "@/assets/hero-banner-3.jpg";
+import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
+import heroBanner2 from "@/assets/hero-banner2-consult.png.asset.json";
+import heroBanner3 from "@/assets/hero-banner3-consult.png.asset.json";
 
 // Order matches the brief: hero-banner2 → hero-banner3 → hero-banner.
 const SLIDES = [
-  { src: heroBanner2, tint: "rgba(245, 226, 226, 0.55)" }, // blush
-  { src: heroBanner3, tint: "rgba(250, 240, 226, 0.55)" }, // cream/peach
-  { src: heroBanner,  tint: "rgba(232, 209, 196, 0.55)" }, // rose
+  { src: heroBanner2.url, tint: "rgba(245, 226, 226, 0.5)" },
+  { src: heroBanner3.url, tint: "rgba(250, 240, 226, 0.48)" },
+  { src: heroBanner.url, tint: "rgba(232, 209, 196, 0.42)" },
 ];
 
 export function HeroCarousel() {
@@ -61,7 +61,7 @@ export function HeroCarousel() {
             src={slide.src}
             alt=""
             aria-hidden
-            className="w-full h-full object-cover object-[center_30%] lg:object-[right_center]"
+            className="w-full h-full object-cover object-center lg:object-[center_38%]"
             width={1024}
             height={1024}
           />
@@ -73,7 +73,7 @@ export function HeroCarousel() {
         className="absolute inset-0 pointer-events-none"
         initial={false}
         animate={{
-          background: `linear-gradient(180deg, var(--background) 0%, color-mix(in oklab, var(--background) 78%, transparent) 40%, color-mix(in oklab, var(--background) 25%, transparent) 100%)`,
+          background: `linear-gradient(180deg, color-mix(in oklab, var(--background) 96%, transparent) 0%, color-mix(in oklab, var(--background) 84%, transparent) 34%, color-mix(in oklab, var(--background) 42%, transparent) 100%)`,
         }}
         transition={{ duration: 1.6, ease: easeLux }}
       />
@@ -81,7 +81,7 @@ export function HeroCarousel() {
         className="absolute inset-0 pointer-events-none hidden lg:block"
         initial={false}
         animate={{
-          background: `linear-gradient(90deg, var(--background) 0%, color-mix(in oklab, var(--background) 88%, transparent) 38%, color-mix(in oklab, var(--background) 10%, transparent) 72%, transparent 100%)`,
+          background: `linear-gradient(90deg, color-mix(in oklab, var(--background) 97%, transparent) 0%, color-mix(in oklab, var(--background) 90%, transparent) 32%, color-mix(in oklab, var(--background) 42%, transparent) 66%, transparent 100%)`,
         }}
         transition={{ duration: 1.6, ease: easeLux }}
       />
