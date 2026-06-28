@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VisitingRouteImport } from './routes/visiting'
+import { Route as TreatmentFinderRouteImport } from './routes/treatment-finder'
 import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
@@ -32,6 +33,11 @@ import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 const VisitingRoute = VisitingRouteImport.update({
   id: '/visiting',
   path: '/visiting',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TreatmentFinderRoute = TreatmentFinderRouteImport.update({
+  id: '/treatment-finder',
+  path: '/treatment-finder',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TimelineRoute = TimelineRouteImport.update({
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
+  '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
   '/locations/$slug': typeof LocationsSlugRoute
 }
@@ -164,6 +171,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
+  '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
   '/locations/$slug': typeof LocationsSlugRoute
 }
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
+  '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
   '/locations/$slug': typeof LocationsSlugRoute
 }
@@ -209,6 +218,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/timeline'
+    | '/treatment-finder'
     | '/visiting'
     | '/locations/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -230,6 +240,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/timeline'
+    | '/treatment-finder'
     | '/visiting'
     | '/locations/$slug'
   id:
@@ -251,6 +262,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/timeline'
+    | '/treatment-finder'
     | '/visiting'
     | '/locations/$slug'
   fileRoutesById: FileRoutesById
@@ -273,6 +285,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TimelineRoute: typeof TimelineRoute
+  TreatmentFinderRoute: typeof TreatmentFinderRoute
   VisitingRoute: typeof VisitingRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
 }
@@ -284,6 +297,13 @@ declare module '@tanstack/react-router' {
       path: '/visiting'
       fullPath: '/visiting'
       preLoaderRoute: typeof VisitingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/treatment-finder': {
+      id: '/treatment-finder'
+      path: '/treatment-finder'
+      fullPath: '/treatment-finder'
+      preLoaderRoute: typeof TreatmentFinderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/timeline': {
@@ -433,19 +453,10 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TimelineRoute: TimelineRoute,
+  TreatmentFinderRoute: TreatmentFinderRoute,
   VisitingRoute: VisitingRoute,
   LocationsSlugRoute: LocationsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

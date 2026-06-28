@@ -5,6 +5,19 @@ import { Logo } from "./Logo";
 import { NAV, NAV_LEFT, NAV_RIGHT } from "@/lib/site";
 import { getSession, signOut, type ClientProfile } from "@/lib/auth";
 
+function NavLink({ to, label, flag, linkClass }: { to: string; label: string; flag?: boolean; linkClass: string }) {
+  return (
+    <Link to={to} className={`${linkClass} relative inline-flex flex-col items-center leading-none`}
+      activeProps={{ className: "text-primary font-medium" }}
+      activeOptions={{ exact: to === "/" }}>
+      {flag && (
+        <span aria-hidden className="text-xs leading-none mb-0.5">🇹🇹</span>
+      )}
+      <span>{label}</span>
+    </Link>
+  );
+}
+
 export function Header() {
   const nav = useNavigate();
   const [open, setOpen] = useState(false);
@@ -22,13 +35,9 @@ export function Header() {
     <header className="sticky top-0 z-40 glass-nav border-b border-border/40 header-fade">
       <div className="mx-auto max-w-[1400px] px-5 lg:px-10 h-24 grid grid-cols-[1fr_auto_1fr] items-center gap-6">
         {/* LEFT NAV */}
-        <nav className="hidden lg:flex items-center justify-start gap-8">
-          {NAV_LEFT.map(n => (
-            <Link key={n.to} to={n.to} className={linkClass}
-              activeProps={{ className: "text-primary font-medium" }}
-              activeOptions={{ exact: n.to === "/" }}>
-              {n.label}
-            </Link>
+        <nav className="hidden lg:flex items-center justify-around gap-8">
+          {NAV_LEFT.map((n: any) => (
+            <NavLink key={n.to} to={n.to} label={n.label} flag={n.flag} linkClass={linkClass} />
           ))}
         </nav>
 
@@ -40,11 +49,8 @@ export function Header() {
         {/* RIGHT NAV + ACTIONS */}
         <div className="hidden lg:flex items-center justify-end gap-7">
           <nav className="flex items-center gap-7">
-            {NAV_RIGHT.map(n => (
-              <Link key={n.to} to={n.to} className={linkClass}
-                activeProps={{ className: "text-primary font-medium" }}>
-                {n.label}
-              </Link>
+            {NAV_RIGHT.map((n: any) => (
+              <NavLink key={n.to} to={n.to} label={n.label} flag={n.flag} linkClass={linkClass} />
             ))}
           </nav>
           <span className="h-5 w-px bg-border" />

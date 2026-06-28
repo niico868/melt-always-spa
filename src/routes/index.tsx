@@ -1,24 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
-  MessageCircle, ArrowRight, Plane, ShieldCheck, Sparkles, Heart,
-  ClipboardList, UserCheck, Wand2, LineChart, Leaf, Star, Quote,
+  MessageCircle, ArrowRight, Plane, Sparkles, Heart,
+  ClipboardList, ClipboardCheck, UserCog, Wand2, LineChart, Sprout, Star, Quote,
 } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { SERVICES, REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealText } from "@/components/motion/RevealText";
-import { Stagger } from "@/components/motion/Stagger";
-import { FloatImage } from "@/components/motion/FloatImage";
 import { CountUp } from "@/components/motion/CountUp";
-import { HoverCard } from "@/components/motion/HoverCard";
-import womanConfident from "@/assets/woman-confident.jpg";
+import { HeroCarousel } from "@/components/HeroCarousel";
+import { BA_IMAGES } from "@/lib/ba";
 import equipment from "@/assets/equipment.jpg";
 import treatment from "@/assets/treatment.jpg";
-import reception from "@/assets/reception.jpg";
 import petals from "@/assets/petals.jpg";
-import homeModel1 from "@/assets/home-model-1.jpg";
-import homeModel2 from "@/assets/home-model-2.jpg";
-import homeModel3 from "@/assets/home-model-3.jpg";
+import womanConfident from "@/assets/woman-confident.jpg";
+import heroBanner from "@/assets/hero-banner.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -27,7 +25,7 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Consultation-led body contouring, skin tightening, and wellness treatments in Trinidad & Tobago. Personalized care plans built around real goals, real bodies, and honest conversation." },
       { property: "og:title", content: "Melt Aways · Personalized Body Contouring for Real Bodies" },
       { property: "og:description", content: "Real bodies. Real goals. Consultation first. Premium body contouring and wellness in Trinidad & Tobago." },
-      { property: "og:image", content: homeModel1 },
+      { property: "og:image", content: heroBanner },
     ],
   }),
   component: Index,
@@ -43,7 +41,6 @@ function Index() {
       <Reveal><FeaturedTreatments /></Reveal>
       <Reveal><ClientReviews /></Reveal>
       <Reveal><TreatmentFinder /></Reveal>
-      <Reveal><SafetyTrust /></Reveal>
       <Reveal><VisitingTrinidad /></Reveal>
       <Reveal><About /></Reveal>
       <Reveal><JournalPreview /></Reveal>
@@ -55,16 +52,14 @@ function Index() {
 /* ───────────────────────── HERO ───────────────────────── */
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blush via-background to-cream" />
+    <section className="relative overflow-hidden min-h-[640px] lg:min-h-[760px]">
+      <HeroCarousel />
       <div className="bg-bloom" aria-hidden />
-      <div className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full bg-rose/30 blur-3xl -z-10" />
-      <div className="absolute top-40 -right-40 w-[600px] h-[600px] rounded-full bg-blush blur-3xl -z-10" />
 
-      <div className="mx-auto max-w-[1400px] px-5 lg:px-12 pt-16 lg:pt-24 pb-20 lg:pb-28 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <div className="lg:col-span-6">
+      <div className="relative mx-auto max-w-[1400px] px-5 lg:px-12 pt-16 lg:pt-28 pb-20 lg:pb-32 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="lg:col-span-7">
           <Reveal delay={0.1}>
-            <p className="font-script text-3xl lg:text-4xl text-primary/80 leading-none mb-5">Welcome to Melt Aways</p>
+            <p className="script-hero text-primary/85 mb-5">Welcome to Melt Aways</p>
           </Reveal>
           <RevealText
             as="h1"
@@ -110,43 +105,7 @@ function Hero() {
             </p>
           </Reveal>
         </div>
-
-        {/* Image cluster */}
-        <div className="lg:col-span-6 relative">
-          <div className="relative max-w-[560px] mx-auto">
-            <Reveal duration={1.1} variants={{ hidden: { opacity: 0, scale: 0.97 }, show: { opacity: 1, scale: 1 } }}>
-              <FloatImage amplitude={6} duration={9} className="aspect-[4/5] rounded-[2.5rem] overflow-hidden card-shadow">
-                <img src={homeModel1} alt="A Melt Aways client during a consultation" className="w-full h-full object-cover" width={1024} height={1280} />
-              </FloatImage>
-            </Reveal>
-
-            <div className="absolute -bottom-8 -left-6 lg:-left-12 w-44 h-56 rounded-3xl overflow-hidden card-shadow hidden sm:block float-slow">
-              <img src={homeModel2} alt="Personalized care moment" className="w-full h-full object-cover" loading="lazy" />
-            </div>
-
-            <div className="absolute -top-6 -right-4 lg:-right-10 bg-background/95 backdrop-blur rounded-2xl px-5 py-4 card-shadow flex items-center gap-3 max-w-[230px]">
-              <div className="w-10 h-10 rounded-full bg-blush flex items-center justify-center text-primary">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div className="text-xs leading-snug">
-                <div className="font-medium text-ink">Consultation first</div>
-                <div className="text-taupe">No pressure, no judgement</div>
-              </div>
-            </div>
-
-            <div className="absolute bottom-10 -right-3 lg:-right-8 bg-background/95 backdrop-blur rounded-2xl px-5 py-4 card-shadow flex items-center gap-3">
-              <div className="flex -space-x-2">
-                <div className="w-7 h-7 rounded-full bg-rose border-2 border-background" />
-                <div className="w-7 h-7 rounded-full bg-blush border-2 border-background" />
-                <div className="w-7 h-7 rounded-full bg-cream border-2 border-background" />
-              </div>
-              <div className="text-xs leading-snug">
-                <div className="font-medium text-ink">500+ happy clients</div>
-                <div className="text-taupe">across Trinidad & Tobago</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className="hidden lg:block lg:col-span-5" aria-hidden />
       </div>
     </section>
   );
@@ -158,7 +117,7 @@ function RealResults() {
     <section className="relative bg-gradient-to-b from-background via-blush/40 to-background py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-10 text-center">
         <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-primary/80">
-          <Leaf className="w-4 h-4" /> Real Results. Real People.
+          <Sprout className="w-4 h-4" /> Real Results. Real People.
         </p>
         <h2 className="mt-5 font-serif text-4xl lg:text-6xl text-ink leading-[1.05]">
           Real Results, Real <em className="not-italic text-primary">Confidence</em>.
@@ -170,9 +129,17 @@ function RealResults() {
 
         {/* Stat row */}
         <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          <Stat value="500+" label="Happy Clients" sub="and counting" />
-          <Stat value="4.9" label="Google Rating" sub="from 120+ reviews" icon={<StarRow />} />
-          <Stat value="Trusted" label="Across Trinidad" sub="and beyond" icon={<ShieldCheck className="w-7 h-7 text-primary" />} large={false} />
+          <Stat value="60+" label="Happy Clients" sub="and counting" duration={5} />
+          <a
+            href="https://share.google/efNeYdAQwEjKkmsPC"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-2xl hover:bg-blush/30 transition-colors"
+            aria-label="See our Google reviews"
+          >
+            <Stat value="4.9" label="Google Rating" sub="Read on Google ↗" icon={<StarRow />} />
+          </a>
+          <Stat value="Trusted" label="Across Trinidad and Tobago" sub="and beyond" icon={<Sparkles className="w-7 h-7 text-primary" />} large={false} />
         </div>
 
         {/* Result preview cards */}
@@ -197,17 +164,17 @@ function RealResults() {
 }
 
 const RESULT_PREVIEWS = [
-  { name: "Jason",  treatment: "Abdomen Contouring",     duration: "Results after 6 sessions", quote: "I feel lighter, stronger, and more confident in my own skin.", image: homeModel3 },
-  { name: "Ravi",   treatment: "Abdomen Contouring",     duration: "Results after 8 weeks",    quote: "My clothes fit better and I finally feel like myself again.",   image: homeModel2 },
-  { name: "Keisha", treatment: "Thigh Contouring",       duration: "Results after 4 sessions", quote: "I see a difference every time I look in the mirror.",            image: homeModel1 },
-  { name: "Nicole", treatment: "Love Handle Contouring", duration: "Results after 6 weeks",    quote: "My waist is more defined and I feel so much better.",            image: womanConfident },
+  { name: "Client A.J.", treatment: "Body Contouring",     duration: "After 6 sessions", quote: "I feel lighter, stronger, and more confident in my own skin.", image: BA_IMAGES[6] },
+  { name: "Client R.M.", treatment: "Fat Melting",         duration: "After 8 weeks",    quote: "My clothes fit better and I finally feel like myself again.",   image: BA_IMAGES[0] },
+  { name: "Client K.P.", treatment: "Skin Tightening",     duration: "After 4 sessions", quote: "I see a difference every time I look in the mirror.",          image: BA_IMAGES[5] },
+  { name: "Client N.S.", treatment: "Stretch Mark Care",   duration: "After 6 weeks",    quote: "My waist is more defined and I feel so much better.",          image: BA_IMAGES[2] },
 ];
 
 function ResultCard({ name, treatment, duration, quote, image }: { name: string; treatment: string; duration: string; quote: string; image: string }) {
   return (
     <article className="bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow lift-on-hover hover:-translate-y-1 text-left">
       <div className="aspect-[4/5] overflow-hidden bg-blush">
-        <img src={image} alt={`${name} – ${treatment}`} className="w-full h-full object-cover" loading="lazy" />
+        <img src={image} alt={`${name} – ${treatment} before & after`} className="w-full h-full object-contain" loading="lazy" />
       </div>
       <div className="p-5">
         <h3 className="font-serif text-2xl text-primary">{name}</h3>
@@ -221,7 +188,7 @@ function ResultCard({ name, treatment, duration, quote, image }: { name: string;
   );
 }
 
-function Stat({ value, label, sub, icon, large = true }: { value: string; label: string; sub: string; icon?: React.ReactNode; large?: boolean }) {
+function Stat({ value, label, sub, icon, large = true, duration }: { value: string; label: string; sub: string; icon?: React.ReactNode; large?: boolean; duration?: number }) {
   // Detect a leading numeric in the value (e.g. "500+", "4.9") for CountUp animation.
   const m = value.match(/^(\d+(?:\.\d+)?)(.*)$/);
   const numeric = m ? parseFloat(m[1]) : null;
@@ -235,7 +202,7 @@ function Stat({ value, label, sub, icon, large = true }: { value: string; label:
       <div className="text-left">
         <div className={`font-serif text-ink ${large ? "text-4xl" : "text-2xl"}`}>
           {numeric !== null ? (
-            <CountUp value={numeric} decimals={decimals} suffix={suffix} />
+            <CountUp value={numeric} decimals={decimals} suffix={suffix} duration={duration} />
           ) : (
             value
           )}
@@ -259,12 +226,29 @@ function StarRow() {
 
 /* ─────────────────── THE MELT AWAYS METHOD ─────────────────── */
 function Method() {
-  const steps = [
-    { icon: <UserCheck className="w-5 h-5" />,    tag: "CONSULT",     title: "We Start With Understanding",      body: "Every plan begins with a private, unhurried conversation about your goals, lifestyle, and history." },
-    { icon: <ClipboardList className="w-5 h-5" />,tag: "PERSONALIZE", title: "No One-Size-Fits-All Treatments",  body: "We design a treatment pathway shaped around your body, your timeline, and your comfort level." },
-    { icon: <Wand2 className="w-5 h-5" />,        tag: "TREAT",       title: "Treatments With Purpose",          body: "Every session is intentional. We treat with care, explain as we go, and never rush a result." },
-    { icon: <LineChart className="w-5 h-5" />,    tag: "TRACK",       title: "Progress You Can See",             body: "We document measurements and milestones so progress is clear, honest, and personal." },
-    { icon: <Leaf className="w-5 h-5" />,         tag: "MAINTAIN",    title: "Long-Term Confidence",             body: "Maintenance plans support results between sessions and keep confidence steady year-round." },
+  type Step = { icon: React.ReactNode; tag: string; title: string; body: string; withChecklist?: boolean };
+  const steps: Step[] = [
+    { icon: <UserCog className="w-5 h-5" />,       tag: "CONSULT",     title: "We Start With Understanding",      body: "Every plan begins with a private, unhurried conversation about your goals, lifestyle, and history.", withChecklist: true },
+    { icon: <ClipboardList className="w-5 h-5" />, tag: "PERSONALIZE", title: "No One-Size-Fits-All Treatments",  body: "We design a treatment pathway shaped around your body, your timeline, and your comfort level." },
+    { icon: <Wand2 className="w-5 h-5" />,         tag: "TREAT",       title: "Treatments With Purpose",          body: "Every session is intentional. We treat with care, explain as we go, and never rush a result." },
+    { icon: <LineChart className="w-5 h-5" />,     tag: "TRACK",       title: "Progress You Can See",             body: "We document measurements and milestones so progress is clear, honest, and personal." },
+    { icon: <Sprout className="w-5 h-5" />,        tag: "MAINTAIN",    title: "Long-Term Confidence",             body: "Maintenance plans support results between sessions and keep confidence steady year-round." },
+  ];
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: wrapRef, offset: ["start 75%", "end 25%"] });
+  const vineLen = useTransform(scrollYProgress, [0, 0.92], [0, 1]);
+  const bloomScale = useTransform(scrollYProgress, [0.85, 1], [0.4, 1]);
+  const bloomOpacity = useTransform(scrollYProgress, [0.85, 1], [0, 1]);
+  // Pre-compute leaf opacities (hooks cannot live inside .map)
+  const leaf0 = useTransform(scrollYProgress, [0.13, 0.23], [0, 1]);
+  const leaf1 = useTransform(scrollYProgress, [0.31, 0.41], [0, 1]);
+  const leaf2 = useTransform(scrollYProgress, [0.50, 0.60], [0, 1]);
+  const leaf3 = useTransform(scrollYProgress, [0.69, 0.79], [0, 1]);
+  const leaves = [
+    { cx: 18, cy: 180, op: leaf0 },
+    { cx: 42, cy: 360, op: leaf1 },
+    { cx: 18, cy: 550, op: leaf2 },
+    { cx: 42, cy: 740, op: leaf3 },
   ];
   return (
     <Section>
@@ -280,20 +264,70 @@ function Method() {
         </p>
       </div>
 
-      <div className="mt-16 relative">
-        <div className="absolute left-1/2 -translate-x-1/2 top-6 bottom-6 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" aria-hidden />
-        <ol className="space-y-10 lg:space-y-14 max-w-4xl mx-auto">
+      <div ref={wrapRef} className="mt-16 relative">
+        {/* Vine SVG — grows with scroll */}
+        <svg
+          className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 h-full w-16 pointer-events-none"
+          viewBox="0 0 60 1000"
+          preserveAspectRatio="none"
+          aria-hidden
+        >
+          <motion.path
+            d="M30 0 C 18 120, 42 220, 30 340 S 14 540, 30 680 S 46 860, 30 980"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            className="text-primary/60"
+            style={{ pathLength: vineLen }}
+          />
+          {/* Tiny leaves along the vine */}
+          {leaves.map((l, i) => (
+            <motion.circle
+              key={i}
+              cx={l.cx}
+              cy={l.cy}
+              r="4"
+              className="fill-fresh"
+              style={{ opacity: l.op }}
+            />
+          ))}
+          {/* Final bloom */}
+          <motion.g style={{ scale: bloomScale, opacity: bloomOpacity, transformOrigin: "30px 985px" }}>
+            <circle cx="30" cy="985" r="10" className="fill-primary/80" />
+            <circle cx="22" cy="978" r="6" className="fill-rose" />
+            <circle cx="38" cy="978" r="6" className="fill-rose" />
+            <circle cx="22" cy="992" r="6" className="fill-rose" />
+            <circle cx="38" cy="992" r="6" className="fill-rose" />
+            <circle cx="30" cy="985" r="3.5" className="fill-gold" />
+          </motion.g>
+        </svg>
+        {/* Mobile subtle line */}
+        <div className="lg:hidden absolute left-6 top-4 bottom-4 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent" aria-hidden />
+
+        <ol className="space-y-12 lg:space-y-20 max-w-5xl mx-auto">
           {steps.map((s, i) => (
-            <li key={s.tag} className={`grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center ${i % 2 ? "lg:[&>div:first-child]:order-2" : ""}`}>
-              <div className="bg-background border border-border/60 rounded-3xl p-7 lg:p-9 card-shadow lift-on-hover hover:-translate-y-1">
+            <li key={s.tag} className={`grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-16 items-center`}>
+              <Reveal
+                direction={i % 2 === 0 ? "left" : "right"}
+                duration={1.0}
+                className={`${i % 2 ? "lg:order-2" : "lg:order-1"} bg-background border border-border/60 rounded-3xl p-7 lg:p-9 card-shadow lift-on-hover hover:-translate-y-1`}
+              >
                 <div className="flex items-center gap-3 text-primary">
-                  <span className="w-9 h-9 rounded-full bg-blush flex items-center justify-center">{s.icon}</span>
+                  <span className="relative w-11 h-11 rounded-full bg-blush flex items-center justify-center">
+                    {s.icon}
+                    {s.withChecklist && (
+                      <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-fresh text-fresh-foreground flex items-center justify-center shadow">
+                        <ClipboardCheck className="w-3 h-3" />
+                      </span>
+                    )}
+                  </span>
                   <span className="text-xs tracking-[0.25em] uppercase">Step 0{i + 1} · {s.tag}</span>
                 </div>
                 <h3 className="mt-4 font-serif text-2xl lg:text-3xl text-ink">{s.title}</h3>
                 <p className="mt-3 text-taupe leading-relaxed">{s.body}</p>
-              </div>
-              <div className="hidden lg:block" />
+              </Reveal>
+              <div className={`hidden lg:block ${i % 2 ? "lg:order-1" : "lg:order-2"}`} aria-hidden />
             </li>
           ))}
         </ol>
@@ -311,14 +345,14 @@ function Method() {
 /* ─────────────────── WHO WE HELP ─────────────────── */
 function WhoWeHelp() {
   const people = [
-    "New Mothers",
-    "Busy Professionals",
-    "Carnival Preparation",
-    "Wedding Preparation",
-    "Vacation Preparation",
-    "Confidence Rebuilding",
-    "Stubborn Areas Despite Exercise",
-    "Visiting Trinidad",
+    { label: "New Mothers",                       hash: "new-mothers" },
+    { label: "Busy Professionals",                hash: "busy-professionals" },
+    { label: "Carnival Preparation",              hash: "carnival" },
+    { label: "Wedding Preparation",               hash: "wedding" },
+    { label: "Vacation Preparation",              hash: "vacation" },
+    { label: "Confidence Rebuilding",             hash: "confidence" },
+    { label: "Stubborn Areas Despite Exercise",   hash: "stubborn-areas" },
+    { label: "Visiting Trinidad",                 hash: "visiting" },
   ];
   return (
     <section className="bg-cream py-24 lg:py-28">
@@ -333,15 +367,23 @@ function WhoWeHelp() {
             We help clients at every stage.
           </p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {people.map((p, i) => (
-            <div key={p} className="group bg-background rounded-2xl border border-border/60 p-5 lg:p-6 card-shadow lift-on-hover hover:-translate-y-1 hover:bg-blush/40">
-              <div className="w-9 h-9 rounded-full bg-blush flex items-center justify-center text-primary mb-4">
-                <Heart className="w-4 h-4" />
-              </div>
-              <div className="text-xs uppercase tracking-[0.18em] text-primary/70">0{i + 1}</div>
-              <div className="mt-1 font-serif text-lg lg:text-xl text-ink leading-snug">{p}</div>
-            </div>
+            <Link
+              key={p.label}
+              to="/faq"
+              hash={p.hash}
+              className="group bg-background rounded-2xl border border-border/60 px-4 py-3.5 card-shadow lift-on-hover hover:-translate-y-0.5 hover:bg-blush/40 flex items-center gap-3"
+            >
+              <span className="w-7 h-7 rounded-full bg-blush flex items-center justify-center text-primary shrink-0">
+                <Heart className="w-3.5 h-3.5" />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[10px] uppercase tracking-[0.18em] text-primary/70">0{i + 1}</span>
+                <span className="block font-serif text-sm lg:text-base text-ink leading-snug truncate">{p.label}</span>
+              </span>
+              <ArrowRight className="w-3.5 h-3.5 text-primary/40 ml-auto group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           ))}
         </div>
       </div>
@@ -432,85 +474,30 @@ function ClientReviews() {
 
 /* ─────────────────── TREATMENT FINDER ─────────────────── */
 function TreatmentFinder() {
-  const steps = [
-    { n: "01", label: "Concern",        body: "Tell us what's on your mind." },
-    { n: "02", label: "Goal",           body: "Share the result you'd love." },
-    { n: "03", label: "Timeline",       body: "When do you want to feel ready?" },
-    { n: "04", label: "Recommendation", body: "A personal pathway, no pressure." },
-  ];
   return (
     <Section>
-      <div className="rounded-[2.5rem] bg-gradient-to-br from-blush via-background to-cream border border-border/60 p-10 lg:p-16 overflow-hidden relative">
+      <div className="rounded-[2.5rem] bg-gradient-to-br from-blush via-background to-cream border border-border/60 p-10 lg:p-16 overflow-hidden relative text-center max-w-4xl mx-auto">
         <div className="absolute -right-32 -top-32 w-[420px] h-[420px] rounded-full bg-rose/30 blur-3xl" aria-hidden />
-        <div className="relative grid lg:grid-cols-2 gap-10 items-center">
-          <div>
-            <Eyebrow>Treatment Finder</Eyebrow>
-            <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-              Not sure where to start?
-              <span className="block italic text-primary">Let's find your pathway.</span>
-            </h2>
-            <p className="mt-5 text-taupe leading-relaxed max-w-lg">
-              Answer four short questions during your consultation. We listen, then recommend the
-              treatment plan that actually fits your goals and timeline.
-            </p>
-            <Link to="/booking" className="mt-8 inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium hover:opacity-90 lift-on-hover soft-shadow">
-              Start Treatment Finder <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <ol className="grid sm:grid-cols-2 gap-4">
-            {steps.map((s) => (
-              <li key={s.n} className="bg-background/80 backdrop-blur rounded-2xl p-6 border border-border/60 lift-on-hover hover:-translate-y-1">
-                <div className="text-xs tracking-[0.25em] text-primary/70">STEP {s.n}</div>
-                <div className="font-serif text-2xl text-ink mt-1">{s.label}</div>
-                <p className="text-sm text-taupe mt-2 leading-relaxed">{s.body}</p>
-              </li>
-            ))}
-          </ol>
+        <div className="relative">
+          <Eyebrow>Treatment Finder</Eyebrow>
+          <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
+            Not sure where to start?
+            <span className="block italic text-primary">Let's point you in the right direction.</span>
+          </h2>
+          <p className="mt-6 text-taupe leading-relaxed max-w-2xl mx-auto">
+            Complete a quick intake form with your personal details, goals, concerns, and timeline.
+            Based on your answers, we'll suggest suitable treatment options and let you know if you
+            qualify for a free consultation.
+          </p>
+          <Link to="/treatment-finder" className="mt-8 inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium btn-lux soft-shadow">
+            Start Treatment Finder <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </Section>
   );
 }
 
-/* ─────────────────── SAFETY & TRUST ─────────────────── */
-function SafetyTrust() {
-  const items = [
-    { icon: <ShieldCheck className="w-5 h-5" />, title: "Certified Practitioners", body: "Trained, experienced, and continuously refining their craft." },
-    { icon: <Sparkles className="w-5 h-5" />,    title: "Premium Equipment",       body: "Modern, well-maintained machines selected with care." },
-    { icon: <Heart className="w-5 h-5" />,       title: "Safety First",            body: "Every plan reviews health history before any treatment begins." },
-    { icon: <UserCheck className="w-5 h-5" />,   title: "Consultation Required",   body: "We will never recommend a treatment without understanding you first." },
-  ];
-  return (
-    <section className="bg-cream py-24 lg:py-28">
-      <div className="mx-auto max-w-7xl px-5 lg:px-10 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <div className="rounded-[2.5rem] overflow-hidden card-shadow aspect-[5/4] max-w-xl">
-          <img src={reception} alt="The Melt Aways consultation space" className="w-full h-full object-cover" loading="lazy" />
-        </div>
-        <div>
-          <Eyebrow>Safety & Trust</Eyebrow>
-          <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-            Reassurance built into every appointment.
-          </h2>
-          <p className="mt-4 text-taupe leading-relaxed">
-            Years of experience, certified practitioners, hundreds of clients served, and a
-            consultation-first standard that never gets skipped.
-          </p>
-          <ul className="mt-8 grid sm:grid-cols-2 gap-4">
-            {items.map((it) => (
-              <li key={it.title} className="flex gap-3 p-4 rounded-2xl bg-background border border-border/60">
-                <span className="w-9 h-9 rounded-full bg-blush text-primary flex items-center justify-center shrink-0">{it.icon}</span>
-                <div>
-                  <div className="font-medium text-ink">{it.title}</div>
-                  <div className="text-sm text-taupe leading-relaxed">{it.body}</div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ─────────────────── VISITING TRINIDAD ─────────────────── */
 function VisitingTrinidad() {
@@ -518,8 +505,8 @@ function VisitingTrinidad() {
     <Section className="!py-16">
       <div className="rounded-3xl bg-background border border-border/60 p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
         <div className="flex-1">
-          <p className="font-script text-2xl lg:text-3xl text-primary leading-none">Visiting Trinidad & Tobago 🇹🇹</p>
-          <h3 className="mt-2 font-serif text-2xl lg:text-3xl text-ink leading-snug">Plan your treatment before you arrive.</h3>
+          <p className="script-hero text-primary mb-2">Visiting Trinidad & Tobago 🇹🇹</p>
+          <h3 className="mt-1 font-serif text-2xl lg:text-3xl text-ink leading-snug">Plan your treatment before you arrive.</h3>
           <p className="mt-3 text-taupe leading-relaxed max-w-2xl">
             Coming home for Carnival, Christmas, or vacation? Start a consultation before you land so we
             can plan around your event dates and availability.
@@ -540,6 +527,14 @@ function VisitingTrinidad() {
 
 /* ─────────────────── ABOUT ─────────────────── */
 function About() {
+  const values = [
+    "We lead with care.",
+    "We protect your privacy.",
+    "We honour every body.",
+    "We guide with honesty.",
+    "We treat with skill, patience, and intention.",
+    "We celebrate progress that feels real.",
+  ];
   return (
     <Section>
       <div className="max-w-3xl mx-auto text-center">
@@ -549,21 +544,38 @@ function About() {
         </h2>
         <p className="mt-6 text-taupe leading-relaxed">
           Melt Aways exists to give women and men a place where they can talk about their body and
-          their goals without judgement. Our mission is simple: honest consultation, personalized
-          care, and treatment plans that respect the person in front of us.
+          their goals without judgement. We focus on clear guidance, personal attention, and treatment
+          plans built around your comfort, your confidence, and the results you want to achieve.
         </p>
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
-          {[
-            { t: "Mission",       d: "Personalized care that respects real bodies and real goals." },
-            { t: "Values",        d: "Honesty, patience, privacy, and consistent professionalism." },
-            { t: "Philosophy",    d: "Consultation first. Treatment second. Confidence built to last." },
-          ].map(v => (
-            <div key={v.t} className="bg-background border border-border/60 rounded-2xl p-5">
-              <div className="text-xs uppercase tracking-[0.22em] text-primary/70">{v.t}</div>
-              <p className="mt-2 text-sm text-ink/90 leading-relaxed">{v.d}</p>
-            </div>
-          ))}
-        </div>
+      </div>
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
+        <Reveal direction="left" className="bg-background border border-border/60 rounded-3xl p-7 card-shadow">
+          <div className="text-xs uppercase tracking-[0.22em] text-primary/70 mb-2">Mission</div>
+          <p className="text-ink/90 leading-relaxed">
+            To make non-surgical body and wellness care feel personal, private, and results-focused —
+            delivered by trained treatment specialists who listen first, guide honestly, and help
+            every client feel more confident in their own body.
+          </p>
+        </Reveal>
+        <Reveal direction="up" className="bg-background border border-border/60 rounded-3xl p-7 card-shadow">
+          <div className="text-xs uppercase tracking-[0.22em] text-primary/70 mb-2">Values</div>
+          <ul className="space-y-2 text-ink/90">
+            {values.map((v) => (
+              <li key={v} className="flex gap-2.5 leading-relaxed">
+                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden />
+                <span>{v}</span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+        <Reveal direction="right" className="bg-background border border-border/60 rounded-3xl p-7 card-shadow">
+          <div className="text-xs uppercase tracking-[0.22em] text-primary/70 mb-2">Philosophy</div>
+          <p className="text-ink/90 leading-relaxed">
+            Melt Aways care begins with understanding the person, not just the treatment. We welcome
+            all bodies, listen without judgement, and create safe, personalized treatment plans that
+            support confidence, comfort, and real progress.
+          </p>
+        </Reveal>
       </div>
     </Section>
   );
