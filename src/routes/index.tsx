@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   MessageCircle, ArrowRight, Plane, Sparkles, Heart,
@@ -10,7 +10,7 @@ import { REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
 import { HeroCarousel } from "@/components/HeroCarousel";
-import { ScrollPinHeadline } from "@/components/ScrollPinHeadline";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BA_IMAGES } from "@/lib/ba";
 import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
 import maVisiting from "@/assets/ma-visiting.png.asset.json";
@@ -36,14 +36,12 @@ function Index() {
   return (
     <div className="overflow-hidden">
       <Hero />
-      <PinnedHeadline />
       <Reveal><VisitingTrinidad /></Reveal>
       <Reveal><RealResults /></Reveal>
       <Reveal><Method /></Reveal>
       <Reveal><FeaturedTreatments /></Reveal>
       <Reveal><ClientReviews /></Reveal>
       <Reveal><TreatmentFinder /></Reveal>
-      <Reveal><FinalCta /></Reveal>
     </div>
   );
 }
@@ -60,7 +58,14 @@ function Hero() {
           <Reveal delay={0.1}>
             <p className="script-hero text-primary/85 mb-5">Your most confident self lives here.</p>
           </Reveal>
-          <Reveal delay={1.0}>
+          <Reveal delay={0.4}>
+            <h1 className="font-serif text-[2rem] sm:text-5xl lg:text-[3.6rem] leading-[1.05] text-ink">
+              Personalized Body Contouring
+              <span className="block italic text-primary">for Real Bodies</span>
+              <span className="block">and Real Goals.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.9}>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium btn-lux soft-shadow">
                 Book a Consultation <ArrowRight className="w-4 h-4" />
@@ -71,20 +76,6 @@ function Hero() {
         <div className="hidden lg:block lg:col-span-5" aria-hidden />
       </div>
     </section>
-  );
-}
-
-/* ───────────────── SCROLL-PIN HEADLINE (typed reveal) ───────────────── */
-function PinnedHeadline() {
-  return (
-    <ScrollPinHeadline
-      className="font-serif text-[2.4rem] sm:text-5xl lg:text-[4.4rem] leading-[1.05] text-ink text-center max-w-5xl mx-auto"
-      lines={[
-        { text: "Personalized Body Contouring" },
-        { text: "for Real Bodies", italic: true },
-        { text: "and Real Goals." },
-      ]}
-    />
   );
 }
 
