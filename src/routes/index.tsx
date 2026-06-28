@@ -141,10 +141,10 @@ function RealResults() {
 }
 
 const RESULT_PREVIEWS = [
-  { name: "Client A.J.", treatment: "Body Contouring",     duration: "After 6 sessions", quote: "I feel lighter, stronger, and more confident in my own skin.", image: BA_IMAGES[6] },
-  { name: "Client R.M.", treatment: "Fat Melting",         duration: "After 8 weeks",    quote: "My clothes fit better and I finally feel like myself again.",   image: BA_IMAGES[0] },
-  { name: "Client K.P.", treatment: "Skin Tightening",     duration: "After 4 sessions", quote: "I see a difference every time I look in the mirror.",          image: BA_IMAGES[5] },
-  { name: "Client N.S.", treatment: "Stretch Mark Care",   duration: "After 6 weeks",    quote: "My waist is more defined and I feel so much better.",          image: BA_IMAGES[2] },
+  { name: "Amara",  treatment: "Body Contouring",   duration: "After 6 sessions", quote: "I feel lighter, stronger, and more confident in my own skin.", image: BA_IMAGES[6] },
+  { name: "Renee",  treatment: "Fat Melting",       duration: "After 8 weeks",    quote: "My clothes fit better and I finally feel like myself again.",   image: BA_IMAGES[0] },
+  { name: "Kiana",  treatment: "Skin Tightening",   duration: "After 4 sessions", quote: "I see a difference every time I look in the mirror.",          image: BA_IMAGES[5] },
+  { name: "Naomi",  treatment: "Stretch Mark Care", duration: "After 6 weeks",    quote: "My waist is more defined and I feel so much better.",          image: BA_IMAGES[2] },
 ];
 
 function ResultCard({ name, treatment, duration, quote, image }: { name: string; treatment: string; duration: string; quote: string; image: string }) {
