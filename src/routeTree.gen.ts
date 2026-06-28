@@ -29,6 +29,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 
 const VisitingRoute = VisitingRouteImport.update({
   id: '/visiting',
@@ -130,6 +131,11 @@ const LocationsSlugRoute = LocationsSlugRouteImport.update({
   path: '/locations/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalSlugRoute = JournalSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => JournalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -139,7 +145,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
-  '/journal': typeof JournalRoute
+  '/journal': typeof JournalRouteWithChildren
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
+  '/journal/$slug': typeof JournalSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
 }
 export interface FileRoutesByTo {
@@ -161,7 +168,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
-  '/journal': typeof JournalRoute
+  '/journal': typeof JournalRouteWithChildren
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
+  '/journal/$slug': typeof JournalSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
 }
 export interface FileRoutesById {
@@ -184,7 +192,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
-  '/journal': typeof JournalRoute
+  '/journal': typeof JournalRouteWithChildren
   '/login': typeof LoginRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
+  '/journal/$slug': typeof JournalSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
 }
 export interface FileRouteTypes {
@@ -220,6 +229,7 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/treatment-finder'
     | '/visiting'
+    | '/journal/$slug'
     | '/locations/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/treatment-finder'
     | '/visiting'
+    | '/journal/$slug'
     | '/locations/$slug'
   id:
     | '__root__'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/treatment-finder'
     | '/visiting'
+    | '/journal/$slug'
     | '/locations/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -275,7 +287,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
-  JournalRoute: typeof JournalRoute
+  JournalRoute: typeof JournalRouteWithChildren
   LoginRoute: typeof LoginRoute
   PackagesRoute: typeof PackagesRoute
   PoliciesRoute: typeof PoliciesRoute
@@ -432,8 +444,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal/$slug': {
+      id: '/journal/$slug'
+      path: '/$slug'
+      fullPath: '/journal/$slug'
+      preLoaderRoute: typeof JournalSlugRouteImport
+      parentRoute: typeof JournalRoute
+    }
   }
 }
+
+interface JournalRouteChildren {
+  JournalSlugRoute: typeof JournalSlugRoute
+}
+
+const JournalRouteChildren: JournalRouteChildren = {
+  JournalSlugRoute: JournalSlugRoute,
+}
+
+const JournalRouteWithChildren =
+  JournalRoute._addFileChildren(JournalRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -443,7 +473,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
-  JournalRoute: JournalRoute,
+  JournalRoute: JournalRouteWithChildren,
   LoginRoute: LoginRoute,
   PackagesRoute: PackagesRoute,
   PoliciesRoute: PoliciesRoute,
