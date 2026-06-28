@@ -1,16 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   MessageCircle, ArrowRight, Plane, Sparkles, Heart,
   ClipboardList, UserCog, Wand2, LineChart, Sprout, Star, Quote,
 } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
+import { REVIEWS, CONCIERGE_WA } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
 import { HeroCarousel } from "@/components/HeroCarousel";
-import { ScrollPinHeadline } from "@/components/ScrollPinHeadline";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BA_IMAGES } from "@/lib/ba";
 import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
 import maVisiting from "@/assets/ma-visiting.png.asset.json";
@@ -36,14 +36,12 @@ function Index() {
   return (
     <div className="overflow-hidden">
       <Hero />
-      <PinnedHeadline />
       <Reveal><VisitingTrinidad /></Reveal>
       <Reveal><RealResults /></Reveal>
       <Reveal><Method /></Reveal>
       <Reveal><FeaturedTreatments /></Reveal>
       <Reveal><ClientReviews /></Reveal>
       <Reveal><TreatmentFinder /></Reveal>
-      <Reveal><FinalCta /></Reveal>
     </div>
   );
 }
@@ -60,7 +58,14 @@ function Hero() {
           <Reveal delay={0.1}>
             <p className="script-hero text-primary/85 mb-5">Your most confident self lives here.</p>
           </Reveal>
-          <Reveal delay={1.0}>
+          <Reveal delay={0.4}>
+            <h1 className="font-serif text-[2rem] sm:text-5xl lg:text-[3.6rem] leading-[1.05] text-ink">
+              Personalized Body Contouring
+              <span className="block italic text-primary">for Real Bodies</span>
+              <span className="block">and Real Goals.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.9}>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium btn-lux soft-shadow">
                 Book a Consultation <ArrowRight className="w-4 h-4" />
@@ -71,20 +76,6 @@ function Hero() {
         <div className="hidden lg:block lg:col-span-5" aria-hidden />
       </div>
     </section>
-  );
-}
-
-/* ───────────────── SCROLL-PIN HEADLINE (typed reveal) ───────────────── */
-function PinnedHeadline() {
-  return (
-    <ScrollPinHeadline
-      className="font-serif text-[2.4rem] sm:text-5xl lg:text-[4.4rem] leading-[1.05] text-ink text-center max-w-5xl mx-auto"
-      lines={[
-        { text: "Personalized Body Contouring" },
-        { text: "for Real Bodies", italic: true },
-        { text: "and Real Goals." },
-      ]}
-    />
   );
 }
 
@@ -138,7 +129,7 @@ function RealResults() {
 
 const RESULT_PREVIEWS = [
   { name: "Amara",  treatment: "Body Contouring",   duration: "After 6 sessions", quote: "I feel lighter, stronger, and more confident in my own skin.", image: BA_IMAGES[6] },
-  { name: "Renee",  treatment: "Fat Melting",       duration: "After 8 weeks",    quote: "My clothes fit better and I finally feel like myself again.",   image: BA_IMAGES[0] },
+  { name: "Gary",   treatment: "Fat Melting",       duration: "After 8 weeks",    quote: "My clothes fit better and I finally feel like myself again.",   image: BA_IMAGES[0] },
   { name: "Kiana",  treatment: "Skin Tightening",   duration: "After 4 sessions", quote: "I see a difference every time I look in the mirror.",          image: BA_IMAGES[5] },
   { name: "Naomi",  treatment: "Stretch Mark Care", duration: "After 6 weeks",    quote: "My waist is more defined and I feel so much better.",          image: BA_IMAGES[2] },
 ];
@@ -370,6 +361,9 @@ function ClientReviews() {
     "L.W.": "Leah",
   };
   const fourReviews = REVIEWS.slice(0, 4);
+  const [open, setOpen] = useState<number | null>(null);
+  const active = open !== null ? fourReviews[open] : null;
+  const activeName = active ? (REVIEW_NAMES[active.initials] ?? active.initials) : "";
   return (
     <section className="bg-gradient-to-b from-background via-blush/30 to-background py-24 lg:py-28">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
@@ -380,18 +374,23 @@ function ClientReviews() {
           </h2>
         </div>
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {fourReviews.map((r) => {
+          {fourReviews.map((r, i) => {
             const name = REVIEW_NAMES[r.initials] ?? r.initials;
             return (
-              <div key={r.initials} className="bg-background rounded-3xl p-8 card-shadow lift-on-hover hover:-translate-y-1 relative">
+              <button
+                key={r.initials}
+                onClick={() => setOpen(i)}
+                className="text-left bg-background rounded-3xl p-8 card-shadow lift-on-hover hover:-translate-y-1 relative focus:outline-none focus:ring-2 focus:ring-primary/40"
+              >
                 <Quote className="w-7 h-7 text-primary/40 absolute top-6 right-6" />
                 <StarRow />
-                <p className="mt-5 font-serif text-lg text-ink/90 leading-relaxed">{truncateWords(r.text, 16)}</p>
+                <p className="mt-5 font-serif text-lg text-ink/90 leading-relaxed line-clamp-2">{r.text}</p>
+                <span className="mt-3 inline-block text-xs uppercase tracking-[0.2em] text-primary/70">Read full review →</span>
                 <div className="mt-6 text-sm">
                   <div className="font-medium text-ink">{name}</div>
                   <div className="text-taupe text-xs">{r.service}</div>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
@@ -401,6 +400,22 @@ function ClientReviews() {
           </Link>
         </div>
       </div>
+      <Dialog open={open !== null} onOpenChange={(v) => !v && setOpen(null)}>
+        <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto">
+          {active && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-serif text-2xl text-ink">{activeName}</DialogTitle>
+                <p className="text-xs uppercase tracking-[0.2em] text-primary/70">{active.service}</p>
+              </DialogHeader>
+              <StarRow />
+              <p className="mt-2 font-serif text-base lg:text-lg text-ink/90 leading-relaxed whitespace-pre-line">
+                {active.text}
+              </p>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
@@ -462,36 +477,4 @@ function VisitingTrinidad() {
   );
 }
 
-/* ─────────────────── FINAL CTA ─────────────────── */
-function FinalCta() {
-  return (
-    <Section>
-      <div className="relative rounded-[2.5rem] overflow-hidden p-10 lg:p-20 bg-gradient-to-br from-blush via-background to-cream border border-border/60 card-shadow text-center">
-        <div className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full bg-rose/30 blur-3xl" aria-hidden />
-        <div className="absolute -bottom-24 -left-24 w-[380px] h-[380px] rounded-full bg-blush blur-3xl" aria-hidden />
-        <div className="relative max-w-2xl mx-auto">
-          <p className="font-script text-3xl lg:text-4xl text-primary">Ready When You Are</p>
-          <h2 className="mt-3 font-serif text-4xl lg:text-6xl text-ink leading-[1.05]">
-            Ready to explore your best treatment path?
-          </h2>
-          <p className="mt-5 text-taupe leading-relaxed">
-            Book a personalized consultation and receive guidance tailored to your goals, timeline, and body.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium hover:opacity-90 lift-on-hover soft-shadow">
-              Book Consultation <ArrowRight className="w-4 h-4" />
-            </Link>
-            <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-7 py-4 font-medium hover:opacity-90 lift-on-hover">
-              <MessageCircle className="w-4 h-4" /> Message on WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    </Section>
-  );
-}
 
-function truncateWords(text: string, maxWords: number) {
-  const words = text.replace(/\s+/g, " ").trim().split(" ");
-  return words.length > maxWords ? `${words.slice(0, maxWords).join(" ")}...` : text;
-}

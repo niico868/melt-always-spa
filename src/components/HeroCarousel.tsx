@@ -7,9 +7,9 @@ import heroBanner3 from "@/assets/hero-banner3-consult.png.asset.json";
 
 // Order matches the brief: hero-banner2 → hero-banner3 → hero-banner.
 const SLIDES = [
-  { src: heroBanner2.url, tint: "rgba(245, 226, 226, 0.5)" },
-  { src: heroBanner3.url, tint: "rgba(250, 240, 226, 0.48)" },
-  { src: heroBanner.url, tint: "rgba(232, 209, 196, 0.42)" },
+  { src: heroBanner2.url, tint: "rgba(245, 226, 226, 0.22)" },
+  { src: heroBanner3.url, tint: "rgba(250, 240, 226, 0.20)" },
+  { src: heroBanner.url, tint: "rgba(232, 209, 196, 0.18)" },
 ];
 
 export function HeroCarousel() {
@@ -61,7 +61,7 @@ export function HeroCarousel() {
             src={slide.src}
             alt=""
             aria-hidden
-            className="w-full h-full object-cover object-center lg:object-[center_38%]"
+            className="w-full h-full object-cover object-center lg:object-right"
             width={1024}
             height={1024}
           />
@@ -73,7 +73,7 @@ export function HeroCarousel() {
         className="absolute inset-0 pointer-events-none"
         initial={false}
         animate={{
-          background: `linear-gradient(180deg, color-mix(in oklab, var(--background) 96%, transparent) 0%, color-mix(in oklab, var(--background) 84%, transparent) 34%, color-mix(in oklab, var(--background) 42%, transparent) 100%)`,
+          background: `linear-gradient(180deg, color-mix(in oklab, var(--background) 70%, transparent) 0%, color-mix(in oklab, var(--background) 50%, transparent) 40%, color-mix(in oklab, var(--background) 18%, transparent) 100%)`,
         }}
         transition={{ duration: 1.6, ease: easeLux }}
       />
@@ -81,7 +81,7 @@ export function HeroCarousel() {
         className="absolute inset-0 pointer-events-none hidden lg:block"
         initial={false}
         animate={{
-          background: `linear-gradient(90deg, color-mix(in oklab, var(--background) 97%, transparent) 0%, color-mix(in oklab, var(--background) 90%, transparent) 32%, color-mix(in oklab, var(--background) 42%, transparent) 66%, transparent 100%)`,
+          background: `linear-gradient(90deg, color-mix(in oklab, var(--background) 88%, transparent) 0%, color-mix(in oklab, var(--background) 70%, transparent) 32%, color-mix(in oklab, var(--background) 24%, transparent) 62%, transparent 100%)`,
         }}
         transition={{ duration: 1.6, ease: easeLux }}
       />
