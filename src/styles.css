@@ -173,7 +173,7 @@
     -webkit-font-smoothing: antialiased;
   }
   html { scroll-behavior: smooth; }
-  .font-script { font-family: var(--font-script); font-weight: 400; }
+  .font-script { font-family: var(--font-script); font-weight: 400; letter-spacing: 0.012em; word-spacing: 0.14em; }
   .font-serif { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.01em; }
   h1, h2, h3 { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.015em; }
   .script-accent {
@@ -218,13 +218,16 @@
   color: var(--color-gold);
   font-size: clamp(3.25rem, 6vw, 5rem);
   line-height: 1;
-  letter-spacing: 0.005em;
+  letter-spacing: 0.014em;
+  word-spacing: 0.16em;
 }
 .script-eyebrow {
   font-family: var(--font-script);
   font-weight: 400;
   font-size: clamp(2.25rem, 3.6vw, 3rem);
   line-height: 1;
+  letter-spacing: 0.012em;
+  word-spacing: 0.14em;
 }
 
 /* Scroll progress bar */

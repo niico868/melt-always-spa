@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   MessageCircle, ArrowRight, Plane, Sparkles, Heart,
-  ClipboardList, ClipboardCheck, UserCog, Wand2, LineChart, Sprout, Star, Quote,
+  ClipboardList, UserCog, Wand2, LineChart, Sprout, Star, Quote,
 } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { SERVICES, REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
@@ -12,11 +12,14 @@ import { RevealText } from "@/components/motion/RevealText";
 import { CountUp } from "@/components/motion/CountUp";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { BA_IMAGES } from "@/lib/ba";
+import { JOURNAL_POSTS } from "@/lib/journal";
 import equipment from "@/assets/equipment.jpg";
 import treatment from "@/assets/treatment.jpg";
 import petals from "@/assets/petals.jpg";
 import womanConfident from "@/assets/woman-confident.jpg";
-import heroBanner from "@/assets/hero-banner.jpg";
+import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
+import maCarnival from "@/assets/ma-carnival.png.asset.json";
+import maVisiting from "@/assets/ma-visiting.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,7 +28,7 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Consultation-led body contouring, skin tightening, and wellness treatments in Trinidad & Tobago. Personalized care plans built around real goals, real bodies, and honest conversation." },
       { property: "og:title", content: "Melt Aways · Personalized Body Contouring for Real Bodies" },
       { property: "og:description", content: "Real bodies. Real goals. Consultation first. Premium body contouring and wellness in Trinidad & Tobago." },
-      { property: "og:image", content: heroBanner },
+      { property: "og:image", content: heroBanner.url },
     ],
   }),
   component: Index,
@@ -73,13 +76,13 @@ function Hero() {
             ]}
           />
           <Reveal delay={0.7}>
-            <p className="mt-7 text-lg text-taupe leading-relaxed max-w-xl">
+            <p className="mt-7 text-lg text-ink/88 leading-relaxed max-w-xl">
               You don't need to fit a mold to walk through our doors. Melt Aways is a space for real bodies,
               real concerns, and honest conversations.
             </p>
           </Reveal>
           <Reveal delay={0.85}>
-            <p className="mt-4 text-base text-taupe/90 leading-relaxed max-w-xl">
+            <p className="mt-4 text-base text-ink/78 leading-relaxed max-w-xl">
               Every treatment journey begins by listening first: understanding what feels important, what's
               realistic, and what kind of support would actually help. From there, a personal care plan is
               shaped with patience, respect, and guidance that feels genuinely made for the person in front of us.
@@ -93,14 +96,14 @@ function Hero() {
               <Link to="/gallery" className="inline-flex items-center gap-2 rounded-full bg-background border border-ink/15 px-7 py-4 font-medium hover:bg-blush lift-on-hover">
                 See Transformations
               </Link>
-              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-4 text-sm text-taupe hover:text-primary">
+              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-4 text-sm font-medium text-ink/90 hover:text-primary">
                 <MessageCircle className="w-4 h-4" /> Message on WhatsApp
               </a>
             </div>
           </Reveal>
 
           <Reveal delay={1.15}>
-            <p className="mt-8 text-xs uppercase tracking-[0.22em] text-primary/70">
+            <p className="mt-8 text-xs uppercase tracking-[0.22em] text-ink/70">
               Personalized care · Real bodies · Consultation first
             </p>
           </Reveal>
@@ -226,10 +229,10 @@ function StarRow() {
 
 /* ─────────────────── THE MELT AWAYS METHOD ─────────────────── */
 function Method() {
-  type Step = { icon: React.ReactNode; tag: string; title: string; body: string; withChecklist?: boolean };
+  type Step = { icon: React.ReactNode; tag: string; title: string; body: string };
   const steps: Step[] = [
-    { icon: <UserCog className="w-5 h-5" />,       tag: "CONSULT",     title: "We Start With Understanding",      body: "Every plan begins with a private, unhurried conversation about your goals, lifestyle, and history.", withChecklist: true },
-    { icon: <ClipboardList className="w-5 h-5" />, tag: "PERSONALIZE", title: "No One-Size-Fits-All Treatments",  body: "We design a treatment pathway shaped around your body, your timeline, and your comfort level." },
+    { icon: <ClipboardList className="w-5 h-5" />, tag: "CONSULT",     title: "We Start With Understanding",      body: "Every plan begins with a private, unhurried conversation about your goals, lifestyle, and history." },
+    { icon: <UserCog className="w-5 h-5" />,       tag: "PERSONALIZE", title: "No One-Size-Fits-All Treatments",  body: "We design a treatment pathway shaped around your body, your timeline, and your comfort level." },
     { icon: <Wand2 className="w-5 h-5" />,         tag: "TREAT",       title: "Treatments With Purpose",          body: "Every session is intentional. We treat with care, explain as we go, and never rush a result." },
     { icon: <LineChart className="w-5 h-5" />,     tag: "TRACK",       title: "Progress You Can See",             body: "We document measurements and milestones so progress is clear, honest, and personal." },
     { icon: <Sprout className="w-5 h-5" />,        tag: "MAINTAIN",    title: "Long-Term Confidence",             body: "Maintenance plans support results between sessions and keep confidence steady year-round." },
@@ -314,13 +317,8 @@ function Method() {
                 className={`${i % 2 ? "lg:order-2" : "lg:order-1"} bg-background border border-border/60 rounded-3xl p-7 lg:p-9 card-shadow lift-on-hover hover:-translate-y-1`}
               >
                 <div className="flex items-center gap-3 text-primary">
-                  <span className="relative w-11 h-11 rounded-full bg-blush flex items-center justify-center">
+                  <span className="w-11 h-11 rounded-full bg-blush flex items-center justify-center">
                     {s.icon}
-                    {s.withChecklist && (
-                      <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-fresh text-fresh-foreground flex items-center justify-center shadow">
-                        <ClipboardCheck className="w-3 h-3" />
-                      </span>
-                    )}
                   </span>
                   <span className="text-xs tracking-[0.25em] uppercase">Step 0{i + 1} · {s.tag}</span>
                 </div>
@@ -357,34 +355,43 @@ function WhoWeHelp() {
   return (
     <section className="bg-cream py-24 lg:py-28">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <Eyebrow>Who We Help</Eyebrow>
-          <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-            Care designed around your <em className="not-italic text-primary">season of life</em>.
-          </h2>
-          <p className="mt-4 text-taupe leading-relaxed">
-            Whatever brought you here, you are not the first to walk in with this question.
-            We help clients at every stage.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {people.map((p, i) => (
-            <Link
-              key={p.label}
-              to="/faq"
-              hash={p.hash}
-              className="group bg-background rounded-2xl border border-border/60 px-4 py-3.5 card-shadow lift-on-hover hover:-translate-y-0.5 hover:bg-blush/40 flex items-center gap-3"
-            >
-              <span className="w-7 h-7 rounded-full bg-blush flex items-center justify-center text-primary shrink-0">
-                <Heart className="w-3.5 h-3.5" />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-[10px] uppercase tracking-[0.18em] text-primary/70">0{i + 1}</span>
-                <span className="block font-serif text-sm lg:text-base text-ink leading-snug truncate">{p.label}</span>
-              </span>
-              <ArrowRight className="w-3.5 h-3.5 text-primary/40 ml-auto group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          ))}
+        <div className="rounded-[2rem] overflow-hidden border border-border/60 bg-background card-shadow lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:items-stretch">
+          <div className="p-8 lg:p-10">
+            <div className="max-w-2xl">
+              <Eyebrow>Who We Help</Eyebrow>
+              <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
+                Care designed around your <em className="not-italic text-primary">season of life</em>.
+              </h2>
+              <p className="mt-4 text-taupe leading-relaxed">
+                Whatever brought you here, you are not the first to walk in with this question. We help clients at every stage.
+              </p>
+            </div>
+            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-3">
+              {people.map((p, i) => (
+                <Link
+                  key={p.label}
+                  to="/faq"
+                  hash={p.hash}
+                  className="group bg-background rounded-2xl border border-border/60 px-4 py-3.5 lift-on-hover hover:-translate-y-0.5 hover:bg-blush/40 flex items-center gap-3"
+                >
+                  <span className="w-7 h-7 rounded-full bg-blush flex items-center justify-center text-primary shrink-0">
+                    <Heart className="w-3.5 h-3.5" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[10px] uppercase tracking-[0.18em] text-primary/70">0{i + 1}</span>
+                    <span className="block font-serif text-sm lg:text-base text-ink leading-snug truncate">{p.label}</span>
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5 text-primary/40 ml-auto group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative min-h-[260px] lg:min-h-full bg-cream">
+            <img src={maCarnival.url} alt="Carnival travel planning inspiration for Melt Aways clients" className="w-full h-full object-cover" loading="lazy" />
+            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background via-background/70 to-transparent lg:hidden" aria-hidden />
+            <div className="absolute inset-y-0 left-0 hidden lg:block w-28 bg-gradient-to-r from-background via-background/72 to-transparent" aria-hidden />
+          </div>
         </div>
       </div>
     </section>
@@ -446,12 +453,12 @@ function ClientReviews() {
             From the people we've worked with.
           </h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {REVIEWS.slice(0, 3).map((r) => (
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {REVIEWS.map((r) => (
             <div key={r.initials} className="bg-background rounded-3xl p-8 card-shadow lift-on-hover hover:-translate-y-1 relative">
               <Quote className="w-7 h-7 text-primary/40 absolute top-6 right-6" />
               <StarRow />
-              <p className="mt-5 font-serif text-lg text-ink/90 leading-relaxed">{r.text}</p>
+              <p className="mt-5 font-serif text-lg text-ink/90 leading-relaxed">{truncateWords(r.text, 16)}</p>
               <div className="mt-6 flex items-center gap-3">
                 <div className="w-11 h-11 rounded-full bg-blush flex items-center justify-center text-sm font-medium text-primary">{r.initials}</div>
                 <div className="text-sm">
@@ -503,22 +510,26 @@ function TreatmentFinder() {
 function VisitingTrinidad() {
   return (
     <Section className="!py-16">
-      <div className="rounded-3xl bg-background border border-border/60 p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
-        <div className="flex-1">
+      <div className="rounded-[2rem] overflow-hidden border border-border/60 bg-background card-shadow lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.95fr)] lg:items-stretch">
+        <div className="p-8 lg:p-10 flex flex-col justify-center">
           <p className="script-hero text-primary mb-2">Visiting Trinidad & Tobago 🇹🇹</p>
           <h3 className="mt-1 font-serif text-2xl lg:text-3xl text-ink leading-snug">Plan your treatment before you arrive.</h3>
           <p className="mt-3 text-taupe leading-relaxed max-w-2xl">
-            Coming home for Carnival, Christmas, or vacation? Start a consultation before you land so we
-            can plan around your event dates and availability.
+            Coming home for Carnival, Christmas, or vacation? Start a consultation before you land so we can plan around your event dates and availability.
           </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link to="/visiting" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium hover:opacity-90 lift-on-hover soft-shadow">
+              <Plane className="w-4 h-4" /> Plan My Visit
+            </Link>
+            <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 lift-on-hover">
+              <MessageCircle className="w-4 h-4" /> Concierge
+            </a>
+          </div>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Link to="/visiting" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium hover:opacity-90 lift-on-hover soft-shadow">
-            <Plane className="w-4 h-4" /> Plan My Visit
-          </Link>
-          <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 lift-on-hover">
-            <MessageCircle className="w-4 h-4" /> Concierge
-          </a>
+        <div className="relative min-h-[260px] lg:min-h-full bg-cream">
+          <img src={maVisiting.url} alt="Travel planning setup for visiting Melt Aways clients" className="w-full h-full object-cover" loading="lazy" />
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background via-background/70 to-transparent lg:hidden" aria-hidden />
+          <div className="absolute inset-y-0 left-0 hidden lg:block w-28 bg-gradient-to-r from-background via-background/72 to-transparent" aria-hidden />
         </div>
       </div>
     </Section>
@@ -548,7 +559,33 @@ function About() {
           plans built around your comfort, your confidence, and the results you want to achieve.
         </p>
       </div>
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
+      <div className="md:hidden mt-10 max-w-4xl mx-auto text-left">
+        <div className="grid grid-cols-3 grid-rows-2 rounded-[1.75rem] overflow-hidden border border-border/60 bg-background card-shadow h-[32svh] max-h-[260px] min-h-[220px]">
+          <div className="col-span-1 row-span-2 border-r border-border/60 bg-blush/25 p-3">
+            <div className="text-[0.62rem] uppercase tracking-[0.18em] text-primary/70 mb-2">Values</div>
+            <ul className="space-y-1.5 text-[0.68rem] leading-[1.25] text-ink/85">
+              <li>Care first.</li>
+              <li>Privacy protected.</li>
+              <li>Every body welcome.</li>
+              <li>Guidance stays honest.</li>
+              <li>Progress should feel real.</li>
+            </ul>
+          </div>
+          <div className="col-span-2 border-b border-border/60 p-3">
+            <div className="text-[0.62rem] uppercase tracking-[0.18em] text-primary/70 mb-2">Mission</div>
+            <p className="text-[0.68rem] leading-[1.3] text-ink/85">
+              Personal, private, results-focused body and wellness care guided by trained specialists who listen first.
+            </p>
+          </div>
+          <div className="col-span-2 p-3">
+            <div className="text-[0.62rem] uppercase tracking-[0.18em] text-primary/70 mb-2">Philosophy</div>
+            <p className="text-[0.68rem] leading-[1.3] text-ink/85">
+              We understand the person before the treatment so every plan feels safe, respectful, and genuinely personal.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="hidden md:grid mt-12 grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
         <Reveal direction="left" className="bg-background border border-border/60 rounded-3xl p-7 card-shadow">
           <div className="text-xs uppercase tracking-[0.22em] text-primary/70 mb-2">Mission</div>
           <p className="text-ink/90 leading-relaxed">
@@ -583,11 +620,6 @@ function About() {
 
 /* ─────────────────── JOURNAL PREVIEW ─────────────────── */
 function JournalPreview() {
-  const posts = [
-    { tag: "Treatment Guide", title: "What to expect from your first cavitation session",   img: equipment },
-    { tag: "Recovery",        title: "Caring for your body between treatments",             img: petals },
-    { tag: "Education",       title: "Five myths about body contouring, gently corrected",  img: treatment },
-  ];
   return (
     <section className="bg-cream py-24 lg:py-28">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
@@ -603,14 +635,18 @@ function JournalPreview() {
           </Link>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
-          {posts.map(p => (
-            <Link key={p.title} to="/journal" className="group bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow lift-on-hover hover:-translate-y-1">
+          {JOURNAL_POSTS.map((post) => (
+            <Link key={post.slug} to="/journal/$slug" params={{ slug: post.slug }} className="group bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow lift-on-hover hover:-translate-y-1">
               <div className="aspect-[5/3] overflow-hidden bg-blush">
-                <img src={p.img} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" />
+                <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" width={1280} height={720} />
               </div>
               <div className="p-6">
-                <div className="text-xs uppercase tracking-[0.22em] text-primary/70">{p.tag}</div>
-                <h3 className="mt-2 font-serif text-xl text-ink leading-snug">{p.title}</h3>
+                <div className="text-xs uppercase tracking-[0.22em] text-primary/70">{post.category}</div>
+                <h3 className="mt-2 font-serif text-xl text-ink leading-snug">{post.title}</h3>
+                <p className="mt-3 text-sm text-taupe leading-relaxed">{post.excerpt}</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                  {post.ctaText} <ArrowRight className="w-4 h-4" />
+                </span>
               </div>
             </Link>
           ))}
@@ -647,4 +683,9 @@ function FinalCta() {
       </div>
     </Section>
   );
+}
+
+function truncateWords(text: string, maxWords: number) {
+  const words = text.replace(/\s+/g, " ").trim().split(" ");
+  return words.length > maxWords ? `${words.slice(0, maxWords).join(" ")}...` : text;
 }
