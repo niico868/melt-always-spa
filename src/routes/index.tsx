@@ -52,16 +52,14 @@ function Index() {
 /* ───────────────────────── HERO ───────────────────────── */
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blush via-background to-cream" />
+    <section className="relative overflow-hidden min-h-[640px] lg:min-h-[760px]">
+      <HeroCarousel />
       <div className="bg-bloom" aria-hidden />
-      <div className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full bg-rose/30 blur-3xl -z-10" />
-      <div className="absolute top-40 -right-40 w-[600px] h-[600px] rounded-full bg-blush blur-3xl -z-10" />
 
-      <div className="mx-auto max-w-[1400px] px-5 lg:px-12 pt-16 lg:pt-24 pb-20 lg:pb-28 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <div className="lg:col-span-6">
+      <div className="relative mx-auto max-w-[1400px] px-5 lg:px-12 pt-16 lg:pt-28 pb-20 lg:pb-32 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="lg:col-span-7">
           <Reveal delay={0.1}>
-            <p className="font-script text-3xl lg:text-4xl text-primary/80 leading-none mb-5">Welcome to Melt Aways</p>
+            <p className="script-hero text-primary/85 mb-5">Welcome to Melt Aways</p>
           </Reveal>
           <RevealText
             as="h1"
@@ -107,43 +105,7 @@ function Hero() {
             </p>
           </Reveal>
         </div>
-
-        {/* Image cluster */}
-        <div className="lg:col-span-6 relative">
-          <div className="relative max-w-[560px] mx-auto">
-            <Reveal duration={1.1} variants={{ hidden: { opacity: 0, scale: 0.97 }, show: { opacity: 1, scale: 1 } }}>
-              <FloatImage amplitude={6} duration={9} className="aspect-[4/5] rounded-[2.5rem] overflow-hidden card-shadow">
-                <img src={homeModel1} alt="A Melt Aways client during a consultation" className="w-full h-full object-cover" width={1024} height={1280} />
-              </FloatImage>
-            </Reveal>
-
-            <div className="absolute -bottom-8 -left-6 lg:-left-12 w-44 h-56 rounded-3xl overflow-hidden card-shadow hidden sm:block float-slow">
-              <img src={homeModel2} alt="Personalized care moment" className="w-full h-full object-cover" loading="lazy" />
-            </div>
-
-            <div className="absolute -top-6 -right-4 lg:-right-10 bg-background/95 backdrop-blur rounded-2xl px-5 py-4 card-shadow flex items-center gap-3 max-w-[230px]">
-              <div className="w-10 h-10 rounded-full bg-blush flex items-center justify-center text-primary">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div className="text-xs leading-snug">
-                <div className="font-medium text-ink">Consultation first</div>
-                <div className="text-taupe">No pressure, no judgement</div>
-              </div>
-            </div>
-
-            <div className="absolute bottom-10 -right-3 lg:-right-8 bg-background/95 backdrop-blur rounded-2xl px-5 py-4 card-shadow flex items-center gap-3">
-              <div className="flex -space-x-2">
-                <div className="w-7 h-7 rounded-full bg-rose border-2 border-background" />
-                <div className="w-7 h-7 rounded-full bg-blush border-2 border-background" />
-                <div className="w-7 h-7 rounded-full bg-cream border-2 border-background" />
-              </div>
-              <div className="text-xs leading-snug">
-                <div className="font-medium text-ink">500+ happy clients</div>
-                <div className="text-taupe">across Trinidad & Tobago</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className="hidden lg:block lg:col-span-5" aria-hidden />
       </div>
     </section>
   );
