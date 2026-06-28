@@ -477,36 +477,4 @@ function VisitingTrinidad() {
   );
 }
 
-/* ─────────────────── FINAL CTA ─────────────────── */
-function FinalCta() {
-  return (
-    <Section>
-      <div className="relative rounded-[2.5rem] overflow-hidden p-10 lg:p-20 bg-gradient-to-br from-blush via-background to-cream border border-border/60 card-shadow text-center">
-        <div className="absolute -top-32 -right-20 w-[420px] h-[420px] rounded-full bg-rose/30 blur-3xl" aria-hidden />
-        <div className="absolute -bottom-24 -left-24 w-[380px] h-[380px] rounded-full bg-blush blur-3xl" aria-hidden />
-        <div className="relative max-w-2xl mx-auto">
-          <p className="font-script text-3xl lg:text-4xl text-primary">Ready When You Are</p>
-          <h2 className="mt-3 font-serif text-4xl lg:text-6xl text-ink leading-[1.05]">
-            Ready to explore your best treatment path?
-          </h2>
-          <p className="mt-5 text-taupe leading-relaxed">
-            Book a personalized consultation and receive guidance tailored to your goals, timeline, and body.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium hover:opacity-90 lift-on-hover soft-shadow">
-              Book Consultation <ArrowRight className="w-4 h-4" />
-            </Link>
-            <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-7 py-4 font-medium hover:opacity-90 lift-on-hover">
-              <MessageCircle className="w-4 h-4" /> Message on WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    </Section>
-  );
-}
 
-function truncateWords(text: string, maxWords: number) {
-  const words = text.replace(/\s+/g, " ").trim().split(" ");
-  return words.length > maxWords ? `${words.slice(0, maxWords).join(" ")}...` : text;
-}
