@@ -133,7 +133,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ScrollProgress />
       <Header />
-      <main>
+      <main className="pt-24">
         <Outlet />
       </main>
       <Footer />
