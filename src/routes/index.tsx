@@ -6,7 +6,7 @@ import {
   ClipboardList, UserCog, Wand2, LineChart, Sprout, Star, Quote,
 } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
+import { REVIEWS, CONCIERGE_WA } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
 import { HeroCarousel } from "@/components/HeroCarousel";
