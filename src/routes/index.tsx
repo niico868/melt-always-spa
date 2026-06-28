@@ -127,10 +127,6 @@ function RealResults() {
         </div>
 
         <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-          <span className="text-sm text-taupe">Ready to start your transformation?</span>
-          <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-medium hover:opacity-90 lift-on-hover soft-shadow">
-            Book Your Consultation <ArrowRight className="w-4 h-4" />
-          </Link>
           <Link to="/gallery" className="inline-flex items-center gap-2 rounded-full bg-background border border-ink/15 px-6 py-3 text-sm font-medium hover:bg-blush lift-on-hover">
             View All Results
           </Link>
