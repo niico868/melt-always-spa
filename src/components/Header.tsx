@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { Menu, X, User } from "lucide-react";
 import { Logo } from "./Logo";
 import { NAV, NAV_LEFT, NAV_RIGHT } from "@/lib/site";
@@ -23,14 +22,6 @@ export function Header() {
   const nav = useNavigate();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<ClientProfile | null>(null);
-  const [hidden, setHidden] = useState(false);
-  const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, "change", (y) => {
-    const prev = scrollY.getPrevious() ?? 0;
-    if (y < 80) { setHidden(false); return; }
-    if (y > prev + 4) setHidden(true);       // scrolling down
-    else if (y < prev - 4) setHidden(false); // scrolling up
-  });
   useEffect(() => {
     const sync = () => setUser(getSession());
     sync();
@@ -39,15 +30,9 @@ export function Header() {
     return () => { window.removeEventListener("meltaways:auth", sync); window.removeEventListener("storage", sync); };
   }, []);
   const accountLink: "/account" | "/admin" = user?.role === "client" ? "/account" : "/admin";
-  const linkClass = "nav-underline text-[12px] tracking-[0.18em] uppercase font-sans font-normal text-ink/85 hover:text-gold transition-colors";
+  const linkClass = "nav-underline text-[13px] tracking-[0.08em] uppercase text-foreground/75 hover:text-primary transition-colors";
   return (
-    <motion.header
-      className="fixed top-0 inset-x-0 z-40 border-b border-gold/20 header-fade"
-      style={{ background: "color-mix(in oklab, var(--cream) 88%, transparent)", backdropFilter: "saturate(140%) blur(10px)", WebkitBackdropFilter: "saturate(140%) blur(10px)" }}
-      initial={{ y: 0 }}
-      animate={{ y: hidden ? "-110%" : "0%" }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <header className="sticky top-0 z-40 glass-nav border-b border-border/40 header-fade">
       <div className="mx-auto max-w-[1400px] px-5 lg:px-10 h-24 grid grid-cols-[1fr_auto_1fr] items-center gap-6">
         {/* LEFT NAV */}
         <nav className="hidden lg:flex items-center justify-around gap-8">
@@ -82,7 +67,7 @@ export function Header() {
             </Link>
           )}
           <Link to="/booking"
-            className="inline-flex items-center rounded-full bg-gold text-espresso px-5 py-2.5 text-[12px] tracking-[0.14em] uppercase font-medium hover:bg-rose hover:text-cream transition soft-shadow">
+            className="inline-flex items-center rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-[13px] tracking-wide font-medium hover:opacity-90 transition soft-shadow">
             Book Consultation
           </Link>
         </div>
@@ -93,24 +78,24 @@ export function Header() {
         </button>
       </div>
       {open && (
-        <div className="lg:hidden border-t border-gold/20 bg-cream">
+        <div className="lg:hidden border-t border-border/60 bg-background">
           <div className="px-5 py-4 flex flex-col gap-1">
             {NAV.map(n => (
               <Link key={n.to} to={n.to} onClick={() => setOpen(false)}
-                className="py-2 text-sm uppercase tracking-[0.18em] text-ink/85">{n.label}</Link>
+                className="py-2 text-base text-foreground/80">{n.label}</Link>
             ))}
             {user ? (
-              <Link to={accountLink} onClick={() => setOpen(false)} className="py-2 text-sm uppercase tracking-[0.18em] text-ink/85">My Account</Link>
+              <Link to={accountLink} onClick={() => setOpen(false)} className="py-2 text-base text-foreground/80">My Account</Link>
             ) : (
-              <Link to="/login" onClick={() => setOpen(false)} className="py-2 text-sm uppercase tracking-[0.18em] text-ink/85">Account</Link>
+              <Link to="/login" onClick={() => setOpen(false)} className="py-2 text-base text-foreground/80">Account</Link>
             )}
             <Link to="/booking" onClick={() => setOpen(false)}
-              className="mt-3 inline-flex justify-center rounded-full bg-gold text-espresso px-5 py-3 font-medium uppercase tracking-[0.14em] text-sm">
+              className="mt-3 inline-flex justify-center rounded-full bg-primary text-primary-foreground px-5 py-3 font-medium">
               Book Consultation
             </Link>
           </div>
         </div>
       )}
-    </motion.header>
+    </header>
   );
 }
