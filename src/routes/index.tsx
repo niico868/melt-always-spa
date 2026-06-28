@@ -6,20 +6,18 @@ import {
   ClipboardList, UserCog, Wand2, LineChart, Sprout, Star, Quote,
 } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { SERVICES, REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
+import { REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
-import { RevealText } from "@/components/motion/RevealText";
 import { CountUp } from "@/components/motion/CountUp";
 import { HeroCarousel } from "@/components/HeroCarousel";
+import { ScrollPinHeadline } from "@/components/ScrollPinHeadline";
 import { BA_IMAGES } from "@/lib/ba";
-import { JOURNAL_POSTS } from "@/lib/journal";
-import equipment from "@/assets/equipment.jpg";
-import treatment from "@/assets/treatment.jpg";
-import petals from "@/assets/petals.jpg";
-import womanConfident from "@/assets/woman-confident.jpg";
 import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
-import maCarnival from "@/assets/ma-carnival.png.asset.json";
 import maVisiting from "@/assets/ma-visiting.png.asset.json";
+import homeToning from "@/assets/home-toning.png.asset.json";
+import homeSkinTightening from "@/assets/home-skin-tightening.jpeg.asset.json";
+import homeCavitation from "@/assets/home-cavitation.png.asset.json";
+import homeButtFiller from "@/assets/home-buttfiller.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,15 +36,13 @@ function Index() {
   return (
     <div className="overflow-hidden">
       <Hero />
+      <PinnedHeadline />
+      <Reveal><VisitingTrinidad /></Reveal>
       <Reveal><RealResults /></Reveal>
       <Reveal><Method /></Reveal>
-      <Reveal><WhoWeHelp /></Reveal>
       <Reveal><FeaturedTreatments /></Reveal>
       <Reveal><ClientReviews /></Reveal>
       <Reveal><TreatmentFinder /></Reveal>
-      <Reveal><VisitingTrinidad /></Reveal>
-      <Reveal><About /></Reveal>
-      <Reveal><JournalPreview /></Reveal>
       <Reveal><FinalCta /></Reveal>
     </div>
   );
@@ -62,55 +58,33 @@ function Hero() {
       <div className="relative mx-auto max-w-[1400px] px-5 lg:px-12 pt-16 lg:pt-28 pb-20 lg:pb-32 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         <div className="lg:col-span-7">
           <Reveal delay={0.1}>
-            <p className="script-hero text-primary/85 mb-5">Welcome to Melt Aways</p>
-          </Reveal>
-          <RevealText
-            as="h1"
-            className="font-serif text-[2.6rem] sm:text-5xl lg:text-[4.2rem] leading-[1.02] text-ink"
-            stagger={0.12}
-            delay={0.25}
-            lines={[
-              <>Personalized Body Contouring</>,
-              <em className="not-italic italic text-primary">for Real Bodies</em>,
-              <>and Real Goals.</>,
-            ]}
-          />
-          <Reveal delay={0.7}>
-            <p className="mt-7 text-lg text-ink/88 leading-relaxed max-w-xl">
-              You don't need to fit a mold to walk through our doors. Melt Aways is a space for real bodies,
-              real concerns, and honest conversations.
-            </p>
-          </Reveal>
-          <Reveal delay={0.85}>
-            <p className="mt-4 text-base text-ink/78 leading-relaxed max-w-xl">
-              Every treatment journey begins by listening first: understanding what feels important, what's
-              realistic, and what kind of support would actually help. From there, a personal care plan is
-              shaped with patience, respect, and guidance that feels genuinely made for the person in front of us.
-            </p>
+            <p className="script-hero text-primary/85 mb-5">Your most confident self lives here.</p>
           </Reveal>
           <Reveal delay={1.0}>
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap gap-3">
               <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium btn-lux soft-shadow">
                 Book a Consultation <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link to="/gallery" className="inline-flex items-center gap-2 rounded-full bg-background border border-ink/15 px-7 py-4 font-medium hover:bg-blush lift-on-hover">
-                See Transformations
-              </Link>
-              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-4 text-sm font-medium text-ink/90 hover:text-primary">
-                <MessageCircle className="w-4 h-4" /> Message on WhatsApp
-              </a>
             </div>
-          </Reveal>
-
-          <Reveal delay={1.15}>
-            <p className="mt-8 text-xs uppercase tracking-[0.22em] text-ink/70">
-              Personalized care · Real bodies · Consultation first
-            </p>
           </Reveal>
         </div>
         <div className="hidden lg:block lg:col-span-5" aria-hidden />
       </div>
     </section>
+  );
+}
+
+/* ───────────────── SCROLL-PIN HEADLINE (typed reveal) ───────────────── */
+function PinnedHeadline() {
+  return (
+    <ScrollPinHeadline
+      className="font-serif text-[2.4rem] sm:text-5xl lg:text-[4.4rem] leading-[1.05] text-ink text-center max-w-5xl mx-auto"
+      lines={[
+        { text: "Personalized Body Contouring" },
+        { text: "for Real Bodies", italic: true },
+        { text: "and Real Goals." },
+      ]}
+    />
   );
 }
 
