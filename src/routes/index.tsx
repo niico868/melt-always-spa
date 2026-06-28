@@ -314,68 +314,14 @@ function Method() {
   );
 }
 
-/* ─────────────────── WHO WE HELP ─────────────────── */
-function WhoWeHelp() {
-  const people = [
-    { label: "New Mothers",                       hash: "new-mothers" },
-    { label: "Busy Professionals",                hash: "busy-professionals" },
-    { label: "Carnival Preparation",              hash: "carnival" },
-    { label: "Wedding Preparation",               hash: "wedding" },
-    { label: "Vacation Preparation",              hash: "vacation" },
-    { label: "Confidence Rebuilding",             hash: "confidence" },
-    { label: "Stubborn Areas Despite Exercise",   hash: "stubborn-areas" },
-    { label: "Visiting Trinidad",                 hash: "visiting" },
-  ];
-  return (
-    <section className="bg-cream py-24 lg:py-28">
-      <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="rounded-[2rem] overflow-hidden border border-border/60 bg-background card-shadow lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:items-stretch">
-          <div className="p-8 lg:p-10">
-            <div className="max-w-2xl">
-              <Eyebrow>Who We Help</Eyebrow>
-              <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-                Care designed around your <em className="not-italic text-primary">season of life</em>.
-              </h2>
-              <p className="mt-4 text-taupe leading-relaxed">
-                Whatever brought you here, you are not the first to walk in with this question. We help clients at every stage.
-              </p>
-            </div>
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-3">
-              {people.map((p, i) => (
-                <Link
-                  key={p.label}
-                  to="/faq"
-                  hash={p.hash}
-                  className="group bg-background rounded-2xl border border-border/60 px-4 py-3.5 lift-on-hover hover:-translate-y-0.5 hover:bg-blush/40 flex items-center gap-3"
-                >
-                  <span className="w-7 h-7 rounded-full bg-blush flex items-center justify-center text-primary shrink-0">
-                    <Heart className="w-3.5 h-3.5" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[10px] uppercase tracking-[0.18em] text-primary/70">0{i + 1}</span>
-                    <span className="block font-serif text-sm lg:text-base text-ink leading-snug truncate">{p.label}</span>
-                  </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-primary/40 ml-auto group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative min-h-[260px] lg:min-h-full bg-cream">
-            <img src={maCarnival.url} alt="Carnival travel planning inspiration for Melt Aways clients" className="w-full h-full object-cover" loading="lazy" />
-            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background via-background/70 to-transparent lg:hidden" aria-hidden />
-            <div className="absolute inset-y-0 left-0 hidden lg:block w-28 bg-gradient-to-r from-background via-background/72 to-transparent" aria-hidden />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ─────────────────── FEATURED TREATMENTS ─────────────────── */
 function FeaturedTreatments() {
-  const featured = SERVICES.slice(0, 4);
-  const imgs = [treatment, equipment, womanConfident, petals];
+  const featured = [
+    { slug: "muscle-toning",   name: "Body Sculpting / Toning", desc: "Define and strengthen targeted areas with body-sculpting support designed to complement your lifestyle.", image: homeToning.url },
+    { slug: "skin-tightening", name: "Skin Tightening",         desc: "Support firmer-looking skin and smoother body definition through treatment plans created around your goals.", image: homeSkinTightening.url },
+    { slug: "cavitation",      name: "Cavitation",              desc: "A non-surgical body-contouring treatment commonly used to support stubborn fat reduction.", image: homeCavitation.url },
+    { slug: "butt-filler",     name: "Butt Filler",             desc: "A consultation-led contouring service designed for shape, volume, and body confidence.", image: homeButtFiller.url },
+  ];
   return (
     <Section>
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
@@ -394,10 +340,10 @@ function FeaturedTreatments() {
         </Link>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {featured.map((s, i) => (
+        {featured.map((s) => (
           <article key={s.slug} className="group bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow lift-on-hover hover:-translate-y-1 flex flex-col">
             <div className="aspect-[4/3] overflow-hidden bg-blush">
-              <img src={imgs[i]} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" />
+              <img src={s.image} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" />
             </div>
             <div className="p-6 flex flex-col flex-1">
               <h3 className="font-serif text-2xl text-ink">{s.name}</h3>
@@ -418,6 +364,16 @@ function FeaturedTreatments() {
 
 /* ─────────────────── CLIENT REVIEWS ─────────────────── */
 function ClientReviews() {
+  const REVIEW_NAMES: Record<string, string> = {
+    "K.B.": "Kayla",
+    "D.S.": "Danielle",
+    "A.R.": "Anika",
+    "M.J.": "Maya",
+    "C.P.": "Camille",
+    "N.G.": "Nia",
+    "L.W.": "Leah",
+  };
+  const fourReviews = REVIEWS.slice(0, 4);
   return (
     <section className="bg-gradient-to-b from-background via-blush/30 to-background py-24 lg:py-28">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
@@ -428,20 +384,20 @@ function ClientReviews() {
           </h2>
         </div>
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {REVIEWS.map((r) => (
-            <div key={r.initials} className="bg-background rounded-3xl p-8 card-shadow lift-on-hover hover:-translate-y-1 relative">
-              <Quote className="w-7 h-7 text-primary/40 absolute top-6 right-6" />
-              <StarRow />
-              <p className="mt-5 font-serif text-lg text-ink/90 leading-relaxed">{truncateWords(r.text, 16)}</p>
-              <div className="mt-6 flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full bg-blush flex items-center justify-center text-sm font-medium text-primary">{r.initials}</div>
-                <div className="text-sm">
-                  <div className="font-medium text-ink">{r.initials}</div>
+          {fourReviews.map((r) => {
+            const name = REVIEW_NAMES[r.initials] ?? r.initials;
+            return (
+              <div key={r.initials} className="bg-background rounded-3xl p-8 card-shadow lift-on-hover hover:-translate-y-1 relative">
+                <Quote className="w-7 h-7 text-primary/40 absolute top-6 right-6" />
+                <StarRow />
+                <p className="mt-5 font-serif text-lg text-ink/90 leading-relaxed">{truncateWords(r.text, 16)}</p>
+                <div className="mt-6 text-sm">
+                  <div className="font-medium text-ink">{name}</div>
                   <div className="text-taupe text-xs">{r.service}</div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className="text-center mt-10">
           <Link to="/reviews" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:gap-2 transition-all">
@@ -507,126 +463,6 @@ function VisitingTrinidad() {
         </div>
       </div>
     </Section>
-  );
-}
-
-/* ─────────────────── ABOUT ─────────────────── */
-function About() {
-  const values = [
-    "We lead with care.",
-    "We protect your privacy.",
-    "We honour every body.",
-    "We guide with honesty.",
-    "We treat with skill, patience, and intention.",
-    "We celebrate progress that feels real.",
-  ];
-  return (
-    <Section>
-      <div className="max-w-3xl mx-auto text-center">
-        <Eyebrow>About Melt Aways</Eyebrow>
-        <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-          A space where clients feel <em className="not-italic text-primary">seen, respected, and guided</em>.
-        </h2>
-        <p className="mt-6 text-taupe leading-relaxed">
-          Melt Aways exists to give women and men a place where they can talk about their body and
-          their goals without judgement. We focus on clear guidance, personal attention, and treatment
-          plans built around your comfort, your confidence, and the results you want to achieve.
-        </p>
-      </div>
-      <div className="md:hidden mt-10 max-w-4xl mx-auto text-left">
-        <div className="grid grid-cols-3 grid-rows-2 rounded-[1.75rem] overflow-hidden border border-border/60 bg-background card-shadow h-[32svh] max-h-[260px] min-h-[220px]">
-          <div className="col-span-1 row-span-2 border-r border-border/60 bg-blush/25 p-3">
-            <div className="text-[0.62rem] uppercase tracking-[0.18em] text-primary/70 mb-2">Values</div>
-            <ul className="space-y-1.5 text-[0.68rem] leading-[1.25] text-ink/85">
-              <li>Care first.</li>
-              <li>Privacy protected.</li>
-              <li>Every body welcome.</li>
-              <li>Guidance stays honest.</li>
-              <li>Progress should feel real.</li>
-            </ul>
-          </div>
-          <div className="col-span-2 border-b border-border/60 p-3">
-            <div className="text-[0.62rem] uppercase tracking-[0.18em] text-primary/70 mb-2">Mission</div>
-            <p className="text-[0.68rem] leading-[1.3] text-ink/85">
-              Personal, private, results-focused body and wellness care guided by trained specialists who listen first.
-            </p>
-          </div>
-          <div className="col-span-2 p-3">
-            <div className="text-[0.62rem] uppercase tracking-[0.18em] text-primary/70 mb-2">Philosophy</div>
-            <p className="text-[0.68rem] leading-[1.3] text-ink/85">
-              We understand the person before the treatment so every plan feels safe, respectful, and genuinely personal.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="hidden md:grid mt-12 grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
-        <Reveal direction="left" className="bg-background border border-border/60 rounded-3xl p-7 card-shadow">
-          <div className="text-xs uppercase tracking-[0.22em] text-primary/70 mb-2">Mission</div>
-          <p className="text-ink/90 leading-relaxed">
-            To make non-surgical body and wellness care feel personal, private, and results-focused —
-            delivered by trained treatment specialists who listen first, guide honestly, and help
-            every client feel more confident in their own body.
-          </p>
-        </Reveal>
-        <Reveal direction="up" className="bg-background border border-border/60 rounded-3xl p-7 card-shadow">
-          <div className="text-xs uppercase tracking-[0.22em] text-primary/70 mb-2">Values</div>
-          <ul className="space-y-2 text-ink/90">
-            {values.map((v) => (
-              <li key={v} className="flex gap-2.5 leading-relaxed">
-                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0" aria-hidden />
-                <span>{v}</span>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-        <Reveal direction="right" className="bg-background border border-border/60 rounded-3xl p-7 card-shadow">
-          <div className="text-xs uppercase tracking-[0.22em] text-primary/70 mb-2">Philosophy</div>
-          <p className="text-ink/90 leading-relaxed">
-            Melt Aways care begins with understanding the person, not just the treatment. We welcome
-            all bodies, listen without judgement, and create safe, personalized treatment plans that
-            support confidence, comfort, and real progress.
-          </p>
-        </Reveal>
-      </div>
-    </Section>
-  );
-}
-
-/* ─────────────────── JOURNAL PREVIEW ─────────────────── */
-function JournalPreview() {
-  return (
-    <section className="bg-cream py-24 lg:py-28">
-      <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-          <div className="max-w-2xl">
-            <Eyebrow>Journal & Education</Eyebrow>
-            <h2 className="font-serif text-4xl lg:text-5xl text-ink leading-tight">
-              Read, learn, and arrive prepared.
-            </h2>
-          </div>
-          <Link to="/journal" className="text-sm font-medium text-primary inline-flex items-center gap-2 hover:gap-3 transition-all">
-            Visit the journal <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {JOURNAL_POSTS.map((post) => (
-            <Link key={post.slug} to="/journal/$slug" params={{ slug: post.slug }} className="group bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow lift-on-hover hover:-translate-y-1">
-              <div className="aspect-[5/3] overflow-hidden bg-blush">
-                <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" width={1280} height={720} />
-              </div>
-              <div className="p-6">
-                <div className="text-xs uppercase tracking-[0.22em] text-primary/70">{post.category}</div>
-                <h3 className="mt-2 font-serif text-xl text-ink leading-snug">{post.title}</h3>
-                <p className="mt-3 text-sm text-taupe leading-relaxed">{post.excerpt}</p>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary">
-                  {post.ctaText} <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 
