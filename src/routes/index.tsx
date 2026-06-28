@@ -1,24 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
-  MessageCircle, ArrowRight, Plane, ShieldCheck, Sparkles, Heart,
-  ClipboardList, UserCheck, Wand2, LineChart, Leaf, Star, Quote,
+  MessageCircle, ArrowRight, Plane, Sparkles, Heart,
+  ClipboardList, ClipboardCheck, UserCog, Wand2, LineChart, Sprout, Star, Quote,
 } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { SERVICES, REVIEWS, SITE, CONCIERGE_WA } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealText } from "@/components/motion/RevealText";
-import { Stagger } from "@/components/motion/Stagger";
-import { FloatImage } from "@/components/motion/FloatImage";
 import { CountUp } from "@/components/motion/CountUp";
-import { HoverCard } from "@/components/motion/HoverCard";
-import womanConfident from "@/assets/woman-confident.jpg";
+import { HeroCarousel } from "@/components/HeroCarousel";
+import { BA_IMAGES } from "@/lib/ba";
 import equipment from "@/assets/equipment.jpg";
 import treatment from "@/assets/treatment.jpg";
-import reception from "@/assets/reception.jpg";
 import petals from "@/assets/petals.jpg";
-import homeModel1 from "@/assets/home-model-1.jpg";
-import homeModel2 from "@/assets/home-model-2.jpg";
-import homeModel3 from "@/assets/home-model-3.jpg";
+import womanConfident from "@/assets/woman-confident.jpg";
+import heroBanner from "@/assets/hero-banner.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -27,7 +25,7 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Consultation-led body contouring, skin tightening, and wellness treatments in Trinidad & Tobago. Personalized care plans built around real goals, real bodies, and honest conversation." },
       { property: "og:title", content: "Melt Aways · Personalized Body Contouring for Real Bodies" },
       { property: "og:description", content: "Real bodies. Real goals. Consultation first. Premium body contouring and wellness in Trinidad & Tobago." },
-      { property: "og:image", content: homeModel1 },
+      { property: "og:image", content: heroBanner },
     ],
   }),
   component: Index,
@@ -43,7 +41,6 @@ function Index() {
       <Reveal><FeaturedTreatments /></Reveal>
       <Reveal><ClientReviews /></Reveal>
       <Reveal><TreatmentFinder /></Reveal>
-      <Reveal><SafetyTrust /></Reveal>
       <Reveal><VisitingTrinidad /></Reveal>
       <Reveal><About /></Reveal>
       <Reveal><JournalPreview /></Reveal>
