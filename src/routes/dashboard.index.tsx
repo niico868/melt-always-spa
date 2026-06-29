@@ -55,9 +55,9 @@ function Dashboard() {
           </div>
           {/* Middle row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:min-h-0">
-            <RecentSales />
-            <RecentConsultations />
-            <TopServicesChart />
+            <div className="min-h-[200px] lg:min-h-0"><RecentSales /></div>
+            <div className="min-h-[200px] lg:min-h-0"><RecentConsultations /></div>
+            <div className="min-h-[200px] lg:min-h-0"><TopServicesChart /></div>
           </div>
           {/* Bottom row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:min-h-0">

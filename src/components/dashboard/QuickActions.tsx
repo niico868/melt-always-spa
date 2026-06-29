@@ -16,9 +16,9 @@ const ACTIONS: { icon: LucideIcon; label: string }[] = [
 
 export function QuickActions() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 h-full flex flex-col min-h-0">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 lg:h-full flex flex-col lg:min-h-0">
       <h3 className="text-sm font-semibold text-gray-900 mb-1 px-1 flex-shrink-0">Quick actions</h3>
-      <div className="flex-1 min-h-0 flex flex-col justify-between gap-0.5">
+      <div className="lg:flex-1 lg:min-h-0 grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-col lg:justify-between gap-1 lg:gap-0.5">
         {ACTIONS.map(({ icon: Icon, label }) => (
           <button
             key={label}
