@@ -1,5 +1,5 @@
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { consultationChartData } from "@/data/mockData";
+import { useConsultationTrend } from "@/lib/dashboard-queries";
 
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
@@ -12,6 +12,8 @@ function CustomTooltip({ active, payload, label }: any) {
 }
 
 export function ConsultationChart() {
+  const { data } = useConsultationTrend();
+  const rows = data ?? [];
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 h-full flex flex-col min-h-0">
       <div className="flex justify-between items-center mb-1 flex-shrink-0">
@@ -19,7 +21,7 @@ export function ConsultationChart() {
       </div>
       <div className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={consultationChartData} margin={{ top: 5, right: 5, bottom: 0, left: -25 }}>
+          <AreaChart data={rows} margin={{ top: 5, right: 5, bottom: 0, left: -25 }}>
             <defs>
               <linearGradient id="pinkGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#E8246A" stopOpacity={0.3} />
