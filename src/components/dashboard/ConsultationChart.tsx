@@ -14,9 +14,9 @@ function CustomTooltip({ active, payload, label }: any) {
 
 export function ConsultationChart() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3">
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="text-sm font-semibold text-gray-900">Consultation submissions</h3>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="text-base font-semibold text-gray-900">Submissions trend (7 days)</h3>
         <Select defaultValue="week">
           <SelectTrigger className="w-[110px] h-8 text-xs">
             <SelectValue />
@@ -28,7 +28,7 @@ export function ConsultationChart() {
           </SelectContent>
         </Select>
       </div>
-      <div style={{ width: "100%", height: 150 }}>
+      <div style={{ width: "100%", height: 200 }}>
         <ResponsiveContainer>
           <AreaChart data={consultationChartData} margin={{ top: 10, right: 10, bottom: 0, left: -20 }}>
             <defs>
@@ -38,8 +38,8 @@ export function ConsultationChart() {
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
-            <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fill: "#9CA3AF", fontSize: 10 }} />
-            <YAxis domain={[0, 40]} tickLine={false} axisLine={false} tick={{ fill: "#9CA3AF", fontSize: 10 }} />
+            <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fill: "#9CA3AF", fontSize: 12 }} />
+            <YAxis domain={[0, 40]} tickLine={false} axisLine={false} tick={{ fill: "#9CA3AF", fontSize: 12 }} />
             <Tooltip content={<CustomTooltip />} />
             <Area type="monotone" dataKey="count" stroke="#E8246A" strokeWidth={2} fill="url(#pinkGradient)" activeDot={{ r: 5, fill: "#E8246A" }} />
           </AreaChart>
