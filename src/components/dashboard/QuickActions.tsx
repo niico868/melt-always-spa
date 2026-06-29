@@ -16,18 +16,18 @@ const ACTIONS: { icon: LucideIcon; label: string }[] = [
 
 export function QuickActions() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 h-full">
-      <h3 className="text-sm font-semibold text-gray-900 mb-3 px-1">Quick actions</h3>
-      <div className="flex flex-col gap-1">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 h-full flex flex-col min-h-0">
+      <h3 className="text-sm font-semibold text-gray-900 mb-1 px-1 flex-shrink-0">Quick actions</h3>
+      <div className="flex-1 min-h-0 flex flex-col justify-between gap-0.5">
         {ACTIONS.map(({ icon: Icon, label }) => (
           <button
             key={label}
-            className="flex items-center gap-2 cursor-pointer group rounded-lg px-2 py-2 hover:bg-[#FBEAF0] transition-colors text-left"
+            className="flex items-center gap-2 cursor-pointer group rounded-lg px-1.5 py-1 hover:bg-[#FBEAF0] transition-colors text-left"
           >
-            <div className="w-8 h-8 rounded-full bg-[#FBEAF0] group-hover:bg-white flex items-center justify-center flex-shrink-0 transition-colors">
-              <Icon className="text-[#E8246A] size-4" />
+            <div className="w-6 h-6 rounded-full bg-[#FBEAF0] group-hover:bg-white flex items-center justify-center flex-shrink-0 transition-colors">
+              <Icon className="text-[#E8246A] size-3" />
             </div>
-            <span className="text-xs text-gray-700 group-hover:text-gray-900 transition-colors leading-tight">{label}</span>
+            <span className="text-[11px] text-gray-700 leading-tight">{label}</span>
           </button>
         ))}
       </div>

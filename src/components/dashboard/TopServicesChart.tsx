@@ -3,47 +3,27 @@ import { topServicesData } from "@/data/mockData";
 
 export function TopServicesChart() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-      <h3 className="text-base font-semibold text-gray-900 mb-3">Top services (this month)</h3>
-      <div style={{ width: "100%", height: 160 }}>
-        <ResponsiveContainer>
-          <PieChart>
-            <Pie
-              data={topServicesData}
-              dataKey="percentage"
-              nameKey="name"
-              innerRadius={45}
-              outerRadius={75}
-              paddingAngle={1}
-              stroke="none"
-            >
-              {topServicesData.map((d) => (
-                <Cell key={d.name} fill={d.fill} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-      <ul className="space-y-1.5 mt-2">
-        {topServicesData.map((d) => (
-          <li key={d.name} className="flex items-center gap-2 text-sm">
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: d.fill }} />
-            <span className="text-gray-600">{d.name}</span>
-            <span className="font-semibold text-gray-900 ml-auto">{d.percentage}%</span>
-          </li>
-        ))}
-      </ul>
-      <div className="border-t border-gray-100 mt-3 pt-2">
-        <table className="w-full">
-          <tbody>
-            {topServicesData.filter((d) => d.revenue > 0).map((d) => (
-              <tr key={d.name} className="border-b border-gray-50 last:border-0">
-                <td className="text-xs text-gray-600 py-1">{d.name}</td>
-                <td className="text-xs font-semibold text-gray-900 text-right py-1">TT${d.revenue.toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 h-full flex flex-col min-h-0">
+      <h3 className="text-sm font-semibold text-gray-900 mb-1 flex-shrink-0">Top services</h3>
+      <div className="flex-1 min-h-0 flex items-center gap-2">
+        <div className="w-[110px] h-[110px] flex-shrink-0">
+          <ResponsiveContainer>
+            <PieChart>
+              <Pie data={topServicesData} dataKey="percentage" nameKey="name" innerRadius={32} outerRadius={52} paddingAngle={1} stroke="none">
+                {topServicesData.map((d) => (<Cell key={d.name} fill={d.fill} />))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <ul className="flex-1 min-w-0 space-y-0.5">
+          {topServicesData.map((d) => (
+            <li key={d.name} className="flex items-center gap-1.5 text-[11px]">
+              <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: d.fill }} />
+              <span className="text-gray-600 truncate">{d.name}</span>
+              <span className="font-semibold text-gray-900 ml-auto">{d.percentage}%</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

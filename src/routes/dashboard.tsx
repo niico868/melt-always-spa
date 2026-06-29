@@ -9,7 +9,7 @@ function DashboardLayout() {
   return (
     <div className="flex h-screen overflow-hidden bg-[#F4F5F7]" style={{ fontFamily: "Inter, sans-serif" }}>
       <Sidebar />
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 min-w-0 overflow-hidden">
         <Outlet />
       </main>
     </div>
