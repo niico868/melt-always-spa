@@ -8,32 +8,45 @@ import { UpcomingAppointments } from "@/components/dashboard/UpcomingAppointment
 import { RecentConsultations } from "@/components/dashboard/RecentConsultations";
 import { AlertsTray } from "@/components/dashboard/AlertsTray";
 import { QuickActions } from "@/components/dashboard/QuickActions";
-import { kpiData } from "@/data/mockData";
+import { useDashboardKpis } from "@/lib/dashboard-queries";
+import { useSession } from "@/lib/use-session";
 
 export const Route = createFileRoute("/dashboard/")({
   component: Dashboard,
 });
 
 function Dashboard() {
-  const appointmentsKpi = kpiData.find((k) => k.iconKey === "calendar")!;
-  const consultationsKpi = kpiData.find((k) => k.iconKey === "users")!;
-  const customersKpi = kpiData.find((k) => k.iconKey === "userplus")!;
-  const salesKpi = kpiData.find((k) => k.iconKey === "bag")!;
+  const { data } = useDashboardKpis();
+  const { profile, user } = useSession();
+  const displayName = profile?.full_name || user?.email?.split("@")[0] || "there";
+  const today = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const fmt = (v: number) => `TT$${v.toLocaleString()}`;
+
+  const appointmentsKpi = { title: "Appointments", value: String(data?.appointmentsToday ?? "—"), label: "Today", iconKey: "calendar" as const };
+  const consultationsKpi = { title: "New Consultations", value: String(data?.consultationsWeek ?? "—"), label: "This week", iconKey: "users" as const };
+  const customersKpi = { title: "New Customers", value: String(data?.customersMonth ?? "—"), label: "This month", iconKey: "userplus" as const };
+  const salesKpi = {
+    title: "Sales this month",
+    value: data ? fmt(data.salesMonth) : "—",
+    label: "vs last month",
+    trend: data?.salesTrend != null ? `${data.salesTrend >= 0 ? "+" : ""}${data.salesTrend}%` : undefined,
+    goalProgress: true,
+    iconKey: "bag" as const,
+  };
   return (
     <div className="lg:h-full flex flex-col px-3 sm:px-4 pt-3 pb-4 gap-3 lg:overflow-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 flex-shrink-0">
         <div className="min-w-0">
           <h1 className="text-base sm:text-lg font-bold text-[#1A1A2E] leading-tight truncate">
-            Welcome back, <span className="text-[#E8246A]">Krystal C</span>
+            Welcome back, <span className="text-[#E8246A]">{displayName}</span>
           </h1>
           <p className="text-[11px] sm:text-xs text-gray-500">Here's what's happening with your spa today.</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 bg-white flex items-center gap-1.5 whitespace-nowrap">
             <CalendarDays size={14} className="text-gray-400" />
-            <span className="hidden xs:inline sm:inline">May 24, 2025</span>
-            <span className="xs:hidden sm:hidden">May 24</span>
+            <span>{today}</span>
           </button>
           <button className="bg-[#E8246A] text-white rounded-lg px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#C91D5C] transition-colors whitespace-nowrap">
             <Plus size={14} />
