@@ -1,14 +1,32 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Sidebar } from "@/components/sidebar/Sidebar";
+import { useSession } from "@/lib/use-session";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard")({
+  ssr: false,
   component: DashboardLayout,
 });
 
 function DashboardLayout() {
   const [open, setOpen] = useState(false);
+  const { session, loading } = useSession();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !session) navigate({ to: "/auth" });
+  }, [loading, session, navigate]);
+
+  if (loading || !session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F4F5F7]">
+        <div className="text-sm text-gray-500">Loading dashboard…</div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex lg:h-screen min-h-screen lg:overflow-hidden bg-[#F4F5F7]" style={{ fontFamily: "Inter, sans-serif" }}>
       {/* Desktop sidebar */}
