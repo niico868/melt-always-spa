@@ -68,12 +68,12 @@ export function HeroCarousel() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Readability gradient over the image — desktop fades L→R, mobile T→B */}
+      {/* Mobile readability wash — heavier on the top-left where the headline sits */}
       <motion.div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none lg:hidden"
         initial={false}
         animate={{
-          background: `linear-gradient(180deg, color-mix(in oklab, var(--background) 70%, transparent) 0%, color-mix(in oklab, var(--background) 50%, transparent) 40%, color-mix(in oklab, var(--background) 18%, transparent) 100%)`,
+          background: `linear-gradient(160deg, color-mix(in oklab, var(--background) 92%, transparent) 0%, color-mix(in oklab, var(--background) 78%, transparent) 38%, color-mix(in oklab, var(--background) 40%, transparent) 70%, color-mix(in oklab, var(--background) 14%, transparent) 100%)`,
         }}
         transition={{ duration: 1.6, ease: easeLux }}
       />
