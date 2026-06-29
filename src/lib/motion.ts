@@ -42,4 +42,8 @@ export const staggerParent = (stagger = 0.08, delay = 0): Variants => ({
 export const baseTransition: Transition = { duration: 1.0, ease: easeLux };
 export const slowTransition: Transition = { duration: 1.3, ease: easeLux };
 
-export const viewportOnce = { once: true, amount: 0.25 } as const;
+// `amount: "some"` fires whenever any part of the element enters the viewport.
+// Using a numeric amount (e.g. 0.25) breaks on mobile for sections taller than
+// the viewport — 25% of the element is never visible at once, so the Reveal
+// wrapper stays hidden and the section renders as blank white space.
+export const viewportOnce = { once: true, amount: "some" } as const;
