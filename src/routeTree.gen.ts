@@ -23,6 +23,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as JournalRouteImport } from './routes/journal'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -30,8 +31,20 @@ import { Route as AccountRouteImport } from './routes/account'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JournalIndexRouteImport } from './routes/journal.index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
+import { Route as DashboardServicesRouteImport } from './routes/dashboard.services'
+import { Route as DashboardSalesRouteImport } from './routes/dashboard.sales'
+import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
+import { Route as DashboardProductsRouteImport } from './routes/dashboard.products'
+import { Route as DashboardMarketingRouteImport } from './routes/dashboard.marketing'
+import { Route as DashboardInterestsRouteImport } from './routes/dashboard.interests'
+import { Route as DashboardEmployeesRouteImport } from './routes/dashboard.employees'
+import { Route as DashboardCustomersRouteImport } from './routes/dashboard.customers'
+import { Route as DashboardConsultationsRouteImport } from './routes/dashboard.consultations'
+import { Route as DashboardAppointmentsRouteImport } from './routes/dashboard.appointments'
 
 const VisitingRoute = VisitingRouteImport.update({
   id: '/visiting',
@@ -103,6 +116,11 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -138,6 +156,11 @@ const JournalIndexRoute = JournalIndexRouteImport.update({
   path: '/',
   getParentRoute: () => JournalRoute,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const LocationsSlugRoute = LocationsSlugRouteImport.update({
   id: '/locations/$slug',
   path: '/locations/$slug',
@@ -148,6 +171,61 @@ const JournalSlugRoute = JournalSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => JournalRoute,
 } as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardServicesRoute = DashboardServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSalesRoute = DashboardSalesRouteImport.update({
+  id: '/sales',
+  path: '/sales',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardReportsRoute = DashboardReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardProductsRoute = DashboardProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardMarketingRoute = DashboardMarketingRouteImport.update({
+  id: '/marketing',
+  path: '/marketing',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardInterestsRoute = DashboardInterestsRouteImport.update({
+  id: '/interests',
+  path: '/interests',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEmployeesRoute = DashboardEmployeesRouteImport.update({
+  id: '/employees',
+  path: '/employees',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCustomersRoute = DashboardCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardConsultationsRoute = DashboardConsultationsRouteImport.update({
+  id: '/consultations',
+  path: '/consultations',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAppointmentsRoute = DashboardAppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -156,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/journal': typeof JournalRouteWithChildren
@@ -170,8 +249,20 @@ export interface FileRoutesByFullPath {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
+  '/dashboard/appointments': typeof DashboardAppointmentsRoute
+  '/dashboard/consultations': typeof DashboardConsultationsRoute
+  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/employees': typeof DashboardEmployeesRoute
+  '/dashboard/interests': typeof DashboardInterestsRoute
+  '/dashboard/marketing': typeof DashboardMarketingRoute
+  '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/services': typeof DashboardServicesRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
 }
 export interface FileRoutesByTo {
@@ -194,8 +285,20 @@ export interface FileRoutesByTo {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
+  '/dashboard/appointments': typeof DashboardAppointmentsRoute
+  '/dashboard/consultations': typeof DashboardConsultationsRoute
+  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/employees': typeof DashboardEmployeesRoute
+  '/dashboard/interests': typeof DashboardInterestsRoute
+  '/dashboard/marketing': typeof DashboardMarketingRoute
+  '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/services': typeof DashboardServicesRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/journal': typeof JournalIndexRoute
 }
 export interface FileRoutesById {
@@ -206,6 +309,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/journal': typeof JournalRouteWithChildren
@@ -220,8 +324,20 @@ export interface FileRoutesById {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
+  '/dashboard/appointments': typeof DashboardAppointmentsRoute
+  '/dashboard/consultations': typeof DashboardConsultationsRoute
+  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/employees': typeof DashboardEmployeesRoute
+  '/dashboard/interests': typeof DashboardInterestsRoute
+  '/dashboard/marketing': typeof DashboardMarketingRoute
+  '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/services': typeof DashboardServicesRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
 }
 export interface FileRouteTypes {
@@ -233,6 +349,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/booking'
     | '/contact'
+    | '/dashboard'
     | '/faq'
     | '/gallery'
     | '/journal'
@@ -247,8 +364,20 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/treatment-finder'
     | '/visiting'
+    | '/dashboard/appointments'
+    | '/dashboard/consultations'
+    | '/dashboard/customers'
+    | '/dashboard/employees'
+    | '/dashboard/interests'
+    | '/dashboard/marketing'
+    | '/dashboard/products'
+    | '/dashboard/reports'
+    | '/dashboard/sales'
+    | '/dashboard/services'
+    | '/dashboard/settings'
     | '/journal/$slug'
     | '/locations/$slug'
+    | '/dashboard/'
     | '/journal/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -271,8 +400,20 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/treatment-finder'
     | '/visiting'
+    | '/dashboard/appointments'
+    | '/dashboard/consultations'
+    | '/dashboard/customers'
+    | '/dashboard/employees'
+    | '/dashboard/interests'
+    | '/dashboard/marketing'
+    | '/dashboard/products'
+    | '/dashboard/reports'
+    | '/dashboard/sales'
+    | '/dashboard/services'
+    | '/dashboard/settings'
     | '/journal/$slug'
     | '/locations/$slug'
+    | '/dashboard'
     | '/journal'
   id:
     | '__root__'
@@ -282,6 +423,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/booking'
     | '/contact'
+    | '/dashboard'
     | '/faq'
     | '/gallery'
     | '/journal'
@@ -296,8 +438,20 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/treatment-finder'
     | '/visiting'
+    | '/dashboard/appointments'
+    | '/dashboard/consultations'
+    | '/dashboard/customers'
+    | '/dashboard/employees'
+    | '/dashboard/interests'
+    | '/dashboard/marketing'
+    | '/dashboard/products'
+    | '/dashboard/reports'
+    | '/dashboard/sales'
+    | '/dashboard/services'
+    | '/dashboard/settings'
     | '/journal/$slug'
     | '/locations/$slug'
+    | '/dashboard/'
     | '/journal/'
   fileRoutesById: FileRoutesById
 }
@@ -308,6 +462,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   BookingRoute: typeof BookingRoute
   ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
   JournalRoute: typeof JournalRouteWithChildren
@@ -425,6 +580,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -474,6 +636,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalIndexRouteImport
       parentRoute: typeof JournalRoute
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/locations/$slug': {
       id: '/locations/$slug'
       path: '/locations/$slug'
@@ -488,8 +657,119 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalSlugRouteImport
       parentRoute: typeof JournalRoute
     }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/services': {
+      id: '/dashboard/services'
+      path: '/services'
+      fullPath: '/dashboard/services'
+      preLoaderRoute: typeof DashboardServicesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/sales': {
+      id: '/dashboard/sales'
+      path: '/sales'
+      fullPath: '/dashboard/sales'
+      preLoaderRoute: typeof DashboardSalesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/reports': {
+      id: '/dashboard/reports'
+      path: '/reports'
+      fullPath: '/dashboard/reports'
+      preLoaderRoute: typeof DashboardReportsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/products': {
+      id: '/dashboard/products'
+      path: '/products'
+      fullPath: '/dashboard/products'
+      preLoaderRoute: typeof DashboardProductsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/marketing': {
+      id: '/dashboard/marketing'
+      path: '/marketing'
+      fullPath: '/dashboard/marketing'
+      preLoaderRoute: typeof DashboardMarketingRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/interests': {
+      id: '/dashboard/interests'
+      path: '/interests'
+      fullPath: '/dashboard/interests'
+      preLoaderRoute: typeof DashboardInterestsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/employees': {
+      id: '/dashboard/employees'
+      path: '/employees'
+      fullPath: '/dashboard/employees'
+      preLoaderRoute: typeof DashboardEmployeesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/customers': {
+      id: '/dashboard/customers'
+      path: '/customers'
+      fullPath: '/dashboard/customers'
+      preLoaderRoute: typeof DashboardCustomersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/consultations': {
+      id: '/dashboard/consultations'
+      path: '/consultations'
+      fullPath: '/dashboard/consultations'
+      preLoaderRoute: typeof DashboardConsultationsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/appointments': {
+      id: '/dashboard/appointments'
+      path: '/appointments'
+      fullPath: '/dashboard/appointments'
+      preLoaderRoute: typeof DashboardAppointmentsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
+
+interface DashboardRouteChildren {
+  DashboardAppointmentsRoute: typeof DashboardAppointmentsRoute
+  DashboardConsultationsRoute: typeof DashboardConsultationsRoute
+  DashboardCustomersRoute: typeof DashboardCustomersRoute
+  DashboardEmployeesRoute: typeof DashboardEmployeesRoute
+  DashboardInterestsRoute: typeof DashboardInterestsRoute
+  DashboardMarketingRoute: typeof DashboardMarketingRoute
+  DashboardProductsRoute: typeof DashboardProductsRoute
+  DashboardReportsRoute: typeof DashboardReportsRoute
+  DashboardSalesRoute: typeof DashboardSalesRoute
+  DashboardServicesRoute: typeof DashboardServicesRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAppointmentsRoute: DashboardAppointmentsRoute,
+  DashboardConsultationsRoute: DashboardConsultationsRoute,
+  DashboardCustomersRoute: DashboardCustomersRoute,
+  DashboardEmployeesRoute: DashboardEmployeesRoute,
+  DashboardInterestsRoute: DashboardInterestsRoute,
+  DashboardMarketingRoute: DashboardMarketingRoute,
+  DashboardProductsRoute: DashboardProductsRoute,
+  DashboardReportsRoute: DashboardReportsRoute,
+  DashboardSalesRoute: DashboardSalesRoute,
+  DashboardServicesRoute: DashboardServicesRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
 
 interface JournalRouteChildren {
   JournalSlugRoute: typeof JournalSlugRoute
@@ -511,6 +791,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   BookingRoute: BookingRoute,
   ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
   JournalRoute: JournalRouteWithChildren,
