@@ -1,5 +1,4 @@
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { consultationChartData } from "@/data/mockData";
 
 function CustomTooltip({ active, payload, label }: any) {
