@@ -4,6 +4,7 @@ import {
   ChevronDown, LogOut,
 } from "lucide-react";
 import { NavItem } from "./NavItem";
+import { useSession, signOutAndRedirect } from "@/lib/use-session";
 
 const NAV = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
@@ -21,6 +22,10 @@ const NAV = [
 ] as const;
 
 export function Sidebar() {
+  const { user, profile } = useSession();
+  const displayName = profile?.full_name || user?.email?.split("@")[0] || "Account";
+  const initials = displayName.split(/\s+/).map(p => p[0]).slice(0, 2).join("").toUpperCase();
+  const role = profile?.role ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1) : "Staff";
   return (
     <aside className="w-[200px] min-w-[200px] h-full bg-[#E8246A] flex flex-col" style={{ fontFamily: "Inter, sans-serif" }}>
       <div className="px-4 pt-4 mb-4">
@@ -40,18 +45,21 @@ export function Sidebar() {
         <div className="border-t border-white/20 mb-2" />
         <div className="bg-white/15 rounded-xl mx-2 p-2 flex items-center gap-2">
           <div className="bg-white text-[#E8246A] font-bold rounded-full w-7 h-7 flex items-center justify-center text-xs">
-            KC
+            {initials || "?"}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-white font-medium text-xs leading-tight">Krystal C</div>
-            <div className="text-white/70 text-[10px] leading-tight">Owner / Admin</div>
+            <div className="text-white font-medium text-xs leading-tight truncate">{displayName}</div>
+            <div className="text-white/70 text-[10px] leading-tight truncate">{role}</div>
           </div>
           <ChevronDown className="text-white/70" size={14} />
         </div>
-        <div className="mt-2 mb-3 mx-2 flex items-center gap-2 text-white/70 text-xs hover:text-white cursor-pointer px-2">
+        <button
+          onClick={() => { void signOutAndRedirect(); }}
+          className="mt-2 mb-3 mx-2 flex items-center gap-2 text-white/70 text-xs hover:text-white cursor-pointer px-2 w-[calc(100%-1rem)] text-left bg-transparent border-0"
+        >
           <LogOut size={14} />
           <span>Log out</span>
-        </div>
+        </button>
       </div>
     </aside>
   );
