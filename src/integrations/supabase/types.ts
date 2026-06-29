@@ -14,7 +14,317 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          action_label: string | null
+          created_at: string
+          dismissed: boolean
+          id: string
+          kind: string
+          message: string
+        }
+        Insert: {
+          action_label?: string | null
+          created_at?: string
+          dismissed?: boolean
+          id?: string
+          kind?: string
+          message: string
+        }
+        Update: {
+          action_label?: string | null
+          created_at?: string
+          dismissed?: boolean
+          id?: string
+          kind?: string
+          message?: string
+        }
+        Relationships: []
+      }
+      appointments: {
+        Row: {
+          created_at: string
+          customer_id: string | null
+          employee_id: string | null
+          id: string
+          scheduled_at: string
+          service_id: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id?: string | null
+          employee_id?: string | null
+          id?: string
+          scheduled_at: string
+          service_id?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string | null
+          employee_id?: string | null
+          id?: string
+          scheduled_at?: string
+          service_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consultations: {
+        Row: {
+          client_name: string
+          created_at: string
+          customer_id: string | null
+          id: string
+          service_id: string | null
+          service_name: string | null
+          status: string
+          submitted_at: string
+        }
+        Insert: {
+          client_name: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          service_id?: string | null
+          service_name?: string | null
+          status?: string
+          submitted_at?: string
+        }
+        Update: {
+          client_name?: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          service_id?: string | null
+          service_name?: string | null
+          status?: string
+          submitted_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultations_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultations_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customers: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          notes: string | null
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      employees: {
+        Row: {
+          avatar_tone: string
+          created_at: string
+          full_name: string
+          id: string
+          role: string
+          slots_total: number
+        }
+        Insert: {
+          avatar_tone?: string
+          created_at?: string
+          full_name: string
+          id?: string
+          role?: string
+          slots_total?: number
+        }
+        Update: {
+          avatar_tone?: string
+          created_at?: string
+          full_name?: string
+          id?: string
+          role?: string
+          slots_total?: number
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          created_at: string
+          id: string
+          low_stock_threshold: number
+          name: string
+          price: number
+          sku: string | null
+          stock: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          low_stock_threshold?: number
+          name: string
+          price?: number
+          sku?: string | null
+          stock?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          low_stock_threshold?: number
+          name?: string
+          price?: number
+          sku?: string | null
+          stock?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          role: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          role?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          role?: string
+        }
+        Relationships: []
+      }
+      sales: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_id: string | null
+          description: string
+          id: string
+          product_id: string | null
+          service_id: string | null
+          sold_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          customer_id?: string | null
+          description: string
+          id?: string
+          product_id?: string | null
+          service_id?: string | null
+          sold_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_id?: string | null
+          description?: string
+          id?: string
+          product_id?: string | null
+          service_id?: string | null
+          sold_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          base_price: number
+          created_at: string
+          fill_color: string
+          id: string
+          name: string
+        }
+        Insert: {
+          base_price?: number
+          created_at?: string
+          fill_color?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          base_price?: number
+          created_at?: string
+          fill_color?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
