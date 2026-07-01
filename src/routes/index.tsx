@@ -10,6 +10,7 @@ import { REVIEWS, CONCIERGE_WA } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
 import { HeroCarousel } from "@/components/HeroCarousel";
+import { CertProviderStrip } from "@/components/CertProviderStrip";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BA_IMAGES } from "@/lib/ba";
 import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
@@ -40,6 +41,7 @@ function Index() {
       <Reveal><RealResults /></Reveal>
       <Reveal><Method /></Reveal>
       <Reveal><FeaturedTreatments /></Reveal>
+      <CertProviderStrip />
       <Reveal><ClientReviews /></Reveal>
       <Reveal><TreatmentFinder /></Reveal>
     </div>
