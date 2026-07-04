@@ -13,7 +13,6 @@ import { Route as VisitingRouteImport } from './routes/visiting'
 import { Route as TreatmentFinderRouteImport } from './routes/treatment-finder'
 import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -66,11 +65,6 @@ const TimelineRoute = TimelineRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -258,7 +252,6 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
   '/services': typeof ServicesRoute
-  '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
@@ -296,7 +289,6 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
   '/services': typeof ServicesRoute
-  '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
@@ -337,7 +329,6 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
   '/services': typeof ServicesRoute
-  '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
@@ -379,7 +370,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/reviews'
     | '/services'
-    | '/signup'
     | '/sitemap.xml'
     | '/timeline'
     | '/treatment-finder'
@@ -417,7 +407,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/reviews'
     | '/services'
-    | '/signup'
     | '/sitemap.xml'
     | '/timeline'
     | '/treatment-finder'
@@ -457,7 +446,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/reviews'
     | '/services'
-    | '/signup'
     | '/sitemap.xml'
     | '/timeline'
     | '/treatment-finder'
@@ -498,7 +486,6 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   ReviewsRoute: typeof ReviewsRoute
   ServicesRoute: typeof ServicesRoute
-  SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TimelineRoute: typeof TimelineRoute
   TreatmentFinderRoute: typeof TreatmentFinderRoute
@@ -534,13 +521,6 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -843,7 +823,6 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   ReviewsRoute: ReviewsRoute,
   ServicesRoute: ServicesRoute,
-  SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TimelineRoute: TimelineRoute,
   TreatmentFinderRoute: TreatmentFinderRoute,

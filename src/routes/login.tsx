@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Section, Eyebrow } from "@/components/Section";
 import { signIn, type Role } from "@/lib/auth";
@@ -50,8 +50,8 @@ function Login() {
           </button>
         </form>
         {role === "client" ? (
-          <p className="mt-5 text-sm text-center text-taupe">
-            New to Melt Aways? <Link to="/signup" className="text-primary font-medium">Create an account</Link>
+          <p className="mt-5 text-xs text-center text-taupe">
+            Accounts are created by our team. Please contact reception to set one up.
           </p>
         ) : (
           <p className="mt-5 text-xs text-center text-taupe">
