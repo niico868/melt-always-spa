@@ -10,10 +10,8 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const nav = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -28,17 +26,8 @@ function AuthPage() {
     setError(null);
     setBusy(true);
     try {
-      if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { data: { full_name: fullName }, emailRedirectTo: `${window.location.origin}/dashboard` },
-        });
-        if (error) throw error;
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
       nav({ to: "/dashboard" });
     } catch (err: any) {
       setError(err.message || "Authentication failed");
@@ -55,27 +44,16 @@ function AuthPage() {
           <p className="text-sm text-gray-500 mt-1">Spa management dashboard</p>
         </div>
 
-        <div className="flex gap-1 bg-gray-100 rounded-full p-1 mb-6">
-          <button type="button" onClick={() => setMode("signin")}
-            className={`flex-1 rounded-full py-2 text-sm font-medium transition ${mode === "signin" ? "bg-[#E8246A] text-white" : "text-gray-600"}`}>
-            Sign in
-          </button>
-          <button type="button" onClick={() => setMode("signup")}
-            className={`flex-1 rounded-full py-2 text-sm font-medium transition ${mode === "signup" ? "bg-[#E8246A] text-white" : "text-gray-600"}`}>
-            Create account
-          </button>
-        </div>
-
         <form onSubmit={submit} className="space-y-4">
-          {mode === "signup" && (
-            <Field label="Full name" value={fullName} onChange={setFullName} required />
-          )}
           <Field label="Email" type="email" value={email} onChange={setEmail} required />
           <Field label="Password" type="password" value={password} onChange={setPassword} required />
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button disabled={busy} className="w-full rounded-lg bg-[#E8246A] text-white py-3 font-medium hover:bg-[#C91D5C] disabled:opacity-60 transition">
-            {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+            {busy ? "Please wait…" : "Sign in"}
           </button>
+          <p className="text-xs text-center text-gray-500 pt-1">
+            Staff accounts are created by an administrator.
+          </p>
         </form>
       </div>
     </div>
