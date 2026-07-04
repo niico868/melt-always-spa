@@ -362,9 +362,9 @@ function ClientReviews() {
     "N.G.": "Nia",
     "L.W.": "Leah",
   };
-  const fourReviews = REVIEWS.slice(0, 4);
+  const homeReviews = REVIEWS.slice(0, 3);
   const [open, setOpen] = useState<number | null>(null);
-  const active = open !== null ? fourReviews[open] : null;
+  const active = open !== null ? homeReviews[open] : null;
   const activeName = active ? (REVIEW_NAMES[active.initials] ?? active.initials) : "";
   return (
     <section className="bg-gradient-to-b from-background via-blush/30 to-background py-24 lg:py-28">
@@ -375,8 +375,8 @@ function ClientReviews() {
             From the people we've worked with.
           </h2>
         </div>
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {fourReviews.map((r, i) => {
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {homeReviews.map((r, i) => {
             const name = REVIEW_NAMES[r.initials] ?? r.initials;
             return (
               <button
@@ -464,7 +464,7 @@ function VisitingTrinidad() {
             <Link to="/visiting" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium hover:opacity-90 lift-on-hover soft-shadow">
               <Plane className="w-4 h-4" /> Plan My Visit
             </Link>
-            <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 lift-on-hover">
+            <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-6 py-3 font-medium hover:opacity-90 lift-on-hover">
               <MessageCircle className="w-4 h-4" /> Concierge
             </a>
           </div>
