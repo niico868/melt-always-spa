@@ -332,6 +332,16 @@
 }
 .header-fade { animation: header-fade 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 
+/* Marquee — moderate speed, seamless loop (list is duplicated in JSX) */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee      { animation: marquee 38s linear infinite; }
+.animate-marquee-slow { animation: marquee 55s linear infinite; }
+.animate-marquee:hover,
+.animate-marquee-slow:hover { animation-play-state: paused; }
+
 /* Respect reduced motion across the system */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
