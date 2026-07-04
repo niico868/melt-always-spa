@@ -5,6 +5,7 @@ import { DashboardPage, PrimaryButton } from "@/components/dashboard/DashboardPa
 import { DataTable, fmtDate, type Column } from "@/components/dashboard/DataTable";
 import { Modal, Field, inputCls } from "@/components/dashboard/Modal";
 import { useCustomers, useUpsertCustomer, useDeleteCustomer, type Customer } from "@/lib/dashboard-tables";
+import { useCanWrite } from "@/lib/use-my-roles";
 
 export const Route = createFileRoute("/dashboard/customers")({
   component: CustomersPage,
@@ -18,6 +19,7 @@ function CustomersPage() {
   const navigate = useNavigate();
   const search = useSearch({ from: "/dashboard/customers" });
   const [editing, setEditing] = useState<Partial<Customer> | null>(null);
+  const canWrite = useCanWrite();
 
   useEffect(() => {
     if (search.new === "1") {
@@ -39,18 +41,18 @@ function CustomersPage() {
     <DashboardPage
       title="Customers"
       subtitle={`${data?.length ?? 0} total`}
-      actions={<PrimaryButton onClick={() => setEditing({})}><Plus size={14} className="inline mr-1" />Add customer</PrimaryButton>}
+      actions={canWrite ? <PrimaryButton onClick={() => setEditing({})}><Plus size={14} className="inline mr-1" />Add customer</PrimaryButton> : null}
     >
       <DataTable
         rows={data} columns={columns} loading={isLoading} error={error}
         searchPlaceholder="Search customers…" empty="No customers yet."
         onRowClick={r => navigate({ to: "/dashboard/customers/$id", params: { id: r.id } })}
-        rowActions={r => (
+        rowActions={r => canWrite ? (
           <div className="flex gap-1 justify-end">
             <button onClick={() => setEditing(r)} className="p-1 text-gray-400 hover:text-[#E8246A]"><Pencil size={13} /></button>
             <button onClick={() => { if (confirm(`Delete ${r.full_name}? This removes all their history.`)) del.mutate(r.id); }} className="p-1 text-gray-400 hover:text-red-500"><Trash2 size={13} /></button>
           </div>
-        )}
+        ) : null}
       />
       <Modal open={editing !== null} onClose={() => setEditing(null)} title={editing?.id ? "Edit customer" : "Add customer"}>
         <form
