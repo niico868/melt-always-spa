@@ -2,7 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 // ---------- Customers ----------
-export type Customer = { id: string; full_name: string; email: string | null; phone: string | null; notes: string | null; created_at: string };
+export type Customer = {
+  id: string; full_name: string; email: string | null; phone: string | null; notes: string | null; created_at: string;
+  date_of_birth?: string | null; address?: string | null; city?: string | null;
+  preferred_contact?: string | null; tags?: string[] | null; marketing_opt_in?: boolean | null;
+};
 export function useCustomers() {
   return useQuery({
     queryKey: ["customers"],
@@ -10,6 +14,171 @@ export function useCustomers() {
       const { data, error } = await supabase.from("customers").select("*").order("created_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as Customer[];
+    },
+  });
+}
+
+export function useCustomer(id: string | undefined) {
+  return useQuery({
+    queryKey: ["customers", id],
+    enabled: !!id,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("customers").select("*").eq("id", id!).maybeSingle();
+      if (error) throw error;
+      return data as Customer | null;
+    },
+  });
+}
+
+export function useUpsertCustomer() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (row: Partial<Customer> & { full_name: string }) => {
+      const payload: any = {
+        full_name: row.full_name,
+        email: row.email || null,
+        phone: row.phone || null,
+        notes: row.notes || null,
+        date_of_birth: row.date_of_birth || null,
+        address: row.address || null,
+        city: row.city || null,
+        preferred_contact: row.preferred_contact || "whatsapp",
+        tags: row.tags ?? [],
+        marketing_opt_in: row.marketing_opt_in ?? false,
+      };
+      if (row.id) {
+        const { error } = await supabase.from("customers").update(payload).eq("id", row.id);
+        if (error) throw error;
+        return row.id;
+      }
+      const { data, error } = await (supabase.rpc as any)("upsert_customer_by_contact", {
+        p_full_name: row.full_name,
+        p_phone: row.phone ?? null,
+        p_email: row.email ?? null,
+        p_notes: row.notes ?? null,
+      });
+      if (error) throw error;
+      // apply any extra fields to the resolved id
+      if (data) {
+        await supabase.from("customers").update(payload).eq("id", data);
+      }
+      return data as string;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["customers"] }),
+  });
+}
+
+export function useDeleteCustomer() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("customers").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["customers"] }),
+  });
+}
+
+// ---------- Customer Notes ----------
+export type CustomerNote = { id: string; customer_id: string; body: string; pinned: boolean; author_id: string | null; created_at: string };
+export function useCustomerNotes(customerId: string | undefined) {
+  return useQuery({
+    queryKey: ["customer_notes", customerId],
+    enabled: !!customerId,
+    queryFn: async () => {
+      const { data, error } = await (supabase.from as any)("customer_notes").select("*").eq("customer_id", customerId).order("pinned", { ascending: false }).order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as CustomerNote[];
+    },
+  });
+}
+export function useAddCustomerNote() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (row: { customer_id: string; body: string; pinned?: boolean }) => {
+      const { data: userData } = await supabase.auth.getUser();
+      const { error } = await (supabase.from as any)("customer_notes").insert({ ...row, author_id: userData.user?.id ?? null });
+      if (error) throw error;
+    },
+    onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ["customer_notes", v.customer_id] }),
+  });
+}
+export function useDeleteCustomerNote() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id }: { id: string; customer_id: string }) => {
+      const { error } = await (supabase.from as any)("customer_notes").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ["customer_notes", v.customer_id] }),
+  });
+}
+
+// ---------- Customer Treatments ----------
+export type CustomerTreatment = {
+  id: string; customer_id: string; service_name: string; employee_name: string | null;
+  performed_at: string; session_number: number | null; price: number | null; outcome_notes: string | null;
+  before_photo_url: string | null; after_photo_url: string | null;
+};
+export function useCustomerTreatments(customerId: string | undefined) {
+  return useQuery({
+    queryKey: ["customer_treatments", customerId],
+    enabled: !!customerId,
+    queryFn: async () => {
+      const { data, error } = await (supabase.from as any)("customer_treatments").select("*").eq("customer_id", customerId).order("performed_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as CustomerTreatment[];
+    },
+  });
+}
+export function useAddCustomerTreatment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (row: Partial<CustomerTreatment> & { customer_id: string; service_name: string }) => {
+      const { error } = await (supabase.from as any)("customer_treatments").insert(row);
+      if (error) throw error;
+    },
+    onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ["customer_treatments", v.customer_id] }),
+  });
+}
+
+// ---------- Customer-scoped history helpers ----------
+export function useCustomerAppointments(customerId: string | undefined) {
+  return useQuery({
+    queryKey: ["customer_appointments", customerId],
+    enabled: !!customerId,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("appointments")
+        .select("id, scheduled_at, status, service_id, employee_id, services(name), employees(full_name)")
+        .eq("customer_id", customerId!).order("scheduled_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as any[];
+    },
+  });
+}
+export function useCustomerSales(customerId: string | undefined) {
+  return useQuery({
+    queryKey: ["customer_sales", customerId],
+    enabled: !!customerId,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("sales")
+        .select("id, description, amount, sold_at")
+        .eq("customer_id", customerId!).order("sold_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as any[];
+    },
+  });
+}
+export function useCustomerConsultations(customerId: string | undefined) {
+  return useQuery({
+    queryKey: ["customer_consultations", customerId],
+    enabled: !!customerId,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("consultations")
+        .select("id, client_name, service_name, status, submitted_at")
+        .eq("customer_id", customerId!).order("submitted_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as any[];
     },
   });
 }
