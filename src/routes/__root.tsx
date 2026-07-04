@@ -16,6 +16,7 @@ import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { WhatsAppFab } from "../components/WhatsAppFab";
 import { ScrollProgress } from "../components/ScrollProgress";
+import { AmbientAudio } from "../components/AmbientAudio";
 
 function NotFoundComponent() {
   return (
@@ -153,6 +154,7 @@ function RootComponent() {
       </main>
       <Footer />
       <WhatsAppFab />
+      <AmbientAudio />
     </QueryClientProvider>
   );
 }

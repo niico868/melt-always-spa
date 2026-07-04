@@ -1,79 +1,39 @@
-## Goal
-Eliminate dead space, raise font sizes for comfortable middle-aged readability, and reorganize `/dashboard` into clear zones. All other dashboard routes, data, colors, and component file structure stay unchanged.
+# Background music with a sound toggle
 
-## New layout
+The client's ~49s MP3 becomes an ambient, looping soundtrack for the public site. Because every modern browser blocks autoplaying audio with sound, playback must start from a user gesture — so the core UX is a small, always-visible **sound toggle** the visitor taps once to turn on.
 
-```
-┌─────────────── Header (Welcome + date + New appointment) ───────────────┐
-│                                                                          │
-├──────────────┬───────────────────────────────┬──────────┐                
-│ LEFT KPIs    │  MIDDLE COLUMN                │ QUICK    │                
-│ (narrow)     │                               │ ACTIONS  │                
-│              │  Sales this month (KPI +      │ (slim    │                
-│ Appointments │   goal bar)                   │  rail,   │                
-│              │                               │  vert.)  │                
-│ New          │  Recent sales                 │          │                
-│ Consultations│                               │ 8 icons  │                
-│              │  Alerts                       │ stacked  │                
-│ New Customers│                               │ top→     │                
-│              │                               │ bottom   │                
-└──────────────┴───────────────────────────────┴──────────┘                
-┌──────────────────────────┬──────────────────────────────┐                
-│ Consultation Submissions │ Top Services (donut)         │                
-│ (narrower, larger text)  │                              │                
-└──────────────────────────┴──────────────────────────────┘                
-┌──────────────────────────────────────────────────────────┐               
-│ Consultations chart (7-day area) │ Upcoming Appointments │               
-└──────────────────────────────────────────────────────────┘               
-```
+## Recommended placement
 
-Grid: 12 cols. Upper zone = 3 / 6 / 3 (left KPIs / middle stack / Quick Actions rail). Lower zones = 5 / 7 and 7 / 5.
+A circular **floating icon button**, fixed to the viewport, matching the existing `WhatsAppFab` styling so the two feel like a pair:
 
-## What changes
+- Desktop: bottom-left corner (mirrors WhatsApp on the right).
+- Mobile: same bottom-left, above the safe-area inset.
+- Icon: `Volume2` when playing, `VolumeX` when muted (lucide-react, already used).
+- On first load: shows a subtle one-time pulse ring + tiny tooltip "Play ambience" so users notice it. Tooltip auto-dismisses after ~4s or on first interaction.
+- Tap toggles play/pause. State persists in `localStorage` so returning visitors keep their preference (default = off, per browser policy).
+- Only rendered on public routes (not `/dashboard`, not `/auth`, not `/login`) — same conditional pattern already used for `Header`/`Footer` in `__root.tsx`.
 
-**Removed**
-- Employee Overview card (and its import on the dashboard index — component file stays for reuse).
+Rejected alternatives (happy to switch if you prefer):
+- Auto-play muted then unmute on scroll — still requires a gesture, feels broken.
+- Full-screen "Enter with sound / without sound" splash — heavy for a spa site, hurts SEO/LCP.
+- Putting the toggle inside the header — gets lost, doesn't follow on scroll.
 
-**Repositioned**
-- `Appointments`, `New Consultations`, `New Customers` KPI cards → vertical stack in left column, compressed width.
-- `Sales this month` KPI → top of middle column, keeps the goal progress bar.
-- `RecentSales` → middle column, under Sales KPI.
-- `AlertsTray` → middle column, under Recent Sales.
-- `QuickActions` → far-right vertical rail, all 8 actions stacked (icon + label per row), full height of the upper zone.
-- `RecentConsultations` (consultation submissions) → lower-left, narrower, larger font.
-- `TopServicesChart` → lower-right beside it.
-- `ConsultationChart` + `UpcomingAppointments` → bottom row (kept, since you asked me to flag anything missing — they were not in your description).
+## Technical notes
 
-**Typography bump (readability for ~middle-aged eyes)**
-- KPI value: `text-2xl` (was `text-xl`-ish); KPI title `text-sm`; label `text-xs`.
-- Section headings: `text-base` semibold.
-- Table rows / list rows: `text-sm` (was `text-xs` / `text-[10px]`).
-- Alerts message: `text-sm`; action buttons `text-xs`.
-- Quick Actions labels: `text-xs`, icon circle `w-9 h-9`.
-- Removes most `text-[9px]` / `text-[10px]` micro-text.
-
-**Density**
-- Card padding standardized to `p-4`.
-- Inter-card gap `gap-4`.
-- Page padding `px-6 pt-5 pb-4`.
-
-## Sections you didn't mention
-1. **Consultations 7-day chart** — kept; placed in bottom row.
-2. **Upcoming Appointments** (today's bookings) — kept; placed beside the chart.
-3. **Page header** (greeting + date + New appointment button) — kept as-is.
-
-If you'd rather drop any of these or move them, say which and I'll adjust before building.
+1. Upload the MP3 as a Lovable CDN asset (`src/assets/ambience.mp3.asset.json`) — keeps the repo light and gets cached delivery.
+2. New component `src/components/AmbientAudio.tsx`:
+   - Single `<audio loop preload="none">` with `src` from the asset pointer.
+   - `useState` for `playing`; `useEffect` reads `localStorage` key `meltaways:ambience`.
+   - Handles browser autoplay rejection gracefully (catches the `play()` promise).
+   - Fades volume in/out over ~400ms for a soft start/stop instead of a hard cut.
+3. Mount it in `src/routes/__root.tsx` inside the same `!isDashboard` branch that renders `WhatsAppFab`.
+4. Position: `fixed bottom-6 left-6 z-40`, rounded-full, `bg-background/80 backdrop-blur` with the brand `--primary` accent on the icon, subtle shadow — visually quieter than the WhatsApp button so it doesn't compete.
+5. Accessibility: `aria-label="Toggle background music"`, `aria-pressed={playing}`, respects `prefers-reduced-motion` (skips the pulse animation).
 
 ## Files touched
-- `src/routes/dashboard.index.tsx` — new grid structure, remove `EmployeeOverview` usage.
-- `src/components/dashboard/QuickActions.tsx` — rewrite for vertical rail (icon + label rows).
-- `src/components/dashboard/AlertsTray.tsx` — larger text, tighter compact layout for the middle column.
-- `src/components/dashboard/RecentSales.tsx` — larger text, padding consistency.
-- `src/components/dashboard/RecentConsultations.tsx` — narrower-friendly layout, larger row text.
-- `src/components/dashboard/KpiCard.tsx` — bump value/title/label sizes; works in vertical-stack form.
-- `src/components/dashboard/ConsultationChart.tsx`, `TopServicesChart.tsx`, `UpcomingAppointments.tsx` — heading + tick/legend text size bump only.
 
-No data, route, sidebar, or color-token changes.
+- **New**: `src/assets/ambience.mp3.asset.json` (CDN pointer from the uploaded MP3)
+- **New**: `src/components/AmbientAudio.tsx`
+- **Edit**: `src/routes/__root.tsx` (mount alongside `WhatsAppFab`)
 
-## Viewport target
-Still fits 1280×800 at 100% zoom without vertical scroll for the upper zone; the bottom rows scroll naturally below the fold (acceptable since the priority cards are above).
+No backend, no schema, no route changes.
