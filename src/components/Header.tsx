@@ -7,13 +7,13 @@ import { getSession, signOut, type ClientProfile } from "@/lib/auth";
 
 function NavLink({ to, label, flag, linkClass }: { to: string; label: string; flag?: boolean; linkClass: string }) {
   return (
-    <Link to={to} className={`${linkClass} relative inline-flex flex-col items-center leading-none`}
+    <Link to={to} className={`${linkClass} relative inline-flex items-center gap-1.5 leading-none`}
       activeProps={{ className: "text-primary font-medium" }}
       activeOptions={{ exact: to === "/" }}>
-      {flag && (
-        <span aria-hidden className="text-xs leading-none mb-0.5">🇹🇹</span>
-      )}
       <span>{label}</span>
+      {flag && (
+        <span aria-hidden className="text-sm leading-none">🇹🇹</span>
+      )}
     </Link>
   );
 }

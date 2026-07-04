@@ -14,16 +14,10 @@ export const SITE = {
   tiktok: "https://www.tiktok.com/@melt.aways.spa.tt",
   locations: [
     {
-      name: "Woodbrook",
-      address: "#14 Petra Street, Woodbrook",
-      mapsUrl: "https://maps.app.goo.gl/u3f2tXm18zxNkwg59",
-      embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3264.9185337747854!2d-61.52817097713834!3d10.662107861419683!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c36081175b18d1d%3A0x4ba5719cbcd8f83c!2s14%20Petra%20St%2C%20Port%20of%20Spain!5e0!3m2!1sen!2stt!4v1780557289251!5m2!1sen!2stt",
-    },
-    {
-      name: "St Augustine",
-      address: "#26 Agostini Street, St Augustine",
-      mapsUrl: "https://maps.app.goo.gl/hThw1pJXXyPpBzs26",
-      embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3921.1478135447774!2d-61.404249899999996!3d10.6456228!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c36018b1314825b%3A0x64e4703fa9358ace!2sMelt%20Aways%20Spa%20TT!5e0!3m2!1sen!2stt!4v1780556973929!5m2!1sen!2stt",
+      name: "El Dorado",
+      address: "#240 Eastern Main Road, El Dorado, Trinidad and Tobago, West Indies",
+      mapsUrl: "https://www.google.com/maps/search/?api=1&query=240+Eastern+Main+Road+El+Dorado+Trinidad",
+      embed: "https://www.google.com/maps?q=240+Eastern+Main+Road,+El+Dorado,+Trinidad+and+Tobago&output=embed",
     },
   ],
   logo: logoAsset.url,

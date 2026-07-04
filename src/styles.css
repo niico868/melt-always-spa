@@ -86,8 +86,8 @@
   --card-foreground: oklch(0.22 0.005 30);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.22 0.005 30);
-  /* Dusty Rose primary #D9B7B7 -> use a richer rose for buttons */
-  --primary: oklch(0.62 0.09 20);
+  /* Deeper muted red — replaces the previous pink primary */
+  --primary: oklch(0.48 0.14 22);
   --primary-foreground: oklch(0.99 0.005 60);
   /* Soft cream #FAF6F2 */
   --secondary: oklch(0.965 0.01 60);
@@ -105,10 +105,11 @@
   --blush: oklch(0.93 0.025 20);
   --cream: oklch(0.965 0.01 60);
   --rose: oklch(0.82 0.05 20);
-  --taupe: oklch(0.6 0.015 40);
-  --gold: oklch(0.74 0.09 80);
-  /* Fresh affirmative green for primary conversion (sage-fresh) */
-  --fresh: oklch(0.68 0.12 150);
+  --taupe: oklch(0.45 0.02 30);
+  /* Richer, darker gold */
+  --gold: oklch(0.55 0.11 72);
+  /* Warm charcoal — replaces the old green CTA color across the site */
+  --fresh: oklch(0.24 0.02 25);
   --fresh-foreground: oklch(0.99 0.005 60);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -330,6 +331,16 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 .header-fade { animation: header-fade 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+/* Marquee — moderate speed, seamless loop (list is duplicated in JSX) */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee      { animation: marquee 38s linear infinite; }
+.animate-marquee-slow { animation: marquee 55s linear infinite; }
+.animate-marquee:hover,
+.animate-marquee-slow:hover { animation-play-state: paused; }
 
 /* Respect reduced motion across the system */
 @media (prefers-reduced-motion: reduce) {

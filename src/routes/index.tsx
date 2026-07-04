@@ -9,16 +9,16 @@ import { Section, Eyebrow } from "@/components/Section";
 import { REVIEWS, CONCIERGE_WA } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
-import { HeroCarousel } from "@/components/HeroCarousel";
+import { HeroMedia } from "@/components/HeroCarousel";
 import { CertProviderStrip } from "@/components/CertProviderStrip";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BA_IMAGES } from "@/lib/ba";
 import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
 import maVisiting from "@/assets/ma-visiting.png.asset.json";
-import homeToning from "@/assets/home-toning.png.asset.json";
-import homeSkinTightening from "@/assets/home-skin-tightening.jpeg.asset.json";
-import homeCavitation from "@/assets/home-cavitation.png.asset.json";
-import homeButtFiller from "@/assets/home-buttfiller.png.asset.json";
+import homeToning from "@/assets/home-muscle-toning.png.asset.json";
+import homeSkinTightening from "@/assets/home-skin-tightening-2.png.asset.json";
+import homeCavitation from "@/assets/home-cavitation-2.jpg.asset.json";
+import homeButtFiller from "@/assets/home-butt-lift.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -52,13 +52,13 @@ function Index() {
 function Hero() {
   return (
     <section className="relative overflow-hidden min-h-[640px] lg:min-h-[760px]">
-      <HeroCarousel />
+      <HeroMedia />
       <div className="bg-bloom" aria-hidden />
 
-      <div className="relative mx-auto max-w-[1400px] px-5 lg:px-12 pt-16 lg:pt-28 pb-20 lg:pb-32 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <div className="lg:col-span-7">
+      <div className="relative mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-20 pt-24 lg:pt-40 pb-24 lg:pb-40 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="lg:col-span-7 lg:pl-6">
           <Reveal delay={0.1}>
-            <p className="script-hero text-primary/85 mb-5">Your most confident self lives here.</p>
+            <p className="script-hero text-gold mb-6">Your most confident self lives here.</p>
           </Reveal>
           <Reveal delay={0.4}>
             <h1 className="font-serif text-[2rem] sm:text-5xl lg:text-[3.6rem] leading-[1.05] text-ink">
@@ -68,7 +68,7 @@ function Hero() {
             </h1>
           </Reveal>
           <Reveal delay={0.9}>
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/booking" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-7 py-4 font-medium btn-lux soft-shadow">
                 Book a Consultation <ArrowRight className="w-4 h-4" />
               </Link>
@@ -362,9 +362,9 @@ function ClientReviews() {
     "N.G.": "Nia",
     "L.W.": "Leah",
   };
-  const fourReviews = REVIEWS.slice(0, 4);
+  const homeReviews = REVIEWS.slice(0, 3);
   const [open, setOpen] = useState<number | null>(null);
-  const active = open !== null ? fourReviews[open] : null;
+  const active = open !== null ? homeReviews[open] : null;
   const activeName = active ? (REVIEW_NAMES[active.initials] ?? active.initials) : "";
   return (
     <section className="bg-gradient-to-b from-background via-blush/30 to-background py-24 lg:py-28">
@@ -375,8 +375,8 @@ function ClientReviews() {
             From the people we've worked with.
           </h2>
         </div>
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {fourReviews.map((r, i) => {
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {homeReviews.map((r, i) => {
             const name = REVIEW_NAMES[r.initials] ?? r.initials;
             return (
               <button
@@ -464,7 +464,7 @@ function VisitingTrinidad() {
             <Link to="/visiting" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium hover:opacity-90 lift-on-hover soft-shadow">
               <Plane className="w-4 h-4" /> Plan My Visit
             </Link>
-            <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 lift-on-hover">
+            <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-6 py-3 font-medium hover:opacity-90 lift-on-hover">
               <MessageCircle className="w-4 h-4" /> Concierge
             </a>
           </div>
