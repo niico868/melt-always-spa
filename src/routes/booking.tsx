@@ -3,6 +3,7 @@ import { useState } from "react";
 import { MessageCircle, Check, ArrowRight, Home } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { SITE, saveLead, waLink, type Lead } from "@/lib/site";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/booking")({
   head: () => ({ meta: [
@@ -82,7 +83,7 @@ function Booking() {
     setAreas(prev => prev.includes(area) ? prev.filter(a => a !== area) : [...prev, area]);
   }
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!consent) return;
     const f = new FormData(e.currentTarget);
@@ -111,6 +112,23 @@ function Booking() {
       suggestedPackage: suggestion.pkg,
     };
     saveLead(lead);
+    // Persist to backend (dedupe by phone/email, create consultation lead)
+    try {
+      await (supabase.rpc as any)("public_submit_consultation", {
+        p_full_name: lead.fullName,
+        p_phone: lead.phone,
+        p_email: lead.email,
+        p_concern: concern,
+        p_areas: allAreas.join(", "),
+        p_notes: lead.notes,
+        p_preferred_date: lead.preferredDate,
+        p_preferred_time: lead.preferredTime,
+        p_location: lead.location,
+        p_suggested_package: suggestion.pkg,
+      });
+    } catch (err) {
+      console.warn("consultation submit failed", err);
+    }
     setSubmitted(suggestion);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
