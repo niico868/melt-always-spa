@@ -266,9 +266,8 @@ function CertificationsPage() {
         <div className="max-w-3xl mx-auto text-center">
           <Reveal>
             <p className="font-serif text-2xl lg:text-3xl text-ink leading-relaxed italic">
-              "Every treatment we offer is backed by formal training—not trends. We continually
-              invest in new education so our clients benefit from modern techniques, refined
-              protocols, and safer, more effective care."
+              "You trust us with more than your time, you trust us with you. So we keep learning,
+              keep growing, keep earning that trust, appointment after appointment."
             </p>
           </Reveal>
           <div className="mt-10">
