@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, Plus, Search, Check, X, Pencil, Trash2, Clock } from "lucide-react";
+import { CalendarDays, Plus, Search, Check, X, Pencil, Trash2, Clock, List, Calendar as CalIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -92,8 +92,13 @@ export function AppointmentsPage() {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any | null>(null);
+  const [view, setView] = useState<"list" | "day">("list");
+  const [dayDate, setDayDate] = useState<string>(new Date().toISOString().slice(0, 10));
 
-  const { data: rows = [], isLoading } = useAppointments(range, status, q);
+  const listQ = useAppointments(range, status, q);
+  const dayQ = useDayAppointments(dayDate);
+  const rows = view === "list" ? (listQ.data ?? []) : (dayQ.data ?? []);
+  const isLoading = view === "list" ? listQ.isLoading : dayQ.isLoading;
 
   const stats = useMemo(() => {
     const total = rows.length;
@@ -153,6 +158,19 @@ export function AppointmentsPage() {
       {/* Filters */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col md:flex-row md:items-center gap-2">
         <div className="flex gap-1 bg-gray-50 rounded-lg p-1">
+          <button onClick={() => setView("list")}
+            className={`px-2.5 py-1.5 text-xs rounded-md font-medium inline-flex items-center gap-1 ${view==="list" ? "bg-white shadow text-[#E8246A]" : "text-gray-500"}`}>
+            <List size={12} /> List
+          </button>
+          <button onClick={() => setView("day")}
+            className={`px-2.5 py-1.5 text-xs rounded-md font-medium inline-flex items-center gap-1 ${view==="day" ? "bg-white shadow text-[#E8246A]" : "text-gray-500"}`}>
+            <CalIcon size={12} /> Day
+          </button>
+        </div>
+        {view === "day" ? (
+          <Input type="date" value={dayDate} onChange={e => setDayDate(e.target.value)} className="h-9 w-full md:w-[170px]" />
+        ) : (
+        <div className="flex gap-1 bg-gray-50 rounded-lg p-1">
           {(["today","week","upcoming","all"] as Range[]).map(r => (
             <button key={r} onClick={() => setRange(r)}
               className={`px-3 py-1.5 text-xs rounded-md font-medium capitalize transition ${range === r ? "bg-white shadow text-[#E8246A]" : "text-gray-500 hover:text-gray-700"}`}>
@@ -160,6 +178,9 @@ export function AppointmentsPage() {
             </button>
           ))}
         </div>
+        )}
+        {view === "list" && (
+          <>
         <div className="flex-1 relative">
           <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by client or service…" className="pl-8 h-9" />
@@ -174,9 +195,14 @@ export function AppointmentsPage() {
             <SelectItem value="Cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
+          </>
+        )}
       </div>
 
-      {/* Table */}
+      {view === "day" ? (
+        <DayTimeline rows={rows} isLoading={isLoading} onEdit={(a) => { setEditing(a); setOpen(true); }} />
+      ) : (
+      /* Table */
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -241,6 +267,7 @@ export function AppointmentsPage() {
           </table>
         </div>
       </div>
+      )}
 
       <AppointmentDialog
         open={open}
