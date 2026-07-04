@@ -76,6 +76,58 @@ function useLookups() {
   });
 }
 
+function useDayAppointments(date: string) {
+  return useQuery({
+    queryKey: ["appointments-day", date],
+    queryFn: async () => {
+      const start = new Date(date + "T00:00:00");
+      const end = new Date(start); end.setDate(end.getDate() + 1);
+      const { data, error } = await supabase
+        .from("appointments")
+        .select("id, scheduled_at, status, customers(id, full_name), services(id, name, base_price), employees(id, full_name)")
+        .gte("scheduled_at", start.toISOString())
+        .lt("scheduled_at", end.toISOString())
+        .order("scheduled_at", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+function DayTimeline({ rows, isLoading, onEdit }: { rows: any[]; isLoading: boolean; onEdit: (a: any) => void }) {
+  const hours = Array.from({ length: 12 }, (_, i) => i + 8); // 8am → 7pm
+  const byHour = new Map<number, any[]>();
+  rows.forEach(r => {
+    const h = new Date(r.scheduled_at).getHours();
+    const arr = byHour.get(h) ?? []; arr.push(r); byHour.set(h, arr);
+  });
+  if (isLoading) return <div className="bg-white rounded-xl border border-gray-100 p-6 text-xs text-gray-400 text-center">Loading…</div>;
+  return (
+    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-100">
+      {hours.map(h => {
+        const items = byHour.get(h) ?? [];
+        return (
+          <div key={h} className="flex gap-3 px-3 py-2 min-h-[54px]">
+            <div className="w-14 text-[11px] text-gray-400 font-medium pt-1">
+              {h > 12 ? h - 12 : h}:00 {h >= 12 ? "PM" : "AM"}
+            </div>
+            <div className="flex-1 flex flex-wrap gap-2">
+              {items.length === 0 && <div className="text-[11px] text-gray-300 italic pt-1">— free —</div>}
+              {items.map(a => (
+                <button key={a.id} onClick={() => onEdit(a)}
+                  className={`text-left rounded-lg border px-2.5 py-1.5 text-[11px] hover:shadow transition ${statusClasses(a.status)}`}>
+                  <div className="font-semibold">{new Date(a.scheduled_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })} · {a.customers?.full_name ?? "—"}</div>
+                  <div className="opacity-80">{a.services?.name ?? "—"}{a.employees?.full_name ? ` · ${a.employees.full_name}` : ""}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function statusClasses(s: string) {
   switch (s) {
     case "Confirmed": return "bg-green-50 text-green-700 border-green-200";
