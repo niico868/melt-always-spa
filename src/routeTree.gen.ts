@@ -46,6 +46,7 @@ import { Route as DashboardEmployeesRouteImport } from './routes/dashboard.emplo
 import { Route as DashboardCustomersRouteImport } from './routes/dashboard.customers'
 import { Route as DashboardConsultationsRouteImport } from './routes/dashboard.consultations'
 import { Route as DashboardAppointmentsRouteImport } from './routes/dashboard.appointments'
+import { Route as DashboardCustomersIdRouteImport } from './routes/dashboard.customers.$id'
 
 const VisitingRoute = VisitingRouteImport.update({
   id: '/visiting',
@@ -232,6 +233,11 @@ const DashboardAppointmentsRoute = DashboardAppointmentsRouteImport.update({
   path: '/appointments',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardCustomersIdRoute = DashboardCustomersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DashboardCustomersRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -258,7 +264,7 @@ export interface FileRoutesByFullPath {
   '/visiting': typeof VisitingRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
-  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
   '/dashboard/employees': typeof DashboardEmployeesRoute
   '/dashboard/interests': typeof DashboardInterestsRoute
   '/dashboard/marketing': typeof DashboardMarketingRoute
@@ -271,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -295,7 +302,7 @@ export interface FileRoutesByTo {
   '/visiting': typeof VisitingRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
-  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
   '/dashboard/employees': typeof DashboardEmployeesRoute
   '/dashboard/interests': typeof DashboardInterestsRoute
   '/dashboard/marketing': typeof DashboardMarketingRoute
@@ -308,6 +315,7 @@ export interface FileRoutesByTo {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard': typeof DashboardIndexRoute
   '/journal': typeof JournalIndexRoute
+  '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -335,7 +343,7 @@ export interface FileRoutesById {
   '/visiting': typeof VisitingRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
-  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
   '/dashboard/employees': typeof DashboardEmployeesRoute
   '/dashboard/interests': typeof DashboardInterestsRoute
   '/dashboard/marketing': typeof DashboardMarketingRoute
@@ -348,6 +356,7 @@ export interface FileRoutesById {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -389,6 +398,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/dashboard/customers/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -426,6 +436,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard'
     | '/journal'
+    | '/dashboard/customers/$id'
   id:
     | '__root__'
     | '/'
@@ -465,6 +476,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/dashboard/customers/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -754,13 +766,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAppointmentsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/customers/$id': {
+      id: '/dashboard/customers/$id'
+      path: '/$id'
+      fullPath: '/dashboard/customers/$id'
+      preLoaderRoute: typeof DashboardCustomersIdRouteImport
+      parentRoute: typeof DashboardCustomersRoute
+    }
   }
 }
+
+interface DashboardCustomersRouteChildren {
+  DashboardCustomersIdRoute: typeof DashboardCustomersIdRoute
+}
+
+const DashboardCustomersRouteChildren: DashboardCustomersRouteChildren = {
+  DashboardCustomersIdRoute: DashboardCustomersIdRoute,
+}
+
+const DashboardCustomersRouteWithChildren =
+  DashboardCustomersRoute._addFileChildren(DashboardCustomersRouteChildren)
 
 interface DashboardRouteChildren {
   DashboardAppointmentsRoute: typeof DashboardAppointmentsRoute
   DashboardConsultationsRoute: typeof DashboardConsultationsRoute
-  DashboardCustomersRoute: typeof DashboardCustomersRoute
+  DashboardCustomersRoute: typeof DashboardCustomersRouteWithChildren
   DashboardEmployeesRoute: typeof DashboardEmployeesRoute
   DashboardInterestsRoute: typeof DashboardInterestsRoute
   DashboardMarketingRoute: typeof DashboardMarketingRoute
@@ -775,7 +805,7 @@ interface DashboardRouteChildren {
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAppointmentsRoute: DashboardAppointmentsRoute,
   DashboardConsultationsRoute: DashboardConsultationsRoute,
-  DashboardCustomersRoute: DashboardCustomersRoute,
+  DashboardCustomersRoute: DashboardCustomersRouteWithChildren,
   DashboardEmployeesRoute: DashboardEmployeesRoute,
   DashboardInterestsRoute: DashboardInterestsRoute,
   DashboardMarketingRoute: DashboardMarketingRoute,
