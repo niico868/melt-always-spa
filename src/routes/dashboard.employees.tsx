@@ -27,9 +27,9 @@ function EmployeesPage() {
 
   return (
     <DashboardPage
-      title="Employees"
+      title="Accounts"
       subtitle={`${data?.length ?? 0} team members`}
-      actions={<PrimaryButton onClick={() => setEditing({})}><Plus size={14} className="inline mr-1" />Add employee</PrimaryButton>}
+      actions={<PrimaryButton onClick={() => setEditing({})}><Plus size={14} className="inline mr-1" />Add account</PrimaryButton>}
     >
       <DataTable
         rows={data} columns={columns} loading={isLoading} error={error}

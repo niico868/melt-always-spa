@@ -15,7 +15,7 @@ const NAV = [
   { icon: Sparkles, label: "Services", to: "/dashboard/services" },
   { icon: Package, label: "Products", to: "/dashboard/products" },
   { icon: Heart, label: "Interest Tracking", to: "/dashboard/interests" },
-  { icon: UserCheck, label: "Employees", to: "/dashboard/employees" },
+  { icon: UserCheck, label: "Accounts", to: "/dashboard/employees" },
   { icon: BarChart2, label: "Reports", to: "/dashboard/reports" },
   { icon: Megaphone, label: "Marketing", to: "/dashboard/marketing" },
   { icon: Settings, label: "Settings", to: "/dashboard/settings" },
