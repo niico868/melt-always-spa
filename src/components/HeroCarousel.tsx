@@ -48,13 +48,3 @@ export function HeroMedia() {
 export function HeroCarousel() {
   return <HeroMedia />;
 }
-
-// Old-style eager-load for the still images is no longer required; the block
-// below is intentionally left as a no-op placeholder for the previous
-// implementation.
-function _legacy() {
-  const [ready, setReady] = useState(false);
-  const [i, setI] = useState(0);
-  void setReady; void setI; void i; void ready;
-  return null;
-}
