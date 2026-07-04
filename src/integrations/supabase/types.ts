@@ -494,6 +494,21 @@ export type Database = {
         }
         Returns: boolean
       }
+      public_submit_consultation: {
+        Args: {
+          p_areas?: string
+          p_concern?: string
+          p_email: string
+          p_full_name: string
+          p_location?: string
+          p_notes?: string
+          p_phone: string
+          p_preferred_date?: string
+          p_preferred_time?: string
+          p_suggested_package?: string
+        }
+        Returns: string
+      }
       upsert_customer_by_contact: {
         Args: {
           p_email?: string
