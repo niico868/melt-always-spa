@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarDays, Plus } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { ConsultationChart } from "@/components/dashboard/ConsultationChart";
@@ -48,11 +48,15 @@ function Dashboard() {
             <CalendarDays size={14} className="text-gray-400" />
             <span>{today}</span>
           </button>
-          <button className="bg-[#E8246A] text-white rounded-lg px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#C91D5C] transition-colors whitespace-nowrap">
+          <Link
+            to="/dashboard/appointments"
+            search={{ new: "1" } as never}
+            className="bg-[#E8246A] text-white rounded-lg px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 hover:bg-[#C91D5C] transition-colors whitespace-nowrap"
+          >
             <Plus size={14} />
             <span className="hidden sm:inline">New appointment</span>
             <span className="sm:hidden">New</span>
-          </button>
+          </Link>
         </div>
       </div>
 
