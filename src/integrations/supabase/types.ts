@@ -141,30 +141,166 @@ export type Database = {
           },
         ]
       }
+      customer_notes: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          customer_id: string
+          id: string
+          pinned: boolean
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          customer_id: string
+          id?: string
+          pinned?: boolean
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          customer_id?: string
+          id?: string
+          pinned?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_notes_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_treatments: {
+        Row: {
+          after_photo_url: string | null
+          appointment_id: string | null
+          before_photo_url: string | null
+          created_at: string
+          customer_id: string
+          employee_id: string | null
+          employee_name: string | null
+          id: string
+          outcome_notes: string | null
+          performed_at: string
+          price: number | null
+          service_id: string | null
+          service_name: string
+          session_number: number | null
+        }
+        Insert: {
+          after_photo_url?: string | null
+          appointment_id?: string | null
+          before_photo_url?: string | null
+          created_at?: string
+          customer_id: string
+          employee_id?: string | null
+          employee_name?: string | null
+          id?: string
+          outcome_notes?: string | null
+          performed_at?: string
+          price?: number | null
+          service_id?: string | null
+          service_name: string
+          session_number?: number | null
+        }
+        Update: {
+          after_photo_url?: string | null
+          appointment_id?: string | null
+          before_photo_url?: string | null
+          created_at?: string
+          customer_id?: string
+          employee_id?: string | null
+          employee_name?: string | null
+          id?: string
+          outcome_notes?: string | null
+          performed_at?: string
+          price?: number | null
+          service_id?: string | null
+          service_name?: string
+          session_number?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_treatments_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_treatments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_treatments_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_treatments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customers: {
         Row: {
+          address: string | null
+          city: string | null
           created_at: string
+          date_of_birth: string | null
           email: string | null
           full_name: string
           id: string
+          marketing_opt_in: boolean | null
           notes: string | null
           phone: string | null
+          preferred_contact: string | null
+          tags: string[] | null
+          updated_at: string
         }
         Insert: {
+          address?: string | null
+          city?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
           full_name: string
           id?: string
+          marketing_opt_in?: boolean | null
           notes?: string | null
           phone?: string | null
+          preferred_contact?: string | null
+          tags?: string[] | null
+          updated_at?: string
         }
         Update: {
+          address?: string | null
+          city?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
           full_name?: string
           id?: string
+          marketing_opt_in?: boolean | null
           notes?: string | null
           phone?: string | null
+          preferred_contact?: string | null
+          tags?: string[] | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -357,6 +493,15 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      upsert_customer_by_contact: {
+        Args: {
+          p_email?: string
+          p_full_name: string
+          p_notes?: string
+          p_phone?: string
+        }
+        Returns: string
       }
     }
     Enums: {
