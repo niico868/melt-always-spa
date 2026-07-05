@@ -2,6 +2,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Sidebar } from "@/components/sidebar/Sidebar";
+import { MobileBottomNav } from "@/components/sidebar/MobileBottomNav";
 import { useSession } from "@/lib/use-session";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -74,10 +75,11 @@ function DashboardLayout() {
           <div className="font-extrabold tracking-tight text-sm">Melt AWAYS</div>
           <div className="w-7" />
         </div>
-        <div className="flex-1 min-h-0 lg:overflow-hidden">
+        <div className="flex-1 min-h-0 lg:overflow-hidden pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">
           <Outlet />
         </div>
       </main>
+      <MobileBottomNav onMore={() => setOpen(true)} />
     </div>
   );
 }

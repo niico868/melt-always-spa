@@ -81,7 +81,10 @@ export function AmbientAudio() {
   return (
     <>
       <audio ref={audioRef} src={ambienceAsset.url} preload="none" onEnded={handleEnded} />
-      <div className="fixed bottom-6 left-6 z-40 flex items-center gap-2">
+      <div
+        className="fixed left-4 z-30 flex items-center gap-2"
+        style={{ bottom: "calc(env(safe-area-inset-bottom) + 1.25rem)" }}
+      >
         <button
           type="button"
           onClick={toggle}
