@@ -163,7 +163,43 @@ export function DataTable<T extends { id: string | number }>({
         ) : filtered.length === 0 ? (
           <div className="p-8 text-center text-xs text-gray-400">{empty}</div>
         ) : (
-          <table className="w-full text-xs">
+          <>
+          {/* Mobile stacked cards */}
+          <div className="md:hidden divide-y divide-gray-100">
+            {filtered.map(row => (
+              <div
+                key={row.id}
+                onClick={onRowClick ? () => onRowClick(row) : undefined}
+                className={`p-3 ${onRowClick ? "active:bg-gray-50 cursor-pointer" : ""}`}
+              >
+                <div className="flex items-start gap-2">
+                  {selectable && (
+                    <button
+                      onClick={e => { e.stopPropagation(); toggle(row.id); }}
+                      className="text-gray-400 hover:text-[#E8246A] pt-0.5"
+                    >
+                      {selected.has(row.id) ? <CheckSquare size={14} /> : <Square size={14} />}
+                    </button>
+                  )}
+                  <dl className="flex-1 min-w-0 space-y-1">
+                    {columns.map(c => (
+                      <div key={c.key} className="flex items-baseline gap-2">
+                        <dt className="text-[10px] uppercase tracking-wide text-gray-400 min-w-[70px] flex-shrink-0">{c.header}</dt>
+                        <dd className="text-xs text-gray-800 flex-1 min-w-0 break-words">
+                          {c.render ? c.render(row) : String((row as any)[c.key] ?? "—")}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                  {rowActions && (
+                    <div onClick={e => e.stopPropagation()} className="flex-shrink-0">{rowActions(row)}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Desktop table */}
+          <table className="hidden md:table w-full text-xs">
             <thead className="bg-gray-50 text-gray-500 sticky top-0">
               <tr>
                 {selectable && (
@@ -209,6 +245,7 @@ export function DataTable<T extends { id: string | number }>({
               ))}
             </tbody>
           </table>
+          </>
         )}
       </div>
     </div>
