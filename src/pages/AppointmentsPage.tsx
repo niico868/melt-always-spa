@@ -12,6 +12,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { ColumnFilterButton, applyColumnFilters, type ColumnFilters, type FilterDef } from "@/components/dashboard/ColumnFilter";
 
 type Range = "today" | "week" | "upcoming" | "all";
 type Status = "all" | "Pending" | "Confirmed" | "Completed" | "Cancelled";
@@ -149,8 +150,17 @@ export function AppointmentsPage() {
 
   const listQ = useAppointments(range, status, q);
   const dayQ = useDayAppointments(dayDate);
-  const rows = view === "list" ? (listQ.data ?? []) : (dayQ.data ?? []);
+  const rawRows = view === "list" ? (listQ.data ?? []) : (dayQ.data ?? []);
   const isLoading = view === "list" ? listQ.isLoading : dayQ.isLoading;
+  const [colFilters, setColFilters] = useState<ColumnFilters>({});
+  const filterDefs: FilterDef[] = [
+    { key: "client", label: "Client", type: "text", get: (r: any) => r.customers?.full_name ?? "" },
+    { key: "service", label: "Service", get: (r: any) => r.services?.name ?? "" },
+    { key: "therapist", label: "Therapist", get: (r: any) => r.employees?.full_name ?? "" },
+    { key: "status", label: "Status", get: (r: any) => r.status ?? "" },
+    { key: "date", label: "Date", type: "text", get: (r: any) => new Date(r.scheduled_at).toLocaleDateString() },
+  ];
+  const rows = applyColumnFilters(rawRows as any[], filterDefs, colFilters);
 
   const stats = useMemo(() => {
     const total = rows.length;
@@ -247,7 +257,11 @@ export function AppointmentsPage() {
             <SelectItem value="Cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
+        <ColumnFilterButton defs={filterDefs} rows={rawRows as any[]} filters={colFilters} onChange={setColFilters} />
           </>
+        )}
+        {view === "day" && (
+          <ColumnFilterButton defs={filterDefs} rows={rawRows as any[]} filters={colFilters} onChange={setColFilters} />
         )}
       </div>
 

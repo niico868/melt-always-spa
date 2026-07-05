@@ -1,6 +1,10 @@
-import bellyFatThumb from "@/assets/journal-belly-fat.jpg";
-import glp1Thumb from "@/assets/journal-glp1.jpg";
-import consultationThumb from "@/assets/journal-consultation.jpg";
+import bellyFatAsset from "@/assets/journal-belly-fat-v2.png.asset.json";
+import glp1Asset from "@/assets/journal-tirzep.png.asset.json";
+import consultationAsset from "@/assets/journal-consult.png.asset.json";
+
+const bellyFatThumb = bellyFatAsset.url;
+const glp1Thumb = glp1Asset.url;
+const consultationThumb = consultationAsset.url;
 
 export type JournalArticle = {
   slug: string;
@@ -11,12 +15,15 @@ export type JournalArticle = {
   ctaText: string;
   image: string;
   body: string[];
+  /** ISO date for the post's publication (used by lists + article page). */
+  publishedAt: string;
 };
 
 export const JOURNAL_POSTS: JournalArticle[] = [
   {
     slug: "why-your-belly-fat-might-not-be-your-fault",
     category: "Body Confidence",
+    publishedAt: "2026-06-23T11:00:00Z",
     title: "Why Your Belly Fat Might Not Be Your Fault (And What to Do About It)",
     description:
       "A gentle, honest guide to stubborn belly fat, body changes, and how a smarter treatment plan can help.",
@@ -48,6 +55,7 @@ export const JOURNAL_POSTS: JournalArticle[] = [
   {
     slug: "semaglutide-and-tirzepatide-what-you-should-know",
     category: "Weight Support",
+    publishedAt: "2026-06-30T11:00:00Z",
     title: "Semaglutide & Tirzepatide: What You Should Know Before You Start",
     description:
       "What semaglutide and tirzepatide may help with, why consultation matters, and what realistic progress can feel like.",
@@ -82,6 +90,7 @@ export const JOURNAL_POSTS: JournalArticle[] = [
   {
     slug: "why-we-talk-first-and-why-it-matters",
     category: "Consultation First",
+    publishedAt: "2026-07-07T11:00:00Z",
     title: "Why We Talk First — and Why That Actually Matters",
     description:
       "A consultation-first approach protects clients, creates better treatment matches, and makes care feel genuinely personal.",
