@@ -1,10 +1,11 @@
 import {
   LayoutDashboard, Calendar, ClipboardList, Users, CreditCard,
   Sparkles, Package, Heart, UserCheck, BarChart2, Megaphone, Settings,
-  ChevronDown, LogOut,
+  ShieldCheck, ScrollText, LogOut,
 } from "lucide-react";
 import { NavItem } from "./NavItem";
 import { useSession, signOutAndRedirect } from "@/lib/use-session";
+import { useIsAdmin } from "@/lib/use-my-roles";
 
 const NAV = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
@@ -18,11 +19,13 @@ const NAV = [
   { icon: UserCheck, label: "Accounts", to: "/dashboard/employees" },
   { icon: BarChart2, label: "Reports", to: "/dashboard/reports" },
   { icon: Megaphone, label: "Marketing", to: "/dashboard/marketing" },
+  { icon: ShieldCheck, label: "Security (2FA)", to: "/dashboard/security" },
   { icon: Settings, label: "Settings", to: "/dashboard/settings" },
 ] as const;
 
 export function Sidebar() {
   const { user, profile } = useSession();
+  const isAdmin = useIsAdmin();
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "Account";
   const initials = displayName.split(/\s+/).map(p => p[0]).slice(0, 2).join("").toUpperCase();
   const role = profile?.role ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1) : "Staff";
@@ -39,6 +42,7 @@ export function Sidebar() {
         {NAV.map((n) => (
           <NavItem key={n.to} icon={n.icon} label={n.label} to={n.to} />
         ))}
+        {isAdmin && <NavItem icon={ScrollText} label="Audit Log" to="/dashboard/audit" />}
       </nav>
 
       <div className="mt-auto">
@@ -51,7 +55,6 @@ export function Sidebar() {
             <div className="text-white font-medium text-xs leading-tight truncate">{displayName}</div>
             <div className="text-white/70 text-[10px] leading-tight truncate">{role}</div>
           </div>
-          <ChevronDown className="text-white/70" size={14} />
         </div>
         <button
           onClick={() => { void signOutAndRedirect(); }}
