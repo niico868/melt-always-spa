@@ -4,15 +4,32 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type ProfileRow = { id: string; full_name: string | null; role: string };
 
+async function logAuthEvent(action: "sign_in" | "sign_out", userId?: string, email?: string | null) {
+  try {
+    const ua = typeof navigator !== "undefined" ? navigator.userAgent : null;
+    await supabase.from("audit_log").insert({
+      user_id: userId ?? null,
+      actor_email: email ?? null,
+      action,
+      entity: "auth",
+      summary: action === "sign_in" ? "Signed in" : "Signed out",
+      user_agent: ua,
+    });
+  } catch { /* best-effort */ }
+}
+
 export function useSession() {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [profile, setProfile] = useState<ProfileRow | null>(null);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
       setSession(s);
       if (s?.user) loadProfile(s.user);
       else setProfile(null);
+      if (event === "SIGNED_IN" && s?.user) {
+        void logAuthEvent("sign_in", s.user.id, s.user.email);
+      }
     });
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
@@ -34,6 +51,8 @@ export function useSession() {
 }
 
 export async function signOutAndRedirect() {
+  const { data } = await supabase.auth.getUser();
+  if (data.user) await logAuthEvent("sign_out", data.user.id, data.user.email);
   await supabase.auth.signOut();
   if (typeof window !== "undefined") window.location.href = "/auth";
 }
