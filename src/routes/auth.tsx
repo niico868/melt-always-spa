@@ -14,10 +14,15 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [mfa, setMfa] = useState<{ factorId: string; challengeId: string } | null>(null);
+  const [mfaCode, setMfaCode] = useState("");
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) nav({ to: "/dashboard" });
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (!data.session) return;
+      const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") return; // let them challenge here
+      nav({ to: "/dashboard" });
     });
   }, [nav]);
 
@@ -28,6 +33,16 @@ function AuthPage() {
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
+      const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") {
+        const { data: fac } = await supabase.auth.mfa.listFactors();
+        const factor = fac?.totp?.find(f => f.status === "verified");
+        if (!factor) throw new Error("2FA required but no authenticator is enrolled. Contact admin.");
+        const { data: ch, error: cErr } = await supabase.auth.mfa.challenge({ factorId: factor.id });
+        if (cErr) throw cErr;
+        setMfa({ factorId: factor.id, challengeId: ch.id });
+        return;
+      }
       nav({ to: "/dashboard" });
     } catch (err: any) {
       setError(err.message || "Authentication failed");
@@ -36,14 +51,28 @@ function AuthPage() {
     }
   }
 
+  async function verifyMfa(e: React.FormEvent) {
+    e.preventDefault();
+    if (!mfa) return;
+    setError(null); setBusy(true);
+    try {
+      const { error } = await supabase.auth.mfa.verify({ factorId: mfa.factorId, challengeId: mfa.challengeId, code: mfaCode });
+      if (error) throw error;
+      nav({ to: "/dashboard" });
+    } catch (err: any) {
+      setError(err.message || "Invalid code");
+    } finally { setBusy(false); }
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FBEAF0] to-[#FDF2F7] px-4" style={{ fontFamily: "Inter, sans-serif" }}>
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
         <div className="text-center mb-6">
           <div className="text-[#E8246A] text-2xl font-extrabold tracking-tight">Melt AWAYS</div>
-          <p className="text-sm text-gray-500 mt-1">Spa management dashboard</p>
+          <p className="text-sm text-gray-500 mt-1">{mfa ? "Two-factor authentication" : "Spa management dashboard"}</p>
         </div>
 
+        {!mfa ? (
         <form onSubmit={submit} className="space-y-4">
           <Field label="Email" type="email" value={email} onChange={setEmail} required />
           <Field label="Password" type="password" value={password} onChange={setPassword} required />
@@ -55,6 +84,19 @@ function AuthPage() {
             Staff accounts are created by an administrator.
           </p>
         </form>
+        ) : (
+        <form onSubmit={verifyMfa} className="space-y-4">
+          <p className="text-xs text-gray-600">Enter the 6-digit code from your authenticator app.</p>
+          <input value={mfaCode} onChange={e => setMfaCode(e.target.value.replace(/\D/g,"").slice(0,6))}
+            placeholder="000000" inputMode="numeric" autoFocus
+            className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-3 text-center text-2xl tracking-[0.5em] outline-none focus:border-[#E8246A] focus:bg-white" />
+          {error && <p className="text-sm text-red-600">{error}</p>}
+          <button disabled={busy || mfaCode.length !== 6} className="w-full rounded-lg bg-[#E8246A] text-white py-3 font-medium hover:bg-[#C91D5C] disabled:opacity-60 transition">
+            {busy ? "Verifying…" : "Verify"}
+          </button>
+          <button type="button" onClick={() => { setMfa(null); supabase.auth.signOut(); }} className="w-full text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+        </form>
+        )}
       </div>
     </div>
   );
