@@ -13,6 +13,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { ColumnFilterButton, applyColumnFilters, type ColumnFilters, type FilterDef } from "@/components/dashboard/ColumnFilter";
 
 type Range = "today" | "week" | "month" | "all";
 type Status = "all" | "New" | "Contacted" | "Booked" | "Closed";
@@ -92,7 +93,17 @@ export function ConsultationsPage() {
   const [editing, setEditing] = useState<any | null>(null);
   const [bookFrom, setBookFrom] = useState<any | null>(null);
 
-  const { data: rows = [], isLoading } = useConsultations(range, status, q);
+  const { data: rawRows = [], isLoading } = useConsultations(range, status, q);
+  const [colFilters, setColFilters] = useState<ColumnFilters>({});
+  const filterDefs: FilterDef[] = [
+    { key: "client", label: "Client", type: "text", get: (r: any) => r.client_name ?? "" },
+    { key: "email", label: "Email", type: "text", get: (r: any) => r.customers?.email ?? "" },
+    { key: "phone", label: "Phone", type: "text", get: (r: any) => r.customers?.phone ?? "" },
+    { key: "service", label: "Service", get: (r: any) => r.services?.name ?? r.service_name ?? "" },
+    { key: "status", label: "Status", get: (r: any) => r.status ?? "" },
+    { key: "date", label: "Submitted", type: "text", get: (r: any) => new Date(r.submitted_at).toLocaleDateString() },
+  ];
+  const rows = applyColumnFilters(rawRows as any[], filterDefs, colFilters);
 
   const stats = useMemo(() => {
     const total = rows.length;
@@ -170,6 +181,7 @@ export function ConsultationsPage() {
             <SelectItem value="Closed">Closed</SelectItem>
           </SelectContent>
         </Select>
+        <ColumnFilterButton defs={filterDefs} rows={rawRows as any[]} filters={colFilters} onChange={setColFilters} />
       </div>
 
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">

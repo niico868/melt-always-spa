@@ -55,6 +55,11 @@ function JournalArticlePage() {
         <header className="mt-6 text-center max-w-3xl mx-auto">
           <Eyebrow>{article.category}</Eyebrow>
           <h1 className="text-4xl lg:text-6xl text-ink leading-[1.04]">{article.title}</h1>
+          <p className="mt-3 text-xs uppercase tracking-[0.22em] text-primary/70">
+            <time dateTime={article.publishedAt}>
+              {new Date(article.publishedAt).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}
+            </time>
+          </p>
           <p className="mt-5 text-lg text-taupe leading-relaxed">{article.description}</p>
         </header>
 

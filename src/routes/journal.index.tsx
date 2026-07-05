@@ -23,7 +23,12 @@ function JournalIndex() {
           <article key={a.slug} className="bg-background rounded-3xl border border-border/60 card-shadow overflow-hidden flex flex-col">
             <img src={a.image} alt={a.title} className="aspect-[16/9] w-full object-cover" loading="lazy" width={1280} height={720} />
             <div className="p-7 flex flex-col flex-1">
-              <p className="text-xs uppercase tracking-[0.2em] text-primary/80">{a.category}</p>
+              <div className="flex items-center justify-between gap-2 text-xs uppercase tracking-[0.2em] text-primary/80">
+                <span>{a.category}</span>
+                <time dateTime={a.publishedAt} className="text-taupe/80 tracking-normal normal-case">
+                  {new Date(a.publishedAt).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}
+                </time>
+              </div>
               <h2 className="mt-2 text-xl text-ink leading-snug">{a.title}</h2>
               <p className="mt-3 text-sm text-taupe leading-relaxed flex-1">{a.excerpt}</p>
               <Link to="/journal/$slug" params={{ slug: a.slug }} className="mt-5 inline-flex items-center gap-1 text-sm text-primary font-medium hover:gap-2 transition-all">

@@ -119,7 +119,7 @@ export const FAQS = [
   { q: "Is there downtime?", a: "Most of our treatments are non-surgical with minimal downtime, though this depends on the service." },
   { q: "Who may not be suitable for treatment?", a: "Pregnancy, certain medical conditions, and some medications may affect suitability. We will review this with you in consultation." },
   { q: "Do you offer packages?", a: "Yes. We offer curated treatment packages to support consistent results. Pricing is shared after consultation." },
-  { q: "Where are you located?", a: "We have two locations: #14 Petra Street, Woodbrook and #26 Agostini Street, St Augustine." },
+  { q: "Where are you located?", a: "We are located at #240 Eastern Main Road, El Dorado, Trinidad and Tobago." },
   { q: "How do I book?", a: "Submit a consultation request online, message us on WhatsApp, or call us during opening hours." },
   { q: "What should I do before my appointment?", a: "We will share simple pre-treatment guidance once your consultation is confirmed." },
 ];

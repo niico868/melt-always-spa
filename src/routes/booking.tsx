@@ -185,7 +185,7 @@ function Booking() {
           <Field label="Full name" name="fullName" required />
           <Field label="Phone number" name="phone" type="tel" required />
           <Field label="Email" name="email" type="email" required />
-          <Select label="Preferred location" name="location" options={["Woodbrook","St Augustine"]} required />
+          <Select label="Location" name="location" options={["El Dorado"]} required />
           <Select label="Main concern" name="concern" options={concerns} required />
           <Field label="Prior body or aesthetic treatments?" name="priorTreatments" placeholder="Yes / No, brief notes" />
           <Field label="Medical conditions?" name="medical" placeholder="Yes / No, brief notes" />

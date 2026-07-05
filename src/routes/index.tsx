@@ -99,7 +99,7 @@ function RealResults() {
 
         {/* Stat row */}
         <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          <Stat value="60+" label="Happy Clients" sub="and counting" duration={5} />
+          <Stat value="60+" label="Happy Clients" sub="and counting" duration={4.5} flicker />
           <a
             href="https://share.google/efNeYdAQwEjKkmsPC"
             target="_blank"
@@ -154,7 +154,7 @@ function ResultCard({ name, treatment, duration, quote, image }: { name: string;
   );
 }
 
-function Stat({ value, label, sub, icon, large = true, duration }: { value: string; label: string; sub: string; icon?: React.ReactNode; large?: boolean; duration?: number }) {
+function Stat({ value, label, sub, icon, large = true, duration, flicker }: { value: string; label: string; sub: string; icon?: React.ReactNode; large?: boolean; duration?: number; flicker?: boolean }) {
   // Detect a leading numeric in the value (e.g. "500+", "4.9") for CountUp animation.
   const m = value.match(/^(\d+(?:\.\d+)?)(.*)$/);
   const numeric = m ? parseFloat(m[1]) : null;
@@ -168,7 +168,7 @@ function Stat({ value, label, sub, icon, large = true, duration }: { value: stri
       <div className="text-left">
         <div className={`font-serif text-ink ${large ? "text-4xl" : "text-2xl"}`}>
           {numeric !== null ? (
-            <CountUp value={numeric} decimals={decimals} suffix={suffix} duration={duration} />
+            <CountUp value={numeric} decimals={decimals} suffix={suffix} duration={duration} flicker={flicker} />
           ) : (
             value
           )}

@@ -4,9 +4,11 @@ import ambienceAsset from "@/assets/ambience.mp3.asset.json";
 
 const STORAGE_KEY = "meltaways:ambience";
 const TARGET_VOLUME = 0.45;
+const MAX_PLAYS = 2;
 
 export function AmbientAudio() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playCountRef = useRef(0);
   const [playing, setPlaying] = useState(false);
   const [showHint, setShowHint] = useState(false);
 
@@ -49,6 +51,8 @@ export function AmbientAudio() {
       });
       window.localStorage.setItem(STORAGE_KEY, "off");
     } else {
+      playCountRef.current = 0;
+      audio.currentTime = 0;
       audio.volume = 0;
       try {
         await audio.play();
@@ -61,9 +65,22 @@ export function AmbientAudio() {
     }
   };
 
+  const handleEnded = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    playCountRef.current += 1;
+    if (playCountRef.current < MAX_PLAYS) {
+      audio.currentTime = 0;
+      void audio.play();
+    } else {
+      setPlaying(false);
+      playCountRef.current = 0;
+    }
+  };
+
   return (
     <>
-      <audio ref={audioRef} src={ambienceAsset.url} loop preload="none" />
+      <audio ref={audioRef} src={ambienceAsset.url} preload="none" onEnded={handleEnded} />
       <div className="fixed bottom-6 left-6 z-40 flex items-center gap-2">
         <button
           type="button"
