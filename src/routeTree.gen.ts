@@ -37,6 +37,7 @@ import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardServicesRouteImport } from './routes/dashboard.services'
+import { Route as DashboardSecurityRouteImport } from './routes/dashboard.security'
 import { Route as DashboardSalesRouteImport } from './routes/dashboard.sales'
 import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
 import { Route as DashboardProductsRouteImport } from './routes/dashboard.products'
@@ -45,6 +46,7 @@ import { Route as DashboardInterestsRouteImport } from './routes/dashboard.inter
 import { Route as DashboardEmployeesRouteImport } from './routes/dashboard.employees'
 import { Route as DashboardCustomersRouteImport } from './routes/dashboard.customers'
 import { Route as DashboardConsultationsRouteImport } from './routes/dashboard.consultations'
+import { Route as DashboardAuditRouteImport } from './routes/dashboard.audit'
 import { Route as DashboardAppointmentsRouteImport } from './routes/dashboard.appointments'
 import { Route as DashboardCustomersIdRouteImport } from './routes/dashboard.customers.$id'
 
@@ -188,6 +190,11 @@ const DashboardServicesRoute = DashboardServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardSecurityRoute = DashboardSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardSalesRoute = DashboardSalesRouteImport.update({
   id: '/sales',
   path: '/sales',
@@ -228,6 +235,11 @@ const DashboardConsultationsRoute = DashboardConsultationsRouteImport.update({
   path: '/consultations',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAuditRoute = DashboardAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardAppointmentsRoute = DashboardAppointmentsRouteImport.update({
   id: '/appointments',
   path: '/appointments',
@@ -263,6 +275,7 @@ export interface FileRoutesByFullPath {
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
+  '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
   '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
   '/dashboard/employees': typeof DashboardEmployeesRoute
@@ -271,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/security': typeof DashboardSecurityRoute
   '/dashboard/services': typeof DashboardServicesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
@@ -301,6 +315,7 @@ export interface FileRoutesByTo {
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
+  '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
   '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
   '/dashboard/employees': typeof DashboardEmployeesRoute
@@ -309,6 +324,7 @@ export interface FileRoutesByTo {
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/security': typeof DashboardSecurityRoute
   '/dashboard/services': typeof DashboardServicesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
@@ -342,6 +358,7 @@ export interface FileRoutesById {
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRoute
+  '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
   '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
   '/dashboard/employees': typeof DashboardEmployeesRoute
@@ -350,6 +367,7 @@ export interface FileRoutesById {
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/security': typeof DashboardSecurityRoute
   '/dashboard/services': typeof DashboardServicesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
@@ -384,6 +402,7 @@ export interface FileRouteTypes {
     | '/treatment-finder'
     | '/visiting'
     | '/dashboard/appointments'
+    | '/dashboard/audit'
     | '/dashboard/consultations'
     | '/dashboard/customers'
     | '/dashboard/employees'
@@ -392,6 +411,7 @@ export interface FileRouteTypes {
     | '/dashboard/products'
     | '/dashboard/reports'
     | '/dashboard/sales'
+    | '/dashboard/security'
     | '/dashboard/services'
     | '/dashboard/settings'
     | '/journal/$slug'
@@ -422,6 +442,7 @@ export interface FileRouteTypes {
     | '/treatment-finder'
     | '/visiting'
     | '/dashboard/appointments'
+    | '/dashboard/audit'
     | '/dashboard/consultations'
     | '/dashboard/customers'
     | '/dashboard/employees'
@@ -430,6 +451,7 @@ export interface FileRouteTypes {
     | '/dashboard/products'
     | '/dashboard/reports'
     | '/dashboard/sales'
+    | '/dashboard/security'
     | '/dashboard/services'
     | '/dashboard/settings'
     | '/journal/$slug'
@@ -462,6 +484,7 @@ export interface FileRouteTypes {
     | '/treatment-finder'
     | '/visiting'
     | '/dashboard/appointments'
+    | '/dashboard/audit'
     | '/dashboard/consultations'
     | '/dashboard/customers'
     | '/dashboard/employees'
@@ -470,6 +493,7 @@ export interface FileRouteTypes {
     | '/dashboard/products'
     | '/dashboard/reports'
     | '/dashboard/sales'
+    | '/dashboard/security'
     | '/dashboard/services'
     | '/dashboard/settings'
     | '/journal/$slug'
@@ -703,6 +727,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardServicesRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/security': {
+      id: '/dashboard/security'
+      path: '/security'
+      fullPath: '/dashboard/security'
+      preLoaderRoute: typeof DashboardSecurityRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/sales': {
       id: '/dashboard/sales'
       path: '/sales'
@@ -759,6 +790,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardConsultationsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/audit': {
+      id: '/dashboard/audit'
+      path: '/audit'
+      fullPath: '/dashboard/audit'
+      preLoaderRoute: typeof DashboardAuditRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/appointments': {
       id: '/dashboard/appointments'
       path: '/appointments'
@@ -789,6 +827,7 @@ const DashboardCustomersRouteWithChildren =
 
 interface DashboardRouteChildren {
   DashboardAppointmentsRoute: typeof DashboardAppointmentsRoute
+  DashboardAuditRoute: typeof DashboardAuditRoute
   DashboardConsultationsRoute: typeof DashboardConsultationsRoute
   DashboardCustomersRoute: typeof DashboardCustomersRouteWithChildren
   DashboardEmployeesRoute: typeof DashboardEmployeesRoute
@@ -797,6 +836,7 @@ interface DashboardRouteChildren {
   DashboardProductsRoute: typeof DashboardProductsRoute
   DashboardReportsRoute: typeof DashboardReportsRoute
   DashboardSalesRoute: typeof DashboardSalesRoute
+  DashboardSecurityRoute: typeof DashboardSecurityRoute
   DashboardServicesRoute: typeof DashboardServicesRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
@@ -804,6 +844,7 @@ interface DashboardRouteChildren {
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAppointmentsRoute: DashboardAppointmentsRoute,
+  DashboardAuditRoute: DashboardAuditRoute,
   DashboardConsultationsRoute: DashboardConsultationsRoute,
   DashboardCustomersRoute: DashboardCustomersRouteWithChildren,
   DashboardEmployeesRoute: DashboardEmployeesRoute,
@@ -812,6 +853,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardProductsRoute: DashboardProductsRoute,
   DashboardReportsRoute: DashboardReportsRoute,
   DashboardSalesRoute: DashboardSalesRoute,
+  DashboardSecurityRoute: DashboardSecurityRoute,
   DashboardServicesRoute: DashboardServicesRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
@@ -862,13 +904,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

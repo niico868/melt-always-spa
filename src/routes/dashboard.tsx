@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { useSession } from "@/lib/use-session";
 import { useNavigate } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -18,6 +19,15 @@ function DashboardLayout() {
   useEffect(() => {
     if (!loading && !session) navigate({ to: "/auth" });
   }, [loading, session, navigate]);
+
+  useEffect(() => {
+    if (!session) return;
+    supabase.auth.mfa.getAuthenticatorAssuranceLevel().then(({ data }) => {
+      if (data?.nextLevel === "aal2" && data.currentLevel !== "aal2") {
+        navigate({ to: "/auth" });
+      }
+    });
+  }, [session, navigate]);
 
   if (loading || !session) {
     return (

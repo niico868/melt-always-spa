@@ -93,6 +93,48 @@ export type Database = {
           },
         ]
       }
+      audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          created_at: string
+          diff: Json | null
+          entity: string | null
+          entity_id: string | null
+          id: string
+          ip: string | null
+          summary: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          created_at?: string
+          diff?: Json | null
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          ip?: string | null
+          summary?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          created_at?: string
+          diff?: Json | null
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          ip?: string | null
+          summary?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       consultations: {
         Row: {
           client_name: string
