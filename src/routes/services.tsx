@@ -1,16 +1,33 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Section, Eyebrow } from "@/components/Section";
 import { SERVICES } from "@/lib/site";
-import t1 from "@/assets/treatment.jpg";
-import t2 from "@/assets/equipment.jpg";
-import t3 from "@/assets/petals.jpg";
-import t4 from "@/assets/woman-confident.jpg";
-import t5 from "@/assets/reception.jpg";
-import t6 from "@/assets/hero-spa.jpg";
-import t7 from "@/assets/products.jpg";
-import t8 from "@/assets/portrait-1.jpg";
+import fatMelting from "@/assets/treatments/Fat_Melting.png.asset.json";
+import skinTight from "@/assets/treatments/Skin_Tightening.png.asset.json";
+import antiAging from "@/assets/treatments/Basic_Facial.png.asset.json";
+import wellness from "@/assets/treatments/Morpheus_8.png.asset.json";
+import muscleToning from "@/assets/treatments/Muscle_Toning.png.asset.json";
+import breastFiller from "@/assets/treatments/Breast_Augmentation.png.asset.json";
+import buttFiller from "@/assets/treatments/Butt_Lift.png.asset.json";
+import cavitation from "@/assets/treatments/Cavitation.jpg.asset.json";
+import lymphatic from "@/assets/treatments/Stretch_Mark_Therapy.png.asset.json";
+import slimming from "@/assets/treatments/Fat_Dissolving.png.asset.json";
+import peptides from "@/assets/treatments/Peptides.png.asset.json";
+import bodyContour from "@/assets/treatments/Body_Contouring.png.asset.json";
 
-const imgs = [t1, t2, t3, t4, t5, t6, t7, t8, t1, t2, t3, t4];
+const SERVICE_IMAGES: Record<string, string> = {
+  "fat-melting": fatMelting.url,
+  "skin-tightening": skinTight.url,
+  "anti-aging": antiAging.url,
+  "wellness": wellness.url,
+  "muscle-toning": muscleToning.url,
+  "breast-filler": breastFiller.url,
+  "butt-filler": buttFiller.url,
+  "cavitation": cavitation.url,
+  "lymphatic-drainage": lymphatic.url,
+  "slimming-injections": slimming.url,
+  "peptides": peptides.url,
+  "body-contouring": bodyContour.url,
+};
 
 export const Route = createFileRoute("/services")({
   head: () => ({ meta: [
@@ -29,10 +46,10 @@ function Services() {
         <p className="mt-5 text-taupe">Each service begins with a consultation so we can recommend the right path for your goals.</p>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {SERVICES.map((s, i) => (
+        {SERVICES.map((s) => (
           <article key={s.slug} className="group bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow flex flex-col">
             <div className="aspect-[4/3] overflow-hidden bg-blush">
-              <img src={imgs[i]} alt={s.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+              <img src={SERVICE_IMAGES[s.slug]} alt={s.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
             </div>
             <div className="p-7 flex flex-col flex-1">
               <h3 className="text-xl text-ink">{s.name}</h3>
