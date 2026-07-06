@@ -17,10 +17,12 @@ export const Route = createFileRoute("/visiting")({
 function Visiting() {
   const [done, setDone] = useState(false);
   const [form, setForm] = useState({
-    name: "", country: "", travelDates: "", occasion: "", interest: "",
-    concern: "", branch: "", whatsapp: "", urgency: "", priorTreatments: "", medical: "",
+    name: "", country: "", arrival: "", departure: "", occasion: "", interest: "",
+    concern: "", whatsapp: "", urgency: "", priorTreatments: "", priorList: [] as string[], medical: "",
   });
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
+  const togglePrior = (t: string) =>
+    setForm(f => ({ ...f, priorList: f.priorList.includes(t) ? f.priorList.filter(x => x !== t) : [...f.priorList, t] }));
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -28,14 +30,13 @@ function Visiting() {
       "Hi Melt Aways, I am planning treatment before visiting Trinidad.",
       `Name: ${form.name}`,
       `Country: ${form.country}`,
-      `Travel dates: ${form.travelDates}`,
+      `Travel dates: ${form.arrival} to ${form.departure}`,
       `Occasion: ${form.occasion}`,
       `Treatment interest: ${form.interest}`,
       `Main concern: ${form.concern}`,
-      `Preferred branch: ${form.branch}`,
       `WhatsApp: ${form.whatsapp}`,
       `Results timing: ${form.urgency}`,
-      `Prior body treatments: ${form.priorTreatments}`,
+      `Prior body treatments: ${form.priorTreatments}${form.priorTreatments === "Yes" && form.priorList.length ? " — " + form.priorList.join(", ") : ""}`,
       `Medical conditions or medications: ${form.medical}`,
     ].join("\n");
     window.open(waLink(msg), "_blank", "noopener,noreferrer");
@@ -76,17 +77,32 @@ function Visiting() {
         <form onSubmit={submit} className="max-w-3xl mx-auto bg-background rounded-3xl p-8 lg:p-12 card-shadow border border-border/60 grid gap-5">
           <div className="flex items-center gap-3 text-primary"><Plane className="w-5 h-5" /><h2 className="text-xl text-ink">Plan My Visit</h2></div>
           <Row label="Full name"><input required value={form.name} onChange={e => set("name", e.target.value)} className={inp} /></Row>
-          <Row label="Country"><input required value={form.country} onChange={e => set("country", e.target.value)} className={inp} placeholder="e.g. United States, Canada, UK" /></Row>
-          <Row label="Travel dates in Trinidad"><input required value={form.travelDates} onChange={e => set("travelDates", e.target.value)} className={inp} placeholder="e.g. 12 Feb to 22 Feb" /></Row>
-          <Row label="Event or occasion"><input value={form.occasion} onChange={e => set("occasion", e.target.value)} className={inp} placeholder="Carnival, wedding, birthday, vacation" /></Row>
-          <Row label="Treatment interest"><input value={form.interest} onChange={e => set("interest", e.target.value)} className={inp} placeholder="Body contouring, skin tightening, facial..." /></Row>
-          <Row label="Main concern"><input value={form.concern} onChange={e => set("concern", e.target.value)} className={inp} /></Row>
-          <Row label="Preferred branch">
-            <select value={form.branch} onChange={e => set("branch", e.target.value)} className={inp}>
-              <option value="">Choose a branch</option>
-              <option>Woodbrook</option>
-              <option>St Augustine</option>
-              <option>Either</option>
+          <Row label="Country">
+            <select required value={form.country} onChange={e => set("country", e.target.value)} className={inp}>
+              <option value="">Select your country</option>
+              {COUNTRIES.map(c => <option key={c}>{c}</option>)}
+            </select>
+          </Row>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Row label="Arrival date"><input required type="date" value={form.arrival} onChange={e => set("arrival", e.target.value)} className={inp} /></Row>
+            <Row label="Departure date"><input required type="date" value={form.departure} onChange={e => set("departure", e.target.value)} className={inp} /></Row>
+          </div>
+          <Row label="Event or occasion">
+            <select value={form.occasion} onChange={e => set("occasion", e.target.value)} className={inp}>
+              <option value="">Select an occasion</option>
+              {OCCASIONS.map(o => <option key={o}>{o}</option>)}
+            </select>
+          </Row>
+          <Row label="Treatment interest">
+            <select value={form.interest} onChange={e => set("interest", e.target.value)} className={inp}>
+              <option value="">Select a treatment</option>
+              {TREATMENTS.map(t => <option key={t}>{t}</option>)}
+            </select>
+          </Row>
+          <Row label="Main concern">
+            <select value={form.concern} onChange={e => set("concern", e.target.value)} className={inp}>
+              <option value="">Select your main concern</option>
+              {CONCERNS.map(c => <option key={c}>{c}</option>)}
             </select>
           </Row>
           <Row label="WhatsApp number"><input required value={form.whatsapp} onChange={e => set("whatsapp", e.target.value)} className={inp} placeholder="With country code" /></Row>
@@ -106,13 +122,33 @@ function Visiting() {
               <option>No</option>
             </select>
           </Row>
+          {form.priorTreatments === "Yes" && (
+            <Row label="Which treatments have you done?">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {TREATMENTS.map(t => {
+                  const checked = form.priorList.includes(t);
+                  return (
+                    <label key={t} className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm cursor-pointer transition ${checked ? "bg-blush border-primary text-primary" : "bg-cream/40 border-input text-ink hover:border-primary/50"}`}>
+                      <input type="checkbox" className="accent-primary" checked={checked} onChange={() => togglePrior(t)} />
+                      {t}
+                    </label>
+                  );
+                })}
+              </div>
+            </Row>
+          )}
           <Row label="Any medical conditions or medications we should know?">
             <textarea rows={3} value={form.medical} onChange={e => set("medical", e.target.value)} className={inp} />
           </Row>
           <p className="text-xs text-taupe italic">Submitting opens WhatsApp so our concierge can confirm details and recommend the right plan. No diagnosis is provided online.</p>
-          <button type="submit" className="rounded-full bg-primary text-primary-foreground px-7 py-4 font-medium soft-shadow hover:opacity-90 transition">
-            Plan My Visit
-          </button>
+          <div className="flex flex-wrap gap-3">
+            <button type="submit" className="rounded-full bg-primary text-primary-foreground px-7 py-4 font-medium soft-shadow hover:opacity-90 transition">
+              Plan My Visit
+            </button>
+            <button type="submit" className="rounded-full bg-[#25D366] text-white px-7 py-4 font-medium hover:opacity-90 transition inline-flex items-center gap-2">
+              <MessageCircle className="w-4 h-4" /> Submit and Message Us
+            </button>
+          </div>
         </form>
       )}
     </Section>
@@ -120,6 +156,30 @@ function Visiting() {
 }
 
 const inp = "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40";
+
+const COUNTRIES = [
+  "United States", "Canada", "United Kingdom", "Barbados", "Jamaica", "Guyana", "Suriname",
+  "Grenada", "St Lucia", "St Vincent & the Grenadines", "Antigua & Barbuda", "St Kitts & Nevis",
+  "Dominica", "Bahamas", "Cayman Islands", "Puerto Rico", "Panama", "Venezuela", "Brazil",
+  "Germany", "France", "Netherlands", "Spain", "Italy", "Australia", "Other",
+];
+
+const OCCASIONS = [
+  "Carnival", "Wedding", "Birthday", "Anniversary", "Vacation", "Family visit",
+  "Business trip", "Christmas / Holidays", "Summer trip", "Other",
+];
+
+const TREATMENTS = [
+  "Body Contouring", "Fat Melting", "Cavitation", "Skin Tightening", "Anti-Aging",
+  "Wellness", "Peptides", "Slimming Injections", "Lymphatic Drainage",
+  "Muscle Toning", "Breast Filler", "Butt Filler", "Facial", "Not sure yet",
+];
+
+const CONCERNS = [
+  "Stubborn fat", "Loose skin", "Cellulite", "Post-pregnancy body", "Weight loss support",
+  "Facial aging", "Body shape / contour", "Muscle definition", "Wellness reset", "Not sure yet",
+];
+
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
