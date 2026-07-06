@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { MessageCircle, Check, ArrowRight, Home } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { SITE, saveLead, waLink, type Lead } from "@/lib/site";
+import { saveLead, waLink, type Lead } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/booking")({
@@ -97,7 +97,7 @@ function Booking() {
       fullName: String(f.get("fullName") || ""),
       phone: String(f.get("phone") || ""),
       email: String(f.get("email") || ""),
-      location: String(f.get("location") || ""),
+      location: "El Dorado",
       concern,
       targetArea: allAreas.join(", "),
       targetAreas: allAreas,
@@ -123,12 +123,24 @@ function Booking() {
         p_notes: lead.notes,
         p_preferred_date: lead.preferredDate,
         p_preferred_time: lead.preferredTime,
-        p_location: lead.location,
+        p_location: "El Dorado",
         p_suggested_package: suggestion.pkg,
       });
     } catch (err) {
       console.warn("consultation submit failed", err);
     }
+    // Auto-open WhatsApp with a preloaded message so leads reach us directly.
+    const waMessage = [
+      `Hi Melt Aways, I just submitted a consultation request.`,
+      `Name: ${lead.fullName}`,
+      lead.phone ? `Phone: ${lead.phone}` : "",
+      lead.email ? `Email: ${lead.email}` : "",
+      `Main concern: ${concern}`,
+      allAreas.length ? `Target areas: ${allAreas.join(", ")}` : "",
+      `Suggested package: ${suggestion.pkg}`,
+      lead.preferredDate ? `Preferred date: ${lead.preferredDate}${lead.preferredTime ? " " + lead.preferredTime : ""}` : "",
+    ].filter(Boolean).join("\n");
+    window.open(waLink(waMessage), "_blank", "noopener,noreferrer");
     setSubmitted(suggestion);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -185,7 +197,6 @@ function Booking() {
           <Field label="Full name" name="fullName" required />
           <Field label="Phone number" name="phone" type="tel" required />
           <Field label="Email" name="email" type="email" required />
-          <Select label="Location" name="location" options={["El Dorado"]} required />
           <Select label="Main concern" name="concern" options={concerns} required />
           <Field label="Prior body or aesthetic treatments?" name="priorTreatments" placeholder="Yes / No, brief notes" />
           <Field label="Medical conditions?" name="medical" placeholder="Yes / No, brief notes" />
@@ -227,9 +238,9 @@ function Booking() {
           <button type="submit" className="rounded-full bg-primary text-primary-foreground px-7 py-4 font-medium soft-shadow hover:opacity-90 transition">
             Start My Consultation
           </button>
-          <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="rounded-full border border-ink/20 px-7 py-4 font-medium hover:bg-blush transition inline-flex items-center gap-2">
-            <MessageCircle className="w-4 h-4" /> Message Us Instead
-          </a>
+          <button type="submit" className="rounded-full bg-[#25D366] text-white px-7 py-4 font-medium hover:opacity-90 transition inline-flex items-center gap-2">
+            <MessageCircle className="w-4 h-4" /> Submit and Message Us
+          </button>
         </div>
       </form>
     </Section>

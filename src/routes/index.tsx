@@ -15,10 +15,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { BA_IMAGES } from "@/lib/ba";
 import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
 import maVisiting from "@/assets/ma-visiting.png.asset.json";
-import homeToning from "@/assets/home-muscle-toning.png.asset.json";
-import homeSkinTightening from "@/assets/home-skin-tightening-2.png.asset.json";
-import homeCavitation from "@/assets/home-cavitation-2.jpg.asset.json";
-import homeButtFiller from "@/assets/home-butt-lift.png.asset.json";
+import homeToning from "@/assets/treatments/Muscle_Toning.png.asset.json";
+import homeSkinTightening from "@/assets/treatments/Skin_Tightening.png.asset.json";
+import homeCavitation from "@/assets/treatments/Cavitation.jpg.asset.json";
+import homeButtFiller from "@/assets/treatments/Butt_Lift.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
