@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { MessageCircle, Check, ArrowRight, Home } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { SITE, saveLead, waLink, type Lead } from "@/lib/site";
+import { saveLead, waLink, type Lead } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/booking")({
