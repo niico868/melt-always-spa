@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { MapPin, Clock, Phone, Mail, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { SITE } from "@/lib/site";
+import { SITE, waLink } from "@/lib/site";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({ meta: [
@@ -14,6 +14,19 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const msg = [
+      "Hi Melt Aways, I just sent a message from the contact form.",
+      `Name: ${f.get("name") || ""}`,
+      `Email: ${f.get("email") || ""}`,
+      `Phone: ${f.get("phone") || ""}`,
+      `Message: ${f.get("message") || ""}`,
+    ].join("\n");
+    window.open(waLink(msg), "_blank", "noopener,noreferrer");
+    setSent(true);
+  }
   return (
     <Section>
       <div className="text-center max-w-2xl mx-auto mb-14">
@@ -62,7 +75,7 @@ function Contact() {
           </div>
         </div>
         <form
-          onSubmit={(e) => { e.preventDefault(); setSent(true); }}
+          onSubmit={onSubmit}
           className="bg-background rounded-3xl border border-border/60 card-shadow p-7 lg:p-10 space-y-5 h-fit"
         >
           <h3 className="text-2xl font-light text-ink">Send us a message</h3>
@@ -74,7 +87,9 @@ function Contact() {
               <input required type="email" name="email" placeholder="Email" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
               <input name="phone" placeholder="Phone (optional)" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
               <textarea required name="message" rows={5} placeholder="How can we help?" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
-              <button className="w-full rounded-full bg-primary text-primary-foreground px-6 py-4 font-medium soft-shadow">Send message</button>
+              <button className="w-full rounded-full bg-primary text-primary-foreground px-6 py-4 font-medium soft-shadow inline-flex items-center justify-center gap-2">
+                <MessageCircle className="w-4 h-4" /> Submit and Message Us
+              </button>
             </>
           )}
         </form>
