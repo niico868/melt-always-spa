@@ -40,8 +40,10 @@ export const inviteAccount = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const siteUrl = process.env.SITE_URL || "https://melt-always-spa.lovable.app";
     const { data: created, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email, {
       data: { full_name: data.full_name },
+      redirectTo: `${siteUrl}/set-password`,
     });
     if (error) throw new Error(error.message);
     const uid = created.user?.id;
