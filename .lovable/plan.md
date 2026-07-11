@@ -1,64 +1,34 @@
+## Problem
+When a new admin clicks their emailed invite link, Supabase redirects them to the site root (`/`) with a recovery/invite token in the URL hash. There's no page to handle it, so nothing happens and they land on the homepage still signed out.
 
-## 1. Rebrand — Melt Aways → Melt Elite Aesthetics (MEA)
+## Fix
 
-- Upload the MEA logo from `user-uploads://168165ff-4cec-44fb-9c87-aba95f57d506.png` to Lovable Assets as `src/assets/mea-logo.png.asset.json`.
-- Add a second export `SITE.logoMEA` in `src/lib/site.ts` pointing to the new asset. Keep `SITE.logo` (Melt Aways) unchanged so the footer can reference both.
-- Update `src/components/Logo.tsx` to render the MEA logo by default (used by `Header`, mobile menu, dashboard sidebar, auth pages, favicon-related refs).
-- Update `src/routes/__root.tsx` head metadata: swap title/description/og to "Melt Elite Aesthetics (MEA) — a subsidiary of Melt Aways Spa". Update favicon to the MEA mark (upload PNG to `public/favicon.png`, delete `public/favicon.ico`).
-- Rework `src/components/Footer.tsx` — show both logos side-by-side with the phrase:
-  `MEA [logo] — a subsidiary of — MAS [logo]`
-  Keep the tagline and existing contact/nav columns.
-- Leave all other business copy ("Melt Aways" name in body text) untouched for this pass — logo swap only, per your instructions.
+### 1. New public route: `/set-password`
+Create `src/routes/set-password.tsx` (`ssr: false`, `noindex`) that:
+- On mount, reads the URL hash (`#access_token=...&refresh_token=...&type=invite|recovery`) and calls `supabase.auth.setSession({ access_token, refresh_token })` so the user is authenticated for the update call.
+- Also handles the newer `?code=...` PKCE flow via `supabase.auth.exchangeCodeForSession(code)` as a fallback.
+- Shows a branded form: full name (prefilled from session user metadata if present) + new password + confirm password (min 8 chars, match check).
+- On submit: `supabase.auth.updateUser({ password, data: { full_name } })`, then upserts the name into `profiles`.
+- On success, redirects to `/dashboard`.
+- Handles errors (expired/used link) with a clear message and a "Request a new invite" note.
 
-## 2. Homepage image performance
+### 2. Redirect invite/recovery links to `/set-password`
+Update `src/lib/admin-users.functions.ts` `inviteAccount` to pass `redirectTo: \`${SITE_URL}/set-password\`` in `inviteUserByEmail`. `SITE_URL` comes from `process.env.SITE_URL` with fallback to the published URL. Same for any future password-reset call.
 
-- Add `fetchpriority="high"` + `<link rel="preload" as="image">` in the leaf `head()` of `src/routes/index.tsx` for the hero image (LCP).
-- Below-the-fold images (`VisitingTrinidad`, `RealResults`, treatment cards, B&A gallery): keep `loading="lazy"` but add `decoding="async"` and switch to `<img srcset>` with the vite-imagetools plugin to serve AVIF/WebP variants. This shrinks each image ~60–80%.
-- Add `IntersectionObserver`-based **prefetching** ~600px before the section enters view (a tiny `useEagerImage` hook) so images are decoded before they're visible.
-- Result: hero LCP drops, and scroll-in images appear instantly instead of popping.
+### 3. Root route hash handoff (safety net)
+In `src/routes/__root.tsx` `RootComponent`, add a small `useEffect` that if `window.location.hash` contains `type=invite` or `type=recovery` and pathname is `/`, replace the URL with `/set-password<hash>` so old invite emails that still point at `/` still work.
 
-## 3. Fix Comic Sans → script font flash (FOUT)
+### 4. Supabase Auth URL config
+Add `/set-password` to the allowed redirect URLs in Supabase Auth settings — done via the auth configuration; the invite `redirectTo` must be on the allow-list.
 
-Root cause: `Great Vibes` is declared with `font-display: swap`, so the browser paints fallback (Comic Sans on some systems) first, then swaps.
+## User instructions (what to tell the owner)
+1. Delete/ignore the previous invite email.
+2. From the dashboard's Accounts page, click "Invite" again for `meltawaystt@gmail.com` and `smugglersparadisehq@gmail.com`. The new email's button will now land on `/set-password`.
+3. Enter a password (min 8 chars) and confirm — you'll be signed in and taken to the dashboard.
+4. Future sign-ins use email + that password at `/auth`.
 
-Fix:
-- Change `font-display: swap` → `font-display: block` for `Great Vibes` in `src/styles.css` (hides text briefly instead of flashing wrong font — appropriate for decorative headings).
-- Add `<link rel="preload" as="font" type="font/ttf" href="/fonts/GreatVibes.ttf" crossorigin>` in `__root.tsx` head so it loads with the HTML, not after CSS parse.
-- Do the same for Inter and swap Cormorant Garamond / Playfair from remote Google CSS (render-blocking) to self-hosted `@font-face` (already the pattern used for Inter). This removes the second network round-trip and eliminates the flash.
-
-## 4. Auth — remove TOTP, add email invite links
-
-- Delete the `Security` page (`src/routes/dashboard.security.tsx`) and its sidebar entry.
-- Remove `verifyOtp`/MFA challenge code paths from `src/routes/auth.tsx`.
-- Add a server function `sendAdminInvite(email)` in `src/lib/admin-users.functions.ts` that calls `supabaseAdmin.auth.admin.inviteUserByEmail(email, { redirectTo: '<origin>/auth?type=invite' })`, then upserts `user_roles(role='admin')` when the user id becomes available (webhook-style via a follow-up `handle_new_user` trigger update, or via a "claim role" step on first sign-in).
-- Add a small "Invite Admin" panel on `dashboard.employees.tsx` (admin-only, gated by `has_role(admin)`) with an email input + Send Invite button.
-- Seed the two owner emails (`meltawaystt@gmail.com`, `smugglersparadisehq@gmail.com`) with `role='admin'` in a migration so that when they accept the invite and sign in, they land straight into the admin dashboard.
-- Supabase sends the invite email with a magic link → they click → set password → signed in as admin. No 6-digit code involved.
-
-## 5. Treatment photo swaps
-
-Upload the three attached images via `lovable-assets`:
-- `user-uploads://age.png` → `src/assets/treatments/Anti_Aging.png.asset.json`
-- `user-uploads://breast_fill.png` → `src/assets/treatments/Breast_Filler.png.asset.json`
-- `user-uploads://lymph.png` → `src/assets/treatments/Lymphatic_Drainage.png.asset.json`
-
-Update `SERVICE_IMAGES` in `src/routes/services.tsx` (and any references in `src/routes/index.tsx`) to point the `anti-aging`, `breast-filler`, and `lymphatic-drainage` slugs at the new assets.
-
-## 6. Remove Wellness service
-
-- Drop the `wellness` entry from `SERVICES` in `src/lib/site.ts`.
-- Remove `wellness` from `SERVICE_IMAGES` and unused import in `src/routes/services.tsx`.
-- Remove the "Wellness Reset" package (or replace "Wellness" mentions in remaining packages with the closest existing service, e.g. "Lymphatic Drainage").
-- Remove wellness from the treatment-finder options in `src/lib/treatment-finder.ts` and any homepage feature strip references.
-
-## Technical notes (implementation order)
-
-1. Assets first (MEA logo, 3 treatment photos, favicon PNG).
-2. `site.ts` + `Logo.tsx` + `Footer.tsx` + `__root.tsx` (rebrand + font preload + meta).
-3. `styles.css` font-display fix.
-4. Migration: seed 2 admin emails + drop wellness-related seed data if any.
-5. Server fn + Employees page invite panel; delete Security route + sidebar link + auth MFA branches.
-6. `services.tsx` + `index.tsx` image swaps + wellness removal.
-7. Image perf: preload hero, vite-imagetools variants, `decoding="async"` on non-hero `<img>`s.
-
-Typecheck after each block runs automatically.
+## Files
+- add `src/routes/set-password.tsx`
+- edit `src/lib/admin-users.functions.ts` (add `redirectTo`)
+- edit `src/routes/__root.tsx` (hash handoff)
+- Supabase auth redirect allow-list update
