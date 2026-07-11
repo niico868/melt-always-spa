@@ -73,9 +73,18 @@ function SetPasswordPage() {
       if (error) throw error;
       const { error: profErr } = await supabase.from("profiles").upsert({ id: userData.user.id, full_name: fullName });
       if (profErr) console.warn("profile upsert:", profErr.message);
+      // Route by role: staff → dashboard, client → account with welcome flag
+      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userData.user.id);
+      const staffRoles = ["admin", "manager", "staff", "receptionist"];
+      const isStaff = (roles ?? []).some((r: any) => staffRoles.includes(r.role));
       setInfo(null);
-      setSuccess("Password set successfully. Redirecting to your dashboard…");
-      setTimeout(() => nav({ to: "/dashboard" }), 1400);
+      setSuccess(isStaff
+        ? "Password set successfully. Redirecting to your dashboard…"
+        : "Password set successfully. Welcome — taking you to your profile…");
+      setTimeout(() => {
+        if (isStaff) nav({ to: "/dashboard" });
+        else window.location.assign("/account?welcome=1");
+      }, 1400);
     } catch (err: any) {
       setInfo(null);
       setError(err?.message || "Could not set your password. Please try again.");
