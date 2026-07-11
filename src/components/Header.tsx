@@ -42,7 +42,7 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  const accountLink: "/account" | "/admin" = user?.role === "client" ? "/account" : "/admin";
+  const accountLink: "/account" | "/dashboard" = user?.role === "client" ? "/account" : "/dashboard";
   const linkClass = "nav-underline text-[13px] tracking-[0.08em] uppercase text-foreground/75 hover:text-primary transition-colors";
   return (
     <header className={`sticky top-0 z-40 glass-nav border-b border-border/40 header-fade transition-transform duration-300 ease-out ${hidden ? "-translate-y-full" : "translate-y-0"}`}>

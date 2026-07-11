@@ -28,7 +28,6 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CertificationsRouteImport } from './routes/certifications'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -145,11 +144,6 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -255,7 +249,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
-  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/booking': typeof BookingRoute
   '/certifications': typeof CertificationsRoute
@@ -297,7 +290,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
-  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/booking': typeof BookingRoute
   '/certifications': typeof CertificationsRoute
@@ -338,7 +330,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
-  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/booking': typeof BookingRoute
   '/certifications': typeof CertificationsRoute
@@ -382,7 +373,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
-    | '/admin'
     | '/auth'
     | '/booking'
     | '/certifications'
@@ -424,7 +414,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
-    | '/admin'
     | '/auth'
     | '/booking'
     | '/certifications'
@@ -464,7 +453,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
-    | '/admin'
     | '/auth'
     | '/booking'
     | '/certifications'
@@ -507,7 +495,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
-  AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   BookingRoute: typeof BookingRoute
   CertificationsRoute: typeof CertificationsRoute
@@ -663,13 +650,6 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account': {
@@ -879,7 +859,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
-  AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   BookingRoute: BookingRoute,
   CertificationsRoute: CertificationsRoute,
