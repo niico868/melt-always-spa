@@ -19,6 +19,19 @@ import { ScrollProgress } from "../components/ScrollProgress";
 import { AmbientAudio } from "../components/AmbientAudio";
 
 function NotFoundComponent() {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash;
+    const search = window.location.search;
+    const looksLikeAuth =
+      hash.includes("access_token=") ||
+      hash.includes("type=invite") ||
+      hash.includes("type=recovery") ||
+      /[?&]code=/.test(search);
+    if (looksLikeAuth) {
+      window.location.replace(`/set-password${search}${hash}`);
+    }
+  }, []);
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
