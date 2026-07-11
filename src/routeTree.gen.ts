@@ -13,6 +13,7 @@ import { Route as VisitingRouteImport } from './routes/visiting'
 import { Route as TreatmentFinderRouteImport } from './routes/treatment-finder'
 import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -66,6 +67,11 @@ const TimelineRoute = TimelineRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetPasswordRoute = SetPasswordRouteImport.update({
+  id: '/set-password',
+  path: '/set-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -257,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
   '/services': typeof ServicesRoute
+  '/set-password': typeof SetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
@@ -295,6 +302,7 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
   '/services': typeof ServicesRoute
+  '/set-password': typeof SetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
@@ -336,6 +344,7 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
   '/services': typeof ServicesRoute
+  '/set-password': typeof SetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
@@ -378,6 +387,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/reviews'
     | '/services'
+    | '/set-password'
     | '/sitemap.xml'
     | '/timeline'
     | '/treatment-finder'
@@ -416,6 +426,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/reviews'
     | '/services'
+    | '/set-password'
     | '/sitemap.xml'
     | '/timeline'
     | '/treatment-finder'
@@ -456,6 +467,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/reviews'
     | '/services'
+    | '/set-password'
     | '/sitemap.xml'
     | '/timeline'
     | '/treatment-finder'
@@ -497,6 +509,7 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   ReviewsRoute: typeof ReviewsRoute
   ServicesRoute: typeof ServicesRoute
+  SetPasswordRoute: typeof SetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TimelineRoute: typeof TimelineRoute
   TreatmentFinderRoute: typeof TreatmentFinderRoute
@@ -532,6 +545,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/set-password': {
+      id: '/set-password'
+      path: '/set-password'
+      fullPath: '/set-password'
+      preLoaderRoute: typeof SetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -853,6 +873,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   ReviewsRoute: ReviewsRoute,
   ServicesRoute: ServicesRoute,
+  SetPasswordRoute: SetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TimelineRoute: TimelineRoute,
   TreatmentFinderRoute: TreatmentFinderRoute,
