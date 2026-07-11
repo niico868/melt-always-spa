@@ -55,8 +55,8 @@ export function Header() {
         </nav>
 
         {/* CENTER LOGO */}
-        <Link to="/" className="flex items-center justify-center -my-2 lg:col-start-2" aria-label="Melt Aways home">
-          <Logo className="h-16 lg:h-20 w-auto" />
+        <Link to="/" className="flex items-center justify-center -my-2 lg:col-start-2" aria-label="Melt Elite Aesthetics home">
+          <Logo className="h-20 lg:h-24 w-auto" />
         </Link>
 
         {/* RIGHT NAV + ACTIONS */}
