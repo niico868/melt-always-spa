@@ -37,7 +37,6 @@ import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardServicesRouteImport } from './routes/dashboard.services'
-import { Route as DashboardSecurityRouteImport } from './routes/dashboard.security'
 import { Route as DashboardSalesRouteImport } from './routes/dashboard.sales'
 import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
 import { Route as DashboardProductsRouteImport } from './routes/dashboard.products'
@@ -190,11 +189,6 @@ const DashboardServicesRoute = DashboardServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => DashboardRoute,
 } as any)
-const DashboardSecurityRoute = DashboardSecurityRouteImport.update({
-  id: '/security',
-  path: '/security',
-  getParentRoute: () => DashboardRoute,
-} as any)
 const DashboardSalesRoute = DashboardSalesRouteImport.update({
   id: '/sales',
   path: '/sales',
@@ -284,7 +278,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/sales': typeof DashboardSalesRoute
-  '/dashboard/security': typeof DashboardSecurityRoute
   '/dashboard/services': typeof DashboardServicesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
@@ -324,7 +317,6 @@ export interface FileRoutesByTo {
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/sales': typeof DashboardSalesRoute
-  '/dashboard/security': typeof DashboardSecurityRoute
   '/dashboard/services': typeof DashboardServicesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
@@ -367,7 +359,6 @@ export interface FileRoutesById {
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/sales': typeof DashboardSalesRoute
-  '/dashboard/security': typeof DashboardSecurityRoute
   '/dashboard/services': typeof DashboardServicesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
@@ -411,7 +402,6 @@ export interface FileRouteTypes {
     | '/dashboard/products'
     | '/dashboard/reports'
     | '/dashboard/sales'
-    | '/dashboard/security'
     | '/dashboard/services'
     | '/dashboard/settings'
     | '/journal/$slug'
@@ -451,7 +441,6 @@ export interface FileRouteTypes {
     | '/dashboard/products'
     | '/dashboard/reports'
     | '/dashboard/sales'
-    | '/dashboard/security'
     | '/dashboard/services'
     | '/dashboard/settings'
     | '/journal/$slug'
@@ -493,7 +482,6 @@ export interface FileRouteTypes {
     | '/dashboard/products'
     | '/dashboard/reports'
     | '/dashboard/sales'
-    | '/dashboard/security'
     | '/dashboard/services'
     | '/dashboard/settings'
     | '/journal/$slug'
@@ -727,13 +715,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardServicesRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/dashboard/security': {
-      id: '/dashboard/security'
-      path: '/security'
-      fullPath: '/dashboard/security'
-      preLoaderRoute: typeof DashboardSecurityRouteImport
-      parentRoute: typeof DashboardRoute
-    }
     '/dashboard/sales': {
       id: '/dashboard/sales'
       path: '/sales'
@@ -836,7 +817,6 @@ interface DashboardRouteChildren {
   DashboardProductsRoute: typeof DashboardProductsRoute
   DashboardReportsRoute: typeof DashboardReportsRoute
   DashboardSalesRoute: typeof DashboardSalesRoute
-  DashboardSecurityRoute: typeof DashboardSecurityRoute
   DashboardServicesRoute: typeof DashboardServicesRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
@@ -853,7 +833,6 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardProductsRoute: DashboardProductsRoute,
   DashboardReportsRoute: DashboardReportsRoute,
   DashboardSalesRoute: DashboardSalesRoute,
-  DashboardSecurityRoute: DashboardSecurityRoute,
   DashboardServicesRoute: DashboardServicesRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
