@@ -23,7 +23,7 @@ function Login() {
     setError(null);
     const r = signIn(email, password, role);
     if (!r.ok) return setError(r.error || "Sign in failed.");
-    nav({ to: role === "client" ? "/account" : "/admin" });
+    nav({ to: role === "client" ? "/account" : "/dashboard" });
   }
 
   return (
