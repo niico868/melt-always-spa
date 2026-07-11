@@ -139,6 +139,20 @@ function RootComponent() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isDashboard = pathname.startsWith("/dashboard");
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash;
+    const search = window.location.search;
+    const looksLikeAuth =
+      hash.includes("access_token=") ||
+      hash.includes("type=invite") ||
+      hash.includes("type=recovery") ||
+      /[?&]code=/.test(search);
+    if (looksLikeAuth && window.location.pathname === "/") {
+      window.location.replace(`/set-password${search}${hash}`);
+    }
+  }, []);
+
   if (isDashboard) {
     return (
       <QueryClientProvider client={queryClient}>
