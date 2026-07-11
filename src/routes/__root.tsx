@@ -28,7 +28,7 @@ function NotFoundComponent() {
       hash.includes("type=invite") ||
       hash.includes("type=recovery") ||
       /[?&]code=/.test(search);
-    if (looksLikeAuth) {
+    if (looksLikeAuth && window.location.pathname !== "/set-password") {
       window.location.replace(`/set-password${search}${hash}`);
     }
   }, []);
