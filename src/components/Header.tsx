@@ -22,6 +22,7 @@ export function Header() {
   const nav = useNavigate();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<ClientProfile | null>(null);
+  const [hidden, setHidden] = useState(false);
   useEffect(() => {
     const sync = () => setUser(getSession());
     sync();
@@ -29,11 +30,23 @@ export function Header() {
     window.addEventListener("storage", sync);
     return () => { window.removeEventListener("meltaways:auth", sync); window.removeEventListener("storage", sync); };
   }, []);
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y < 80) { setHidden(false); lastY = y; return; }
+      if (Math.abs(y - lastY) < 6) return;
+      setHidden(y > lastY);
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const accountLink: "/account" | "/admin" = user?.role === "client" ? "/account" : "/admin";
   const linkClass = "nav-underline text-[13px] tracking-[0.08em] uppercase text-foreground/75 hover:text-primary transition-colors";
   return (
-    <header className="sticky top-0 z-40 glass-nav border-b border-border/40 header-fade">
-      <div className="mx-auto max-w-[1400px] px-5 lg:px-10 h-24 grid grid-cols-[1fr_auto_1fr] items-center gap-6">
+    <header className={`sticky top-0 z-40 glass-nav border-b border-border/40 header-fade transition-transform duration-300 ease-out ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
+      <div className="mx-auto max-w-[1400px] px-5 lg:px-10 h-[calc(4rem+0.67em)] lg:h-[calc(5rem+0.67em)] grid grid-cols-[1fr_auto_1fr] items-center gap-6">
         {/* LEFT NAV */}
         <nav className="hidden lg:flex items-center justify-around gap-8">
           {NAV_LEFT.map((n: any) => (
