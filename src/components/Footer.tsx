@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, Phone, Mail, MapPin, Clock } from "lucide-react";
-import { Logo } from "./Logo";
 import { SITE, NAV } from "@/lib/site";
 
 export function Footer() {
@@ -8,7 +7,11 @@ export function Footer() {
     <footer className="mt-24 bg-cream border-t border-border">
       <div className="mx-auto max-w-7xl px-5 lg:px-10 py-16 grid gap-12 md:grid-cols-4">
         <div className="md:col-span-2">
-          <Logo className="h-24 w-auto -ml-2" />
+          <div className="flex items-center gap-4 flex-wrap">
+            <img src={SITE.logoMEA} alt="Melt Elite Aesthetics" className="h-20 w-auto" />
+            <span className="text-xs text-taupe italic tracking-wide">a subsidiary of</span>
+            <img src={SITE.logoMAS} alt="Melt Aways Spa" className="h-20 w-auto" />
+          </div>
           <p className="mt-4 max-w-sm text-sm text-taupe leading-relaxed">
             A wellness, body-contouring, and aesthetic spa in Trinidad & Tobago. We guide women and men
             toward confidence through respectful, consultation-led care.

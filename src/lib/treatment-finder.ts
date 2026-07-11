@@ -18,7 +18,6 @@ export const FINDER_GOALS = [
   "Fat reduction",
   "Skin tightening",
   "Anti-aging",
-  "Wellness reset",
   "Weight loss support",
   "Body contouring",
   "Confidence rebuild",
@@ -40,12 +39,11 @@ export function suggestPackage(a: FinderAnswers): string {
   const g = a.goals.map((x) => x.toLowerCase());
   const has = (k: string) => g.some((x) => x.includes(k));
 
-  if (has("weight loss")) return "Wellness Reset";
+  if (has("weight loss")) return "Melt & Tighten";
   if (has("anti-aging") || has("skin tightening")) return "Glow & Firm";
   if (has("fat reduction") && has("body contouring")) return "Full Body Confidence";
   if (has("fat reduction")) return "Melt & Tighten";
   if (has("body contouring")) return "Sculpt & Smooth";
-  if (has("wellness")) return "Wellness Reset";
   return "Sculpt & Smooth";
 }
 
