@@ -66,6 +66,11 @@ function Hero() {
           <Reveal delay={0.1}>
             <p className="script-hero text-gold mb-6">Your most confident self lives here.</p>
           </Reveal>
+          <Reveal delay={0.25}>
+            <h2 className="font-serif tracking-[0.18em] uppercase text-primary text-sm sm:text-base lg:text-lg mb-4">
+              Melt Elite Aesthetics
+            </h2>
+          </Reveal>
           <Reveal delay={0.4}>
             <h1 className="font-serif text-[2rem] sm:text-5xl lg:text-[3.6rem] leading-[1.05] text-ink">
               Personalized Body Contouring
