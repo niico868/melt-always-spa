@@ -1,155 +1,120 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Section, Eyebrow } from "@/components/Section";
-import { getSession, updateProfile, signOut, clientTreatments, type ClientProfile, type TreatmentRecord } from "@/lib/auth";
-import { LogOut, Save, User as UserIcon, Activity } from "lucide-react";
+import { LogOut, Save, Sparkles, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/account")({
+  ssr: false,
   head: () => ({ meta: [
-    { title: "My Account — Melt Aways" },
+    { title: "My Account — Melt Elite Aesthetics" },
     { name: "robots", content: "noindex" },
   ]}),
   component: Account,
 });
 
+type AccountUser = { id: string; email: string; fullName: string };
+
 function Account() {
   const nav = useNavigate();
-  const [user, setUser] = useState<ClientProfile | null>(null);
-  const [treatments, setTreatments] = useState<TreatmentRecord[]>([]);
-  const [tab, setTab] = useState<"profile" | "history">("profile");
-  const [saved, setSaved] = useState(false);
+  const [user, setUser] = useState<AccountUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [fullName, setFullName] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [savedMsg, setSavedMsg] = useState<string | null>(null);
+  const [errMsg, setErrMsg] = useState<string | null>(null);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
-    const s = getSession();
-    if (!s || s.role !== "client") { nav({ to: "/login" }); return; }
-    setUser(s);
-    setTreatments(clientTreatments(s.id));
+    (async () => {
+      const { data } = await supabase.auth.getUser();
+      if (!data.user) { nav({ to: "/login" }); return; }
+      const { data: prof } = await supabase.from("profiles").select("full_name").eq("id", data.user.id).maybeSingle();
+      const name = prof?.full_name || (data.user.user_metadata as any)?.full_name || "";
+      setUser({ id: data.user.id, email: data.user.email ?? "", fullName: name });
+      setFullName(name);
+      setLoading(false);
+      // One-time welcome from ?welcome=1
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("welcome") === "1") {
+        setShowWelcome(true);
+        window.history.replaceState({}, "", "/account");
+      }
+    })();
   }, [nav]);
 
-  if (!user) return null;
-
-  function save(e: React.FormEvent<HTMLFormElement>) {
+  async function save(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
-    const patch: Partial<ClientProfile> = {
-      fullName: String(f.get("fullName") || ""),
-      phone: String(f.get("phone") || ""),
-      dob: String(f.get("dob") || ""),
-      address: String(f.get("address") || ""),
-      emergencyContact: String(f.get("emergencyContact") || ""),
-      medicalConditions: String(f.get("medicalConditions") || ""),
-      medications: String(f.get("medications") || ""),
-      allergies: String(f.get("allergies") || ""),
-      pregnancy: String(f.get("pregnancy") || ""),
-      goals: String(f.get("goals") || ""),
-      notes: String(f.get("notes") || ""),
-    };
-    updateProfile(patch);
-    setUser({ ...user!, ...patch });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2200);
+    if (!user) return;
+    setSaving(true); setSavedMsg(null); setErrMsg(null);
+    try {
+      const { error } = await supabase.from("profiles").upsert({ id: user.id, full_name: fullName });
+      if (error) throw error;
+      setUser({ ...user, fullName });
+      setSavedMsg("Profile updated.");
+      setTimeout(() => setSavedMsg(null), 2200);
+    } catch (err: any) {
+      setErrMsg(err?.message || "Could not save your profile.");
+    } finally {
+      setSaving(false);
+    }
   }
 
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    nav({ to: "/" });
+  }
+
+  if (loading || !user) return <Section className="max-w-3xl"><p className="text-taupe text-sm">Loading your account…</p></Section>;
+
+  const firstName = (user.fullName || user.email).split(/[ @]/)[0];
+
   return (
-    <Section className="max-w-5xl">
+    <Section className="max-w-3xl">
+      {showWelcome && (
+        <div className="mb-6 rounded-2xl border border-primary/30 bg-blush/50 p-5 flex items-start gap-3">
+          <Sparkles className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="text-ink font-medium">Welcome to Melt Elite Aesthetics, {firstName}!</p>
+            <p className="text-sm text-taupe mt-1">Your account is set up. This is your personal portal — update your details anytime and we'll see you soon.</p>
+          </div>
+          <button onClick={() => setShowWelcome(false)} aria-label="Dismiss" className="p-1 text-taupe hover:text-primary">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
         <div>
           <Eyebrow>My Account</Eyebrow>
-          <h1 className="text-3xl lg:text-4xl font-light text-ink">Welcome back, {user.fullName.split(" ")[0]}.</h1>
+          <h1 className="text-3xl lg:text-4xl font-light text-ink">Welcome back, {firstName}.</h1>
           <p className="text-sm text-taupe mt-1">{user.email}</p>
         </div>
-        <button onClick={() => { signOut(); nav({ to: "/" }); }}
+        <button onClick={handleSignOut}
           className="inline-flex items-center gap-2 rounded-full border border-ink/15 px-5 py-2.5 text-sm hover:bg-blush transition">
           <LogOut className="w-4 h-4" /> Sign Out
         </button>
       </div>
 
-      <div className="flex gap-2 mb-6 bg-cream rounded-full p-1 w-fit">
-        <TabBtn active={tab === "profile"} onClick={() => setTab("profile")} icon={<UserIcon className="w-4 h-4" />}>My Profile</TabBtn>
-        <TabBtn active={tab === "history"} onClick={() => setTab("history")} icon={<Activity className="w-4 h-4" />}>Treatment History</TabBtn>
-      </div>
-
-      {tab === "profile" && (
-        <form onSubmit={save} className="bg-background border border-border/60 rounded-3xl p-7 lg:p-10 card-shadow space-y-5">
-          <div className="grid sm:grid-cols-2 gap-4">
-            <F label="Full name" name="fullName" defaultValue={user.fullName} required />
-            <F label="Phone" name="phone" defaultValue={user.phone} />
-            <F label="Date of birth" name="dob" type="date" defaultValue={user.dob} />
-            <F label="Address" name="address" defaultValue={user.address} />
-            <F label="Emergency contact" name="emergencyContact" defaultValue={user.emergencyContact} />
-            <F label="Pregnancy status" name="pregnancy" defaultValue={user.pregnancy} placeholder="No / Pregnant / Postpartum" />
-          </div>
-          <T label="Medical conditions" name="medicalConditions" defaultValue={user.medicalConditions} />
-          <T label="Current medications" name="medications" defaultValue={user.medications} />
-          <T label="Allergies" name="allergies" defaultValue={user.allergies} />
-          <T label="Your wellness goals" name="goals" defaultValue={user.goals} />
-          <T label="Additional notes for your care team" name="notes" defaultValue={user.notes} />
-          <div className="flex items-center gap-3">
-            <button className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow">
-              <Save className="w-4 h-4" /> Save Changes
-            </button>
-            {saved && <span className="text-sm text-primary">Profile updated.</span>}
-          </div>
-        </form>
-      )}
-
-      {tab === "history" && (
-        <div className="bg-background border border-border/60 rounded-3xl card-shadow overflow-hidden">
-          <div className="p-6 border-b border-border/60">
-            <h2 className="text-lg font-medium text-ink">Treatment history</h2>
-            <p className="text-sm text-taupe">A record of your sessions with Melt Aways. Includes practitioner and processing clerk for each visit.</p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-cream text-left text-xs uppercase tracking-wider text-taupe">
-                <tr>
-                  <th className="px-4 py-3">Date</th><th className="px-4 py-3">Service</th><th className="px-4 py-3">Area</th>
-                  <th className="px-4 py-3">Practitioner</th><th className="px-4 py-3">Clerk</th>
-                  <th className="px-4 py-3">Status</th><th className="px-4 py-3 text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {treatments.map(t => (
-                  <tr key={t.id} className="border-t border-border">
-                    <td className="px-4 py-3 text-ink">{t.date}</td>
-                    <td className="px-4 py-3 text-ink">{t.service}</td>
-                    <td className="px-4 py-3 text-taupe">{t.area}</td>
-                    <td className="px-4 py-3 text-taupe">{t.practitioner}</td>
-                    <td className="px-4 py-3 text-taupe">{t.clerk}</td>
-                    <td className="px-4 py-3"><span className="rounded-full bg-blush text-primary text-xs px-3 py-1">{t.status}</span></td>
-                    <td className="px-4 py-3 text-right text-ink">TT${t.amount}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <form onSubmit={save} className="bg-background border border-border/60 rounded-3xl p-7 lg:p-10 card-shadow space-y-5">
+        <div>
+          <label className="text-sm font-medium text-ink">Full name</label>
+          <input value={fullName} onChange={e => setFullName(e.target.value)} required
+            className="mt-1.5 w-full rounded-2xl border border-input bg-cream/50 px-4 py-3 outline-none focus:border-primary transition" />
         </div>
-      )}
+        <div>
+          <label className="text-sm font-medium text-ink">Email</label>
+          <input value={user.email} disabled
+            className="mt-1.5 w-full rounded-2xl border border-input bg-cream/30 px-4 py-3 text-taupe" />
+        </div>
+        {savedMsg && <p className="text-sm rounded-lg bg-green-50 border border-green-200 text-green-700 px-3 py-2">{savedMsg}</p>}
+        {errMsg && <p className="text-sm rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2">{errMsg}</p>}
+        <div className="flex items-center gap-3">
+          <button disabled={saving} className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow disabled:opacity-60">
+            <Save className="w-4 h-4" /> {saving ? "Saving…" : "Save Changes"}
+          </button>
+        </div>
+      </form>
     </Section>
-  );
-}
-
-function TabBtn({ active, onClick, children, icon }: { active: boolean; onClick: () => void; children: React.ReactNode; icon: React.ReactNode }) {
-  return (
-    <button onClick={onClick}
-      className={`inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition ${active ? "bg-primary text-primary-foreground" : "text-taupe"}`}>
-      {icon}{children}
-    </button>
-  );
-}
-function F({ label, ...p }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <div>
-      <label className="text-sm font-medium text-ink">{label}</label>
-      <input {...p} className="mt-1.5 w-full rounded-2xl border border-input bg-cream/50 px-4 py-3 outline-none focus:border-primary transition" />
-    </div>
-  );
-}
-function T({ label, ...p }: { label: string } & React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return (
-    <div>
-      <label className="text-sm font-medium text-ink">{label}</label>
-      <textarea rows={3} {...p} className="mt-1.5 w-full rounded-2xl border border-input bg-cream/50 px-4 py-3 outline-none focus:border-primary transition" />
-    </div>
   );
 }
