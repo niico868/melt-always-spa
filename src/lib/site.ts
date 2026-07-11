@@ -1,4 +1,5 @@
 import logoAsset from "@/assets/logo.asset.json";
+import meaLogoAsset from "@/assets/mea-logo.png.asset.json";
 
 export const SITE = {
   name: "Melt Aways",
@@ -21,6 +22,8 @@ export const SITE = {
     },
   ],
   logo: logoAsset.url,
+  logoMEA: meaLogoAsset.url,
+  logoMAS: logoAsset.url,
 };
 
 export function waLink(message?: string) {
@@ -54,7 +57,6 @@ export const SERVICES = [
   { slug: "fat-melting", name: "Fat Melting", desc: "Target stubborn areas with non-surgical body-contouring treatments designed to support a slimmer, more sculpted look." },
   { slug: "skin-tightening", name: "Skin Tightening", desc: "Support firmer-looking skin and smoother body definition through treatment plans created around your goals." },
   { slug: "anti-aging", name: "Anti-Aging", desc: "Refresh the appearance of your skin with treatments focused on glow, firmness, texture, and confidence." },
-  { slug: "wellness", name: "Wellness", desc: "Support your body from the inside out with wellness-focused treatments and guided care." },
   { slug: "muscle-toning", name: "Muscle Toning", desc: "Help define and strengthen targeted areas with body-sculpting support designed to complement your lifestyle." },
   { slug: "breast-filler", name: "Breast Filler", desc: "A consultation-led enhancement service for clients seeking fuller, more balanced-looking results." },
   { slug: "butt-filler", name: "Butt Filler", desc: "A consultation-led contouring service designed for shape, volume, and body confidence." },
@@ -68,9 +70,8 @@ export const SERVICES = [
 export const PACKAGES = [
   { name: "Sculpt & Smooth", desc: "A contouring-focused journey for clients targeting stubborn areas with a smoother finish.", bestFor: "First-time body-contouring clients", includes: ["Cavitation", "Lymphatic Drainage", "Skin Tightening"] },
   { name: "Melt & Tighten", desc: "A combined plan that pairs fat-melting treatments with skin tightening for a more defined silhouette.", bestFor: "Clients seeking definition + firmness", includes: ["Fat Melting", "Skin Tightening", "Body-Contouring"] },
-  { name: "Glow & Firm", desc: "An anti-aging and skin-focused plan designed to restore glow and improve skin appearance.", bestFor: "Anti-aging and skin confidence", includes: ["Anti-Aging", "Skin Tightening", "Wellness Support"] },
+  { name: "Glow & Firm", desc: "An anti-aging and skin-focused plan designed to restore glow and improve skin appearance.", bestFor: "Anti-aging and skin confidence", includes: ["Anti-Aging", "Skin Tightening", "Lymphatic Drainage"] },
   { name: "Full Body Confidence", desc: "A comprehensive premium plan covering multiple zones for a complete body confidence journey.", bestFor: "Clients ready for a full transformation", includes: ["Cavitation", "Body-Contouring", "Skin Tightening", "Lymphatic Drainage"] },
-  { name: "Wellness Reset", desc: "A restorative plan focused on internal wellness, drainage, and supportive guidance.", bestFor: "Clients prioritising wellness", includes: ["Lymphatic Drainage", "Wellness", "Peptide Guidance"] },
 ];
 
 export const REVIEWS = [

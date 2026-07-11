@@ -1,11 +1,12 @@
 import {
   LayoutDashboard, Calendar, ClipboardList, Users, CreditCard,
   Sparkles, Package, Heart, UserCheck, BarChart2, Megaphone, Settings,
-  ShieldCheck, ScrollText, LogOut,
+  ScrollText, LogOut,
 } from "lucide-react";
 import { NavItem } from "./NavItem";
 import { useSession, signOutAndRedirect } from "@/lib/use-session";
 import { useIsAdmin } from "@/lib/use-my-roles";
+import { Logo } from "@/components/Logo";
 
 const NAV = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
@@ -19,7 +20,6 @@ const NAV = [
   { icon: UserCheck, label: "Accounts", to: "/dashboard/employees" },
   { icon: BarChart2, label: "Reports", to: "/dashboard/reports" },
   { icon: Megaphone, label: "Marketing", to: "/dashboard/marketing" },
-  { icon: ShieldCheck, label: "Security (2FA)", to: "/dashboard/security" },
   { icon: Settings, label: "Settings", to: "/dashboard/settings" },
 ] as const;
 
@@ -32,9 +32,11 @@ export function Sidebar() {
   return (
     <aside className="w-[200px] min-w-[200px] h-full bg-[#E8246A] flex flex-col" style={{ fontFamily: "Inter, sans-serif" }}>
       <div className="px-4 pt-4 mb-4">
-        <div className="text-white text-base font-extrabold tracking-tight">Melt AWAYS</div>
-        <div className="text-white/80 text-[10px] italic mt-1 leading-snug">
-          Where we destroy fat and reveal the you inside
+        <div className="bg-white/95 rounded-lg p-2 flex items-center justify-center">
+          <Logo className="h-10 w-auto" />
+        </div>
+        <div className="text-white/80 text-[10px] italic mt-2 leading-snug text-center">
+          Melt Elite Aesthetics
         </div>
       </div>
 

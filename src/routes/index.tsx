@@ -29,6 +29,12 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Real bodies. Real goals. Consultation first. Premium body contouring and wellness in Trinidad & Tobago." },
       { property: "og:image", content: heroBanner.url },
     ],
+    links: [
+      { rel: "preload", as: "image", href: homeToning.url },
+      { rel: "preload", as: "image", href: homeSkinTightening.url },
+      { rel: "preload", as: "image", href: homeCavitation.url },
+      { rel: "preload", as: "image", href: homeButtFiller.url },
+    ],
   }),
   component: Index,
 });
@@ -140,7 +146,7 @@ function ResultCard({ name, treatment, duration, quote, image }: { name: string;
   return (
     <article className="bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow lift-on-hover hover:-translate-y-1 text-left">
       <div className="aspect-[4/5] overflow-hidden bg-blush">
-        <img src={image} alt={`${name} – ${treatment} before & after`} className="w-full h-full object-contain" loading="lazy" />
+        <img src={image} alt={`${name} – ${treatment} before & after`} className="w-full h-full object-contain" loading="eager" decoding="async" fetchPriority="high" />
       </div>
       <div className="p-5">
         <h3 className="font-serif text-2xl text-primary">{name}</h3>
@@ -332,7 +338,7 @@ function FeaturedTreatments() {
         {featured.map((s) => (
           <article key={s.slug} className="group bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow lift-on-hover hover:-translate-y-1 flex flex-col">
             <div className="aspect-[4/3] overflow-hidden bg-blush">
-              <img src={s.image} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" />
+              <img src={s.image} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="eager" decoding="async" />
             </div>
             <div className="p-6 flex flex-col flex-1">
               <h3 className="font-serif text-2xl text-ink">{s.name}</h3>

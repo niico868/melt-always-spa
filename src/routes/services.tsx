@@ -3,13 +3,12 @@ import { Section, Eyebrow } from "@/components/Section";
 import { SERVICES } from "@/lib/site";
 import fatMelting from "@/assets/treatments/Fat_Melting.png.asset.json";
 import skinTight from "@/assets/treatments/Skin_Tightening.png.asset.json";
-import antiAging from "@/assets/treatments/Basic_Facial.png.asset.json";
-import wellness from "@/assets/treatments/Morpheus_8.png.asset.json";
+import antiAging from "@/assets/treatments/Anti_Aging.png.asset.json";
 import muscleToning from "@/assets/treatments/Muscle_Toning.png.asset.json";
-import breastFiller from "@/assets/treatments/Breast_Augmentation.png.asset.json";
+import breastFiller from "@/assets/treatments/Breast_Filler.png.asset.json";
 import buttFiller from "@/assets/treatments/Butt_Lift.png.asset.json";
 import cavitation from "@/assets/treatments/Cavitation.jpg.asset.json";
-import lymphatic from "@/assets/treatments/Stretch_Mark_Therapy.png.asset.json";
+import lymphatic from "@/assets/treatments/Lymphatic_Drainage.png.asset.json";
 import slimming from "@/assets/treatments/Fat_Dissolving.png.asset.json";
 import peptides from "@/assets/treatments/Peptides.png.asset.json";
 import bodyContour from "@/assets/treatments/Body_Contouring.png.asset.json";
@@ -18,7 +17,6 @@ const SERVICE_IMAGES: Record<string, string> = {
   "fat-melting": fatMelting.url,
   "skin-tightening": skinTight.url,
   "anti-aging": antiAging.url,
-  "wellness": wellness.url,
   "muscle-toning": muscleToning.url,
   "breast-filler": breastFiller.url,
   "butt-filler": buttFiller.url,
