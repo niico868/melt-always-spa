@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, Plus, Search, Check, X, Pencil, Trash2, Clock, List, Calendar as CalIcon } from "lucide-react";
+import { CalendarDays, Plus, Search, Check, X, Pencil, Trash2, Clock, List, Calendar as CalIcon, MessageCircle, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "@tanstack/react-router";
+import { buildWhatsAppUrl } from "@/lib/appointments-detail";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,12 +38,12 @@ function rangeBounds(r: Range) {
 
 function useAppointments(range: Range, status: Status, q: string) {
   return useQuery({
-    queryKey: ["appointments", range, status, q],
+    queryKey: ["appointments-list-v2", range, status, q],
     queryFn: async () => {
       const { gte, lt } = rangeBounds(range);
       let query = supabase
         .from("appointments")
-        .select("id, scheduled_at, status, customers(id, full_name), services(id, name, base_price), employees(id, full_name)")
+        .select("id, scheduled_at, status, quick_note, customers(id, full_name, phone), services(id, name, base_price), employees(id, full_name), appointment_services(service_id, price_snapshot, services(name)), invoices(id, total, status, payments(amount, kind)), appointment_medical(allergies, medications, contraindications)")
         .order("scheduled_at", { ascending: true });
       if (gte) query = query.gte("scheduled_at", gte);
       if (lt) query = query.lt("scheduled_at", lt);
