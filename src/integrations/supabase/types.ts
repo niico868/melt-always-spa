@@ -41,12 +41,130 @@ export type Database = {
         }
         Relationships: []
       }
+      appointment_medical: {
+        Row: {
+          additional_notes: string | null
+          allergies: string | null
+          appointment_id: string
+          contraindications: string | null
+          medications: string | null
+          updated_at: string
+        }
+        Insert: {
+          additional_notes?: string | null
+          allergies?: string | null
+          appointment_id: string
+          contraindications?: string | null
+          medications?: string | null
+          updated_at?: string
+        }
+        Update: {
+          additional_notes?: string | null
+          allergies?: string | null
+          appointment_id?: string
+          contraindications?: string | null
+          medications?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_medical_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appointment_notes: {
+        Row: {
+          appointment_id: string
+          author_id: string | null
+          author_name: string | null
+          body: string
+          created_at: string
+          id: string
+          kind: string
+        }
+        Insert: {
+          appointment_id: string
+          author_id?: string | null
+          author_name?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          kind: string
+        }
+        Update: {
+          appointment_id?: string
+          author_id?: string | null
+          author_name?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_notes_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appointment_services: {
+        Row: {
+          appointment_id: string
+          created_at: string
+          duration_min_snapshot: number
+          id: string
+          price_snapshot: number
+          service_id: string
+        }
+        Insert: {
+          appointment_id: string
+          created_at?: string
+          duration_min_snapshot?: number
+          id?: string
+          price_snapshot?: number
+          service_id: string
+        }
+        Update: {
+          appointment_id?: string
+          created_at?: string
+          duration_min_snapshot?: number
+          id?: string
+          price_snapshot?: number
+          service_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_services_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointment_services_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           created_at: string
           customer_id: string | null
+          duration_min: number | null
           employee_id: string | null
           id: string
+          quick_note: string | null
+          room: string | null
           scheduled_at: string
           service_id: string | null
           status: string
@@ -54,8 +172,11 @@ export type Database = {
         Insert: {
           created_at?: string
           customer_id?: string | null
+          duration_min?: number | null
           employee_id?: string | null
           id?: string
+          quick_note?: string | null
+          room?: string | null
           scheduled_at: string
           service_id?: string | null
           status?: string
@@ -63,8 +184,11 @@ export type Database = {
         Update: {
           created_at?: string
           customer_id?: string | null
+          duration_min?: number | null
           employee_id?: string | null
           id?: string
+          quick_note?: string | null
+          room?: string | null
           scheduled_at?: string
           service_id?: string | null
           status?: string
@@ -373,6 +497,107 @@ export type Database = {
         }
         Relationships: []
       }
+      invoices: {
+        Row: {
+          appointment_id: string | null
+          created_at: string
+          customer_id: string | null
+          discount: number
+          id: string
+          invoice_number: string
+          notes: string | null
+          status: string
+          subtotal: number
+          tax: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          discount?: number
+          id?: string
+          invoice_number?: string
+          notes?: string | null
+          status?: string
+          subtotal?: number
+          tax?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          appointment_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          discount?: number
+          id?: string
+          invoice_number?: string
+          notes?: string | null
+          status?: string
+          subtotal?: number
+          tax?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          id: string
+          invoice_id: string
+          kind: string
+          method: string
+          note: string | null
+          recorded_at: string
+          recorded_by: string | null
+        }
+        Insert: {
+          amount: number
+          id?: string
+          invoice_id: string
+          kind?: string
+          method?: string
+          note?: string | null
+          recorded_at?: string
+          recorded_by?: string | null
+        }
+        Update: {
+          amount?: number
+          id?: string
+          invoice_id?: string
+          kind?: string
+          method?: string
+          note?: string | null
+          recorded_at?: string
+          recorded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           created_at: string
@@ -551,6 +776,7 @@ export type Database = {
         }
         Returns: string
       }
+      recompute_invoice: { Args: { _invoice_id: string }; Returns: undefined }
       upsert_customer_by_contact: {
         Args: {
           p_email?: string
