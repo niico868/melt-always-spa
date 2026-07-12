@@ -48,6 +48,7 @@ import { Route as DashboardConsultationsRouteImport } from './routes/dashboard.c
 import { Route as DashboardAuditRouteImport } from './routes/dashboard.audit'
 import { Route as DashboardAppointmentsRouteImport } from './routes/dashboard.appointments'
 import { Route as DashboardCustomersIdRouteImport } from './routes/dashboard.customers.$id'
+import { Route as DashboardAppointmentsIdRouteImport } from './routes/dashboard.appointments.$id'
 
 const VisitingRoute = VisitingRouteImport.update({
   id: '/visiting',
@@ -244,6 +245,11 @@ const DashboardCustomersIdRoute = DashboardCustomersIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => DashboardCustomersRoute,
 } as any)
+const DashboardAppointmentsIdRoute = DashboardAppointmentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DashboardAppointmentsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -268,7 +274,7 @@ export interface FileRoutesByFullPath {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
-  '/dashboard/appointments': typeof DashboardAppointmentsRoute
+  '/dashboard/appointments': typeof DashboardAppointmentsRouteWithChildren
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
   '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
@@ -284,6 +290,7 @@ export interface FileRoutesByFullPath {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
 }
 export interface FileRoutesByTo {
@@ -307,7 +314,7 @@ export interface FileRoutesByTo {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
-  '/dashboard/appointments': typeof DashboardAppointmentsRoute
+  '/dashboard/appointments': typeof DashboardAppointmentsRouteWithChildren
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
   '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
@@ -323,6 +330,7 @@ export interface FileRoutesByTo {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard': typeof DashboardIndexRoute
   '/journal': typeof JournalIndexRoute
+  '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
 }
 export interface FileRoutesById {
@@ -349,7 +357,7 @@ export interface FileRoutesById {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
-  '/dashboard/appointments': typeof DashboardAppointmentsRoute
+  '/dashboard/appointments': typeof DashboardAppointmentsRouteWithChildren
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
   '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
@@ -365,6 +373,7 @@ export interface FileRoutesById {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
 }
 export interface FileRouteTypes {
@@ -408,6 +417,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -447,6 +457,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard'
     | '/journal'
+    | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
   id:
     | '__root__'
@@ -488,6 +499,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
   fileRoutesById: FileRoutesById
 }
@@ -792,8 +804,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCustomersIdRouteImport
       parentRoute: typeof DashboardCustomersRoute
     }
+    '/dashboard/appointments/$id': {
+      id: '/dashboard/appointments/$id'
+      path: '/$id'
+      fullPath: '/dashboard/appointments/$id'
+      preLoaderRoute: typeof DashboardAppointmentsIdRouteImport
+      parentRoute: typeof DashboardAppointmentsRoute
+    }
   }
 }
+
+interface DashboardAppointmentsRouteChildren {
+  DashboardAppointmentsIdRoute: typeof DashboardAppointmentsIdRoute
+}
+
+const DashboardAppointmentsRouteChildren: DashboardAppointmentsRouteChildren = {
+  DashboardAppointmentsIdRoute: DashboardAppointmentsIdRoute,
+}
+
+const DashboardAppointmentsRouteWithChildren =
+  DashboardAppointmentsRoute._addFileChildren(
+    DashboardAppointmentsRouteChildren,
+  )
 
 interface DashboardCustomersRouteChildren {
   DashboardCustomersIdRoute: typeof DashboardCustomersIdRoute
@@ -807,7 +839,7 @@ const DashboardCustomersRouteWithChildren =
   DashboardCustomersRoute._addFileChildren(DashboardCustomersRouteChildren)
 
 interface DashboardRouteChildren {
-  DashboardAppointmentsRoute: typeof DashboardAppointmentsRoute
+  DashboardAppointmentsRoute: typeof DashboardAppointmentsRouteWithChildren
   DashboardAuditRoute: typeof DashboardAuditRoute
   DashboardConsultationsRoute: typeof DashboardConsultationsRoute
   DashboardCustomersRoute: typeof DashboardCustomersRouteWithChildren
@@ -823,7 +855,7 @@ interface DashboardRouteChildren {
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardAppointmentsRoute: DashboardAppointmentsRoute,
+  DashboardAppointmentsRoute: DashboardAppointmentsRouteWithChildren,
   DashboardAuditRoute: DashboardAuditRoute,
   DashboardConsultationsRoute: DashboardConsultationsRoute,
   DashboardCustomersRoute: DashboardCustomersRouteWithChildren,
