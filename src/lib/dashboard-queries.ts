@@ -61,7 +61,7 @@ export function useUpcomingAppointments() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("appointments")
-        .select("id, scheduled_at, status, customers(full_name), services(name)")
+        .select("id, scheduled_at, status, customers(id, full_name), services(name)")
         .order("scheduled_at", { ascending: true })
         .limit(6);
       if (error) throw error;
@@ -76,7 +76,7 @@ export function useRecentConsultations() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("consultations")
-        .select("id, client_name, service_name, status, submitted_at, services(name)")
+        .select("id, client_name, service_name, status, submitted_at, customer_id, customers(id, full_name), services(name)")
         .order("submitted_at", { ascending: false })
         .limit(6);
       if (error) throw error;
