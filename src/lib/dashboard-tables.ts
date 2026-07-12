@@ -6,6 +6,8 @@ export type Customer = {
   id: string; full_name: string; email: string | null; phone: string | null; notes: string | null; created_at: string;
   date_of_birth?: string | null; address?: string | null; city?: string | null;
   preferred_contact?: string | null; tags?: string[] | null; marketing_opt_in?: boolean | null;
+  allergies?: string | null; medications?: string | null; medical_conditions?: string | null;
+  skin_type?: string | null; medical_notes?: string | null;
 };
 export function useCustomers() {
   return useQuery({
@@ -46,6 +48,11 @@ export function useUpsertCustomer() {
         tags: row.tags ?? [],
         marketing_opt_in: row.marketing_opt_in ?? false,
       };
+      if (row.allergies !== undefined) payload.allergies = row.allergies || null;
+      if (row.medications !== undefined) payload.medications = row.medications || null;
+      if (row.medical_conditions !== undefined) payload.medical_conditions = row.medical_conditions || null;
+      if (row.skin_type !== undefined) payload.skin_type = row.skin_type || null;
+      if (row.medical_notes !== undefined) payload.medical_notes = row.medical_notes || null;
       if (row.id) {
         const { error } = await supabase.from("customers").update(payload).eq("id", row.id);
         if (error) throw error;
