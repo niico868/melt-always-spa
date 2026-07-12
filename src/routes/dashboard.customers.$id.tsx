@@ -1,18 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, Pin, Trash2, Plus, Mail, Phone, MapPin, Cake, MessageCircle } from "lucide-react";
+import { ArrowLeft, Pin, Trash2, Plus, Mail, Phone, MapPin, Cake, MessageCircle, AlertTriangle, Pencil } from "lucide-react";
 import { DashboardPage, PrimaryButton } from "@/components/dashboard/DashboardPage";
 import { Modal, Field, inputCls } from "@/components/dashboard/Modal";
 import { fmtDate, fmtDateTime, fmtMoney } from "@/components/dashboard/DataTable";
 import {
-  useCustomer, useCustomerNotes, useAddCustomerNote, useDeleteCustomerNote,
+  useCustomer, useUpsertCustomer, useCustomerNotes, useAddCustomerNote, useDeleteCustomerNote,
   useCustomerTreatments, useAddCustomerTreatment,
   useCustomerAppointments, useCustomerSales, useCustomerConsultations,
 } from "@/lib/dashboard-tables";
 
 export const Route = createFileRoute("/dashboard/customers/$id")({ component: CustomerDetail });
 
-type Tab = "overview" | "treatments" | "appointments" | "consultations" | "sales" | "notes";
+type Tab = "overview" | "medical" | "treatments" | "appointments" | "consultations" | "sales" | "notes";
 
 function CustomerDetail() {
   const { id } = Route.useParams();
@@ -29,12 +29,13 @@ function CustomerDetail() {
       actions={<Link to="/dashboard/customers" className="text-xs text-gray-500 hover:text-[#E8246A] inline-flex items-center gap-1"><ArrowLeft size={12} /> Back</Link>}
     >
       <div className="border-b border-gray-100 px-3 flex gap-1 overflow-x-auto flex-shrink-0">
-        {(["overview","treatments","appointments","consultations","sales","notes"] as Tab[]).map(t => (
+        {(["overview","medical","treatments","appointments","consultations","sales","notes"] as Tab[]).map(t => (
           <button key={t} onClick={() => setTab(t)} className={`px-3 py-2 text-xs capitalize whitespace-nowrap border-b-2 ${tab === t ? "border-[#E8246A] text-[#E8246A] font-medium" : "border-transparent text-gray-500 hover:text-gray-700"}`}>{t}</button>
         ))}
       </div>
       <div className="p-4">
         {tab === "overview" && <OverviewTab customer={customer} />}
+        {tab === "medical" && <MedicalTab customer={customer} />}
         {tab === "treatments" && <TreatmentsTab customerId={id} />}
         {tab === "appointments" && <AppointmentsTab customerId={id} />}
         {tab === "consultations" && <ConsultationsTab customerId={id} />}
@@ -42,6 +43,76 @@ function CustomerDetail() {
         {tab === "notes" && <NotesTab customerId={id} />}
       </div>
     </DashboardPage>
+  );
+}
+
+function MedicalTab({ customer }: { customer: any }) {
+  const upsert = useUpsertCustomer();
+  const [editing, setEditing] = useState(false);
+  const hasAny = !!(customer.allergies || customer.medications || customer.medical_conditions || customer.skin_type || customer.medical_notes);
+
+  if (editing) {
+    return (
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          const f = new FormData(e.currentTarget);
+          upsert.mutate({
+            id: customer.id,
+            full_name: customer.full_name,
+            phone: customer.phone,
+            email: customer.email,
+            allergies: String(f.get("allergies") || "").trim() || null,
+            medications: String(f.get("medications") || "").trim() || null,
+            medical_conditions: String(f.get("medical_conditions") || "").trim() || null,
+            skin_type: String(f.get("skin_type") || "").trim() || null,
+            medical_notes: String(f.get("medical_notes") || "").trim() || null,
+          } as any, { onSuccess: () => setEditing(false) });
+        }}
+        className="space-y-2 text-xs"
+      >
+        <Field label="Allergies"><textarea name="allergies" defaultValue={customer.allergies ?? ""} rows={2} placeholder="e.g. Latex, lidocaine, nuts" className={inputCls} /></Field>
+        <Field label="Current medications"><textarea name="medications" defaultValue={customer.medications ?? ""} rows={2} placeholder="e.g. Retinoids, blood thinners" className={inputCls} /></Field>
+        <Field label="Medical conditions / contraindications"><textarea name="medical_conditions" defaultValue={customer.medical_conditions ?? ""} rows={2} placeholder="e.g. Pregnancy, keloid scarring, diabetes" className={inputCls} /></Field>
+        <Field label="Skin type"><input name="skin_type" defaultValue={customer.skin_type ?? ""} placeholder="e.g. Fitzpatrick III, oily / sensitive" className={inputCls} /></Field>
+        <Field label="Other medical notes"><textarea name="medical_notes" defaultValue={customer.medical_notes ?? ""} rows={3} className={inputCls} /></Field>
+        <div className="flex justify-end gap-2 pt-2">
+          <button type="button" onClick={() => setEditing(false)} className="px-3 py-1.5 text-xs text-gray-600">Cancel</button>
+          <PrimaryButton type="submit">{upsert.isPending ? "Saving…" : "Save medical info"}</PrimaryButton>
+        </div>
+      </form>
+    );
+  }
+
+  return (
+    <div className="space-y-2 text-xs">
+      <div className="flex justify-between items-center">
+        <p className="text-[11px] text-gray-500 flex items-center gap-1"><AlertTriangle size={11} className="text-amber-500" /> Sensitive — visible only to signed-in staff.</p>
+        <button onClick={() => setEditing(true)} className="text-[#E8246A] inline-flex items-center gap-1"><Pencil size={11} /> {hasAny ? "Edit" : "Add medical info"}</button>
+      </div>
+      {!hasAny ? <p className="text-gray-400 py-6 text-center">No medical info recorded yet.</p> : (
+        <div className="grid md:grid-cols-2 gap-2">
+          <MedBlock label="Allergies" value={customer.allergies} tone="red" />
+          <MedBlock label="Medications" value={customer.medications} tone="amber" />
+          <MedBlock label="Conditions / Contraindications" value={customer.medical_conditions} tone="amber" />
+          <MedBlock label="Skin type" value={customer.skin_type} tone="gray" />
+          {customer.medical_notes && <div className="md:col-span-2"><MedBlock label="Other notes" value={customer.medical_notes} tone="gray" /></div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MedBlock({ label, value, tone }: { label: string; value: string | null; tone: "red" | "amber" | "gray" }) {
+  if (!value) return null;
+  const cls = tone === "red" ? "bg-red-50 border-red-200 text-red-900"
+    : tone === "amber" ? "bg-amber-50 border-amber-200 text-amber-900"
+    : "bg-gray-50 border-gray-200 text-gray-800";
+  return (
+    <div className={`p-3 rounded-lg border ${cls}`}>
+      <div className="text-[10px] uppercase tracking-wide opacity-70 mb-1">{label}</div>
+      <div className="whitespace-pre-wrap">{value}</div>
+    </div>
   );
 }
 

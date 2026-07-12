@@ -425,6 +425,7 @@ export type Database = {
       customers: {
         Row: {
           address: string | null
+          allergies: string | null
           city: string | null
           created_at: string
           date_of_birth: string | null
@@ -432,14 +433,19 @@ export type Database = {
           full_name: string
           id: string
           marketing_opt_in: boolean | null
+          medical_conditions: string | null
+          medical_notes: string | null
+          medications: string | null
           notes: string | null
           phone: string | null
           preferred_contact: string | null
+          skin_type: string | null
           tags: string[] | null
           updated_at: string
         }
         Insert: {
           address?: string | null
+          allergies?: string | null
           city?: string | null
           created_at?: string
           date_of_birth?: string | null
@@ -447,14 +453,19 @@ export type Database = {
           full_name: string
           id?: string
           marketing_opt_in?: boolean | null
+          medical_conditions?: string | null
+          medical_notes?: string | null
+          medications?: string | null
           notes?: string | null
           phone?: string | null
           preferred_contact?: string | null
+          skin_type?: string | null
           tags?: string[] | null
           updated_at?: string
         }
         Update: {
           address?: string | null
+          allergies?: string | null
           city?: string | null
           created_at?: string
           date_of_birth?: string | null
@@ -462,9 +473,13 @@ export type Database = {
           full_name?: string
           id?: string
           marketing_opt_in?: boolean | null
+          medical_conditions?: string | null
+          medical_notes?: string | null
+          medications?: string | null
           notes?: string | null
           phone?: string | null
           preferred_contact?: string | null
+          skin_type?: string | null
           tags?: string[] | null
           updated_at?: string
         }
