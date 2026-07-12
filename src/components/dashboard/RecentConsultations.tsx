@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useRecentConsultations } from "@/lib/dashboard-queries";
 
 function Badge({ status }: { status: string }) {
@@ -16,7 +17,7 @@ export function RecentConsultations() {
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 h-full flex flex-col min-h-0">
       <div className="flex justify-between items-center mb-1 flex-shrink-0">
         <h3 className="text-sm font-semibold text-gray-900">Consultation submissions</h3>
-        <a className="text-[10px] text-[#E8246A] hover:underline cursor-pointer">View all</a>
+        <Link to="/dashboard/consultations" className="text-[10px] text-[#E8246A] hover:underline">View all</Link>
       </div>
       <div className="flex-1 min-h-0 overflow-hidden">
         {isLoading && <div className="text-xs text-gray-400 py-2">Loading…</div>}
@@ -31,7 +32,13 @@ export function RecentConsultations() {
           <tbody>
             {rows.map((c: any) => (
               <tr key={c.id} className="text-xs border-b border-gray-50 last:border-0">
-                <td className="text-gray-900 font-medium py-1.5">{c.client_name}</td>
+                <td className="text-gray-900 font-medium py-1.5">
+                  {c.customers?.id ? (
+                    <Link to="/dashboard/customers/$id" params={{ id: c.customers.id }} className="hover:text-[#E8246A] hover:underline">
+                      {c.client_name}
+                    </Link>
+                  ) : c.client_name}
+                </td>
                 <td className="text-gray-700 py-1.5 truncate">{c.services?.name ?? c.service_name ?? "—"}</td>
                 <td className="py-1.5"><Badge status={c.status} /></td>
               </tr>
