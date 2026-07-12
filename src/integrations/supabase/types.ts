@@ -512,48 +512,124 @@ export type Database = {
         }
         Relationships: []
       }
+      invoice_items: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          invoice_id: string
+          kind: string
+          line_discount: number
+          line_total: number | null
+          product_id: string | null
+          quantity: number
+          service_id: string | null
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          invoice_id: string
+          kind?: string
+          line_discount?: number
+          line_total?: number | null
+          product_id?: string | null
+          quantity?: number
+          service_id?: string | null
+          unit_price?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          invoice_id?: string
+          kind?: string
+          line_discount?: number
+          line_total?: number | null
+          product_id?: string | null
+          quantity?: number
+          service_id?: string | null
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_items_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoices: {
         Row: {
           appointment_id: string | null
           created_at: string
           customer_id: string | null
           discount: number
+          due_date: string | null
           id: string
           invoice_number: string
           notes: string | null
+          staff_id: string | null
           status: string
           subtotal: number
           tax: number
           total: number
           updated_at: string
+          void_reason: string | null
+          voided_at: string | null
         }
         Insert: {
           appointment_id?: string | null
           created_at?: string
           customer_id?: string | null
           discount?: number
+          due_date?: string | null
           id?: string
           invoice_number?: string
           notes?: string | null
+          staff_id?: string | null
           status?: string
           subtotal?: number
           tax?: number
           total?: number
           updated_at?: string
+          void_reason?: string | null
+          voided_at?: string | null
         }
         Update: {
           appointment_id?: string | null
           created_at?: string
           customer_id?: string | null
           discount?: number
+          due_date?: string | null
           id?: string
           invoice_number?: string
           notes?: string | null
+          staff_id?: string | null
           status?: string
           subtotal?: number
           tax?: number
           total?: number
           updated_at?: string
+          void_reason?: string | null
+          voided_at?: string | null
         }
         Relationships: [
           {
@@ -568,6 +644,13 @@ export type Database = {
             columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
             referencedColumns: ["id"]
           },
         ]
