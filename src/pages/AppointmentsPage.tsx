@@ -323,9 +323,11 @@ export function AppointmentsPage() {
                       <div className="text-[11px] text-gray-500">{d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</div>
                     </td>
                     <td className="px-3 py-2 font-medium">
-                      <Link to="/dashboard/appointments/$id" params={{ id: a.id }} className="text-[#E8246A] hover:underline">
-                        {a.customers?.full_name ?? "—"}
-                      </Link>
+                      {a.customers?.id ? (
+                        <Link to="/dashboard/customers/$id" params={{ id: a.customers.id }} className="text-[#E8246A] hover:underline">
+                          {a.customers.full_name}
+                        </Link>
+                      ) : <span className="text-gray-400">—</span>}
                     </td>
                     <td className="px-3 py-2 text-gray-700 max-w-[220px]">
                       {svcNames.length ? <span title={svcNames.join(", ")}>{svcNames[0]}{svcNames.length > 1 && <span className="ml-1 text-[10px] text-gray-500">+{svcNames.length - 1}</span>}</span> : "—"}
