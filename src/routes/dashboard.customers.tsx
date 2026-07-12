@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { DashboardPage, PrimaryButton } from "@/components/dashboard/DashboardPage";
 import { DataTable, fmtDate, type Column } from "@/components/dashboard/DataTable";
@@ -20,6 +20,30 @@ function CustomersPage() {
   const search = useSearch({ from: "/dashboard/customers" });
   const [editing, setEditing] = useState<Partial<Customer> | null>(null);
   const canWrite = useCanWrite();
+  const [tagFilter, setTagFilter] = useState<string>("");
+  const [contactFilter, setContactFilter] = useState<string>("");
+  const [marketingFilter, setMarketingFilter] = useState<string>("");
+  const [medicalFilter, setMedicalFilter] = useState<string>("");
+
+  const allTags = useMemo(() => {
+    const s = new Set<string>();
+    (data ?? []).forEach(c => c.tags?.forEach(t => s.add(t)));
+    return Array.from(s).sort();
+  }, [data]);
+
+  const filtered = useMemo(() => {
+    return (data ?? []).filter(c => {
+      if (tagFilter && !c.tags?.includes(tagFilter)) return false;
+      if (contactFilter && (c.preferred_contact ?? "") !== contactFilter) return false;
+      if (marketingFilter === "in" && !c.marketing_opt_in) return false;
+      if (marketingFilter === "out" && c.marketing_opt_in) return false;
+      const hasMed = !!(c.allergies || c.medications || c.medical_conditions || c.medical_notes);
+      if (medicalFilter === "has" && !hasMed) return false;
+      if (medicalFilter === "none" && hasMed) return false;
+      return true;
+    });
+  }, [data, tagFilter, contactFilter, marketingFilter, medicalFilter]);
+  const anyFilter = tagFilter || contactFilter || marketingFilter || medicalFilter;
 
   useEffect(() => {
     if (search.new === "1") {
@@ -35,16 +59,48 @@ function CustomersPage() {
     { key: "tags", header: "Tags", render: r => (r.tags?.length ? (
       <span className="flex flex-wrap gap-1">{r.tags.map(t => <span key={t} className="px-1.5 py-0.5 rounded bg-[#FDF2F7] text-[#E8246A] text-[10px]">{t}</span>)}</span>
     ) : "—") },
+    { key: "medical", header: "Medical", render: r => {
+      const flags: string[] = [];
+      if (r.allergies) flags.push("Allergies");
+      if (r.medications) flags.push("Meds");
+      if (r.medical_conditions) flags.push("Conditions");
+      return flags.length ? <span className="text-[10px] text-amber-700">{flags.join(" · ")}</span> : <span className="text-gray-300">—</span>;
+    } },
     { key: "created_at", header: "Joined", render: r => fmtDate(r.created_at) },
   ];
   return (
     <DashboardPage
       title="Customers"
-      subtitle={`${data?.length ?? 0} total`}
+      subtitle={`${filtered.length} of ${data?.length ?? 0}`}
       actions={canWrite ? <PrimaryButton onClick={() => setEditing({})}><Plus size={14} className="inline mr-1" />Add customer</PrimaryButton> : null}
     >
+      <div className="px-3 pt-3 flex flex-wrap gap-2 items-center text-xs">
+        <select value={tagFilter} onChange={e => setTagFilter(e.target.value)} className="border border-gray-200 rounded px-2 py-1 text-xs">
+          <option value="">All tags</option>
+          {allTags.map(t => <option key={t} value={t}>{t}</option>)}
+        </select>
+        <select value={contactFilter} onChange={e => setContactFilter(e.target.value)} className="border border-gray-200 rounded px-2 py-1 text-xs">
+          <option value="">Any contact</option>
+          <option value="whatsapp">WhatsApp</option>
+          <option value="email">Email</option>
+          <option value="phone">Phone</option>
+        </select>
+        <select value={marketingFilter} onChange={e => setMarketingFilter(e.target.value)} className="border border-gray-200 rounded px-2 py-1 text-xs">
+          <option value="">Marketing: any</option>
+          <option value="in">Opted in</option>
+          <option value="out">Not opted in</option>
+        </select>
+        <select value={medicalFilter} onChange={e => setMedicalFilter(e.target.value)} className="border border-gray-200 rounded px-2 py-1 text-xs">
+          <option value="">Medical: any</option>
+          <option value="has">Has medical info</option>
+          <option value="none">No medical info</option>
+        </select>
+        {anyFilter && (
+          <button onClick={() => { setTagFilter(""); setContactFilter(""); setMarketingFilter(""); setMedicalFilter(""); }} className="text-[#E8246A] hover:underline">Clear</button>
+        )}
+      </div>
       <DataTable
-        rows={data} columns={columns} loading={isLoading} error={error}
+        rows={filtered} columns={columns} loading={isLoading} error={error}
         searchPlaceholder="Search customers…" empty="No customers yet."
         onRowClick={r => navigate({ to: "/dashboard/customers/$id", params: { id: r.id } })}
         rowActions={r => canWrite ? (
