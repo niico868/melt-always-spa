@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ClipboardList, Plus, Search, Check, Pencil, Trash2, Phone, Mail, CalendarPlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,7 +19,12 @@ import { ColumnFilterButton, applyColumnFilters, type ColumnFilters, type Filter
 type Range = "today" | "week" | "month" | "all";
 type Status = "all" | "New" | "Contacted" | "Booked" | "Closed";
 
-function rangeBounds(r: Range) {
+function rangeBounds(r: Range, specificDate?: string) {
+  if (specificDate) {
+    const start = new Date(specificDate + "T00:00:00");
+    const end = new Date(start); end.setDate(end.getDate() + 1);
+    return { gte: start.toISOString(), lt: end.toISOString() };
+  }
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   if (r === "today") {
@@ -36,11 +42,11 @@ function rangeBounds(r: Range) {
   return { gte: null as string | null, lt: null as string | null };
 }
 
-function useConsultations(range: Range, status: Status, q: string) {
+function useConsultations(range: Range, status: Status, q: string, specificDate: string) {
   return useQuery({
-    queryKey: ["consultations-page", range, status, q],
+    queryKey: ["consultations-page", range, status, q, specificDate],
     queryFn: async () => {
-      const { gte, lt } = rangeBounds(range);
+      const { gte, lt } = rangeBounds(range, specificDate || undefined);
       let query = supabase
         .from("consultations")
         .select("id, client_name, service_name, status, submitted_at, customer_id, service_id, customers(id, full_name, email, phone), services(id, name, base_price)")
@@ -92,8 +98,9 @@ export function ConsultationsPage() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any | null>(null);
   const [bookFrom, setBookFrom] = useState<any | null>(null);
+  const [specificDate, setSpecificDate] = useState<string>("");
 
-  const { data: rawRows = [], isLoading } = useConsultations(range, status, q);
+  const { data: rawRows = [], isLoading } = useConsultations(range, status, q, specificDate);
   const [colFilters, setColFilters] = useState<ColumnFilters>({});
   const filterDefs: FilterDef[] = [
     { key: "client", label: "Client", type: "text", get: (r: any) => r.client_name ?? "" },
@@ -161,11 +168,18 @@ export function ConsultationsPage() {
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col md:flex-row md:items-center gap-2">
         <div className="flex gap-1 bg-gray-50 rounded-lg p-1">
           {(["today","week","month","all"] as Range[]).map(r => (
-            <button key={r} onClick={() => setRange(r)}
+            <button key={r} onClick={() => { setRange(r); setSpecificDate(""); }}
               className={`px-3 py-1.5 text-xs rounded-md font-medium capitalize transition ${range === r ? "bg-white shadow text-[#E8246A]" : "text-gray-500 hover:text-gray-700"}`}>
               {r}
             </button>
           ))}
+        </div>
+        <div className="flex items-center gap-1">
+          <Input type="date" value={specificDate} onChange={e => setSpecificDate(e.target.value)}
+            className="h-9 w-full md:w-[160px] text-xs" title="Pick a specific date" />
+          {specificDate && (
+            <button onClick={() => setSpecificDate("")} className="text-[11px] text-gray-500 hover:text-[#E8246A]">Clear</button>
+          )}
         </div>
         <div className="flex-1 relative">
           <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -217,7 +231,13 @@ export function ConsultationsPage() {
                       <div className="font-medium text-gray-900">{d.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</div>
                       <div className="text-[11px] text-gray-500">{d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</div>
                     </td>
-                    <td className="px-3 py-2 font-medium text-gray-900">{c.client_name}</td>
+                    <td className="px-3 py-2 font-medium">
+                      {c.customers?.id ? (
+                        <Link to="/dashboard/customers/$id" params={{ id: c.customers.id }} className="text-[#E8246A] hover:underline">
+                          {c.client_name}
+                        </Link>
+                      ) : <span className="text-gray-900">{c.client_name}</span>}
+                    </td>
                     <td className="px-3 py-2 text-gray-700">
                       <div className="flex flex-col gap-0.5 text-[11px]">
                         {email && <a href={`mailto:${email}`} className="flex items-center gap-1 hover:text-[#E8246A]"><Mail size={11} />{email}</a>}
