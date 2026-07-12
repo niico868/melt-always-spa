@@ -416,6 +416,30 @@ function toLocalInput(iso?: string | null) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+function QuickNoteInput({ id, initial }: { id: string; initial: string }) {
+  const qc = useQueryClient();
+  const [val, setVal] = useState(initial);
+  const [saving, setSaving] = useState(false);
+  async function save() {
+    if (val === initial) return;
+    setSaving(true);
+    const { error } = await (supabase.from("appointments") as any).update({ quick_note: val || null }).eq("id", id);
+    setSaving(false);
+    if (error) { toast.error(error.message); return; }
+    qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
+    qc.invalidateQueries({ queryKey: ["appt-detail", id] });
+  }
+  return (
+    <input
+      value={val}
+      onChange={e => setVal(e.target.value)}
+      onBlur={save}
+      placeholder="e.g. Confirmed via phone"
+      className={`text-[11px] px-2 py-1 border rounded w-40 ${saving ? "bg-gray-50" : ""}`}
+    />
+  );
+}
+
 function AppointmentDialog({
   open, onOpenChange, editing, onSaved,
 }: { open: boolean; onOpenChange: (v: boolean) => void; editing: any | null; onSaved: () => void; }) {
