@@ -68,7 +68,7 @@ export function useUpdateAppointment(id: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (patch: Record<string, any>) => {
-      const { error } = await supabase.from("appointments").update(patch).eq("id", id);
+      const { error } = await (supabase.from("appointments") as any).update(patch).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => inv(qc, id),
@@ -141,7 +141,7 @@ export function useUpdateInvoice(id: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ invoice_id, patch }: { invoice_id: string; patch: Record<string, any> }) => {
-      const { error } = await supabase.from("invoices").update(patch).eq("id", invoice_id);
+      const { error } = await (supabase.from("invoices") as any).update(patch).eq("id", invoice_id);
       if (error) throw error;
     },
     onSuccess: () => inv(qc, id),
