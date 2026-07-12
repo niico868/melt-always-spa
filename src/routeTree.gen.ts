@@ -47,6 +47,7 @@ import { Route as DashboardCustomersRouteImport } from './routes/dashboard.custo
 import { Route as DashboardConsultationsRouteImport } from './routes/dashboard.consultations'
 import { Route as DashboardAuditRouteImport } from './routes/dashboard.audit'
 import { Route as DashboardAppointmentsRouteImport } from './routes/dashboard.appointments'
+import { Route as DashboardSalesIdRouteImport } from './routes/dashboard.sales.$id'
 import { Route as DashboardCustomersIdRouteImport } from './routes/dashboard.customers.$id'
 import { Route as DashboardAppointmentsIdRouteImport } from './routes/dashboard.appointments.$id'
 
@@ -240,6 +241,11 @@ const DashboardAppointmentsRoute = DashboardAppointmentsRouteImport.update({
   path: '/appointments',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardSalesIdRoute = DashboardSalesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DashboardSalesRoute,
+} as any)
 const DashboardCustomersIdRoute = DashboardCustomersIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -283,7 +289,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/marketing': typeof DashboardMarketingRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/reports': typeof DashboardReportsRoute
-  '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/sales': typeof DashboardSalesRouteWithChildren
   '/dashboard/services': typeof DashboardServicesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
@@ -292,6 +298,7 @@ export interface FileRoutesByFullPath {
   '/journal/': typeof JournalIndexRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
+  '/dashboard/sales/$id': typeof DashboardSalesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -323,7 +330,7 @@ export interface FileRoutesByTo {
   '/dashboard/marketing': typeof DashboardMarketingRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/reports': typeof DashboardReportsRoute
-  '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/sales': typeof DashboardSalesRouteWithChildren
   '/dashboard/services': typeof DashboardServicesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
@@ -332,6 +339,7 @@ export interface FileRoutesByTo {
   '/journal': typeof JournalIndexRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
+  '/dashboard/sales/$id': typeof DashboardSalesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -366,7 +374,7 @@ export interface FileRoutesById {
   '/dashboard/marketing': typeof DashboardMarketingRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/reports': typeof DashboardReportsRoute
-  '/dashboard/sales': typeof DashboardSalesRoute
+  '/dashboard/sales': typeof DashboardSalesRouteWithChildren
   '/dashboard/services': typeof DashboardServicesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/journal/$slug': typeof JournalSlugRoute
@@ -375,6 +383,7 @@ export interface FileRoutesById {
   '/journal/': typeof JournalIndexRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
+  '/dashboard/sales/$id': typeof DashboardSalesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -419,6 +428,7 @@ export interface FileRouteTypes {
     | '/journal/'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
+    | '/dashboard/sales/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -459,6 +469,7 @@ export interface FileRouteTypes {
     | '/journal'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
+    | '/dashboard/sales/$id'
   id:
     | '__root__'
     | '/'
@@ -501,6 +512,7 @@ export interface FileRouteTypes {
     | '/journal/'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
+    | '/dashboard/sales/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -797,6 +809,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAppointmentsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/sales/$id': {
+      id: '/dashboard/sales/$id'
+      path: '/$id'
+      fullPath: '/dashboard/sales/$id'
+      preLoaderRoute: typeof DashboardSalesIdRouteImport
+      parentRoute: typeof DashboardSalesRoute
+    }
     '/dashboard/customers/$id': {
       id: '/dashboard/customers/$id'
       path: '/$id'
@@ -838,6 +857,18 @@ const DashboardCustomersRouteChildren: DashboardCustomersRouteChildren = {
 const DashboardCustomersRouteWithChildren =
   DashboardCustomersRoute._addFileChildren(DashboardCustomersRouteChildren)
 
+interface DashboardSalesRouteChildren {
+  DashboardSalesIdRoute: typeof DashboardSalesIdRoute
+}
+
+const DashboardSalesRouteChildren: DashboardSalesRouteChildren = {
+  DashboardSalesIdRoute: DashboardSalesIdRoute,
+}
+
+const DashboardSalesRouteWithChildren = DashboardSalesRoute._addFileChildren(
+  DashboardSalesRouteChildren,
+)
+
 interface DashboardRouteChildren {
   DashboardAppointmentsRoute: typeof DashboardAppointmentsRouteWithChildren
   DashboardAuditRoute: typeof DashboardAuditRoute
@@ -848,7 +879,7 @@ interface DashboardRouteChildren {
   DashboardMarketingRoute: typeof DashboardMarketingRoute
   DashboardProductsRoute: typeof DashboardProductsRoute
   DashboardReportsRoute: typeof DashboardReportsRoute
-  DashboardSalesRoute: typeof DashboardSalesRoute
+  DashboardSalesRoute: typeof DashboardSalesRouteWithChildren
   DashboardServicesRoute: typeof DashboardServicesRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
@@ -864,7 +895,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardMarketingRoute: DashboardMarketingRoute,
   DashboardProductsRoute: DashboardProductsRoute,
   DashboardReportsRoute: DashboardReportsRoute,
-  DashboardSalesRoute: DashboardSalesRoute,
+  DashboardSalesRoute: DashboardSalesRouteWithChildren,
   DashboardServicesRoute: DashboardServicesRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
