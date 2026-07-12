@@ -445,40 +445,69 @@ function AppointmentDialog({
 }: { open: boolean; onOpenChange: (v: boolean) => void; editing: any | null; onSaved: () => void; }) {
   const { data: lookups } = useLookups();
   const [customerId, setCustomerId] = useState<string>("");
-  const [serviceId, setServiceId] = useState<string>("");
+  const [serviceIds, setServiceIds] = useState<string[]>([]);
   const [employeeId, setEmployeeId] = useState<string>("");
   const [when, setWhen] = useState<string>(toLocalInput());
   const [status, setStatus] = useState<string>("Pending");
+  const [room, setRoom] = useState<string>("");
   const [saving, setSaving] = useState(false);
 
   // Reset when opening / editing changes
   useMemo(() => {
     if (!open) return;
     setCustomerId(editing?.customers?.id ?? "");
-    setServiceId(editing?.services?.id ?? "");
+    const existing = (editing?.appointment_services ?? []).map((s: any) => s.service_id);
+    setServiceIds(existing.length ? existing : (editing?.services?.id ? [editing.services.id] : []));
     setEmployeeId(editing?.employees?.id ?? "");
     setWhen(toLocalInput(editing?.scheduled_at ?? null));
     setStatus(editing?.status ?? "Pending");
+    setRoom(editing?.room ?? "");
   }, [open, editing]);
 
+  const pickedServices = (lookups?.services ?? []).filter((s: any) => serviceIds.includes(s.id));
+  const totalPrice = pickedServices.reduce((s: number, x: any) => s + Number(x.base_price ?? 0), 0);
+  const totalDur = pickedServices.length * 60; // default 60 min per service
+
   async function save() {
-    if (!customerId || !serviceId || !when) {
-      toast.error("Client, service, and time are required");
+    if (!customerId || !serviceIds.length || !when) {
+      toast.error("Client, at least one service, and time are required");
       return;
     }
     setSaving(true);
+    const primaryService = serviceIds[0];
     const payload = {
       customer_id: customerId,
-      service_id: serviceId,
+      service_id: primaryService,
       employee_id: employeeId || null,
       scheduled_at: new Date(when).toISOString(),
       status,
+      room: room || null,
+      duration_min: totalDur,
     };
-    const res = editing
-      ? await supabase.from("appointments").update(payload).eq("id", editing.id)
-      : await supabase.from("appointments").insert(payload);
+    let apptId: string | undefined = editing?.id;
+    if (editing) {
+      const { error } = await (supabase.from("appointments") as any).update(payload).eq("id", editing.id);
+      if (error) { setSaving(false); toast.error(error.message); return; }
+    } else {
+      const { data, error } = await (supabase.from("appointments") as any).insert(payload).select("id").single();
+      if (error || !data) { setSaving(false); toast.error(error?.message ?? "Failed"); return; }
+      apptId = data.id;
+    }
+    // Replace services
+    if (apptId) {
+      await supabase.from("appointment_services").delete().eq("appointment_id", apptId);
+      const rows = pickedServices.map((s: any) => ({
+        appointment_id: apptId,
+        service_id: s.id,
+        price_snapshot: Number(s.base_price ?? 0),
+        duration_min_snapshot: 60,
+      }));
+      if (rows.length) {
+        const { error: e2 } = await supabase.from("appointment_services").insert(rows);
+        if (e2) { setSaving(false); toast.error(e2.message); return; }
+      }
+    }
     setSaving(false);
-    if (res.error) { toast.error(res.error.message); return; }
     toast.success(editing ? "Appointment updated" : "Appointment created");
     onOpenChange(false);
     onSaved();
@@ -503,15 +532,22 @@ function AppointmentDialog({
             </Select>
           </div>
           <div className="grid gap-1.5">
-            <Label className="text-xs">Service</Label>
-            <Select value={serviceId} onValueChange={setServiceId}>
-              <SelectTrigger><SelectValue placeholder="Select service" /></SelectTrigger>
-              <SelectContent>
-                {(lookups?.services ?? []).map((s: any) => (
-                  <SelectItem key={s.id} value={s.id}>{s.name} — TT${Number(s.base_price).toLocaleString()}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label className="text-xs">Services (select one or more)</Label>
+            <div className="max-h-44 overflow-y-auto border rounded-md p-2 space-y-1 bg-white">
+              {(lookups?.services ?? []).map((s: any) => (
+                <label key={s.id} className="flex items-center gap-2 text-xs hover:bg-gray-50 rounded px-1 py-1 cursor-pointer">
+                  <input type="checkbox" checked={serviceIds.includes(s.id)}
+                    onChange={e => setServiceIds(prev => e.target.checked ? [...prev, s.id] : prev.filter(x => x !== s.id))} />
+                  <span className="flex-1">{s.name}</span>
+                  <span className="text-gray-500">TT${Number(s.base_price).toLocaleString()}</span>
+                </label>
+              ))}
+            </div>
+            {pickedServices.length > 0 && (
+              <div className="text-[11px] text-gray-600 mt-1">
+                {pickedServices.length} service{pickedServices.length > 1 ? "s" : ""} · ~{totalDur} min · TT${totalPrice.toLocaleString()}
+              </div>
+            )}
           </div>
           <div className="grid gap-1.5">
             <Label className="text-xs">Therapist (optional)</Label>
@@ -524,6 +560,10 @@ function AppointmentDialog({
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          <div className="grid gap-1.5">
+            <Label className="text-xs">Room (optional)</Label>
+            <Input value={room} onChange={e => setRoom(e.target.value)} placeholder="e.g. Room 1" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="grid gap-1.5">
