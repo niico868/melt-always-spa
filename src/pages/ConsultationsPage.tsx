@@ -231,7 +231,13 @@ export function ConsultationsPage() {
                       <div className="font-medium text-gray-900">{d.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</div>
                       <div className="text-[11px] text-gray-500">{d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</div>
                     </td>
-                    <td className="px-3 py-2 font-medium text-gray-900">{c.client_name}</td>
+                    <td className="px-3 py-2 font-medium">
+                      {c.customers?.id ? (
+                        <Link to="/dashboard/customers/$id" params={{ id: c.customers.id }} className="text-[#E8246A] hover:underline">
+                          {c.client_name}
+                        </Link>
+                      ) : <span className="text-gray-900">{c.client_name}</span>}
+                    </td>
                     <td className="px-3 py-2 text-gray-700">
                       <div className="flex flex-col gap-0.5 text-[11px]">
                         {email && <a href={`mailto:${email}`} className="flex items-center gap-1 hover:text-[#E8246A]"><Mail size={11} />{email}</a>}
