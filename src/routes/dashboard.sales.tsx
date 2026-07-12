@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { DashboardPage, PrimaryButton } from "@/components/dashboard/DashboardPage";
 import { DataTable, fmtDate, fmtDateTime, fmtMoney, type Column } from "@/components/dashboard/DataTable";
@@ -69,7 +69,16 @@ function SalesPage() {
       key: "customer",
       header: "Customer",
       accessor: (r) => r.customers?.full_name,
-      render: (r) => r.customers?.full_name ?? <span className="text-gray-400">Walk-in</span>,
+      render: (r) => r.customers?.id ? (
+        <Link
+          to="/dashboard/customers/$id"
+          params={{ id: r.customers.id }}
+          onClick={(e) => e.stopPropagation()}
+          className="text-[#E8246A] hover:underline"
+        >
+          {r.customers.full_name}
+        </Link>
+      ) : <span className="text-gray-400">Walk-in</span>,
     },
     {
       key: "items",
