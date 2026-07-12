@@ -178,7 +178,8 @@ export function AppointmentsPage() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["appointments"] });
+      qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
+      qc.invalidateQueries({ queryKey: ["appointments-day"] });
       qc.invalidateQueries({ queryKey: ["dashboard"] });
       toast.success("Appointment updated");
     },
@@ -191,7 +192,8 @@ export function AppointmentsPage() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["appointments"] });
+      qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
+      qc.invalidateQueries({ queryKey: ["appointments-day"] });
       qc.invalidateQueries({ queryKey: ["dashboard"] });
       toast.success("Appointment deleted");
     },
@@ -382,7 +384,8 @@ export function AppointmentsPage() {
         onOpenChange={setOpen}
         editing={editing}
         onSaved={() => {
-          qc.invalidateQueries({ queryKey: ["appointments"] });
+          qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
+          qc.invalidateQueries({ queryKey: ["appointments-day"] });
           qc.invalidateQueries({ queryKey: ["dashboard"] });
         }}
       />
