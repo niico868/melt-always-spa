@@ -278,38 +278,78 @@ export function AppointmentsPage() {
               <tr>
                 <th className="text-left font-medium px-3 py-2">When</th>
                 <th className="text-left font-medium px-3 py-2">Client</th>
-                <th className="text-left font-medium px-3 py-2">Service</th>
+                <th className="text-left font-medium px-3 py-2">Services</th>
                 <th className="text-left font-medium px-3 py-2">Therapist</th>
                 <th className="text-left font-medium px-3 py-2">Status</th>
+                <th className="text-left font-medium px-3 py-2">Payment</th>
+                <th className="text-right font-medium px-3 py-2">Remaining</th>
+                <th className="text-left font-medium px-3 py-2">Med</th>
+                <th className="text-left font-medium px-3 py-2">Quick note</th>
                 <th className="text-right font-medium px-3 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {isLoading && (
-                <tr><td colSpan={6} className="px-3 py-6 text-center text-xs text-gray-400">Loading…</td></tr>
+                <tr><td colSpan={10} className="px-3 py-6 text-center text-xs text-gray-400">Loading…</td></tr>
               )}
               {!isLoading && rows.length === 0 && (
-                <tr><td colSpan={6} className="px-3 py-10 text-center text-xs text-gray-400">
+                <tr><td colSpan={10} className="px-3 py-10 text-center text-xs text-gray-400">
                   <Clock className="mx-auto mb-2" size={20} />
                   No appointments in this view.
                 </td></tr>
               )}
               {rows.map((a: any) => {
                 const d = new Date(a.scheduled_at);
+                const svcList = (a.appointment_services ?? []).map((x: any) => x.services?.name).filter(Boolean);
+                const svcNames = svcList.length ? svcList : [a.services?.name].filter(Boolean);
+                const inv = a.invoices;
+                const paid = ((inv?.payments ?? []) as any[]).reduce((s, p) => s + (p.kind === "refund" ? -Number(p.amount) : Number(p.amount)), 0);
+                const remaining = Math.max(0, Number(inv?.total ?? 0) - paid);
+                const payStatus = !inv ? "—" : remaining <= 0 && Number(inv.total) > 0 ? "Paid" : paid > 0 ? "Partial" : "Outstanding";
+                const payTone = payStatus === "Paid" ? "bg-green-100 text-green-700" : payStatus === "Partial" ? "bg-amber-100 text-amber-700" : payStatus === "Outstanding" ? "bg-rose-100 text-rose-700" : "bg-gray-100 text-gray-600";
+                const med = a.appointment_medical;
+                const medFlags: string[] = [];
+                if (med?.allergies) medFlags.push("A");
+                if (med?.medications) medFlags.push("M");
+                if (med?.contraindications) medFlags.push("C");
+                const phone = a.customers?.phone;
+                const waUrl = phone ? buildWhatsAppUrl(phone, a.scheduled_at, svcNames) : null;
                 return (
                   <tr key={a.id} className="border-t border-gray-100 hover:bg-gray-50/60">
                     <td className="px-3 py-2 whitespace-nowrap">
                       <div className="font-medium text-gray-900">{d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</div>
                       <div className="text-[11px] text-gray-500">{d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</div>
                     </td>
-                    <td className="px-3 py-2 font-medium text-gray-900">{a.customers?.full_name ?? "—"}</td>
-                    <td className="px-3 py-2 text-gray-700">{a.services?.name ?? "—"}</td>
+                    <td className="px-3 py-2 font-medium">
+                      <Link to="/dashboard/appointments/$id" params={{ id: a.id }} className="text-[#E8246A] hover:underline">
+                        {a.customers?.full_name ?? "—"}
+                      </Link>
+                    </td>
+                    <td className="px-3 py-2 text-gray-700 max-w-[220px]">
+                      {svcNames.length ? <span title={svcNames.join(", ")}>{svcNames[0]}{svcNames.length > 1 && <span className="ml-1 text-[10px] text-gray-500">+{svcNames.length - 1}</span>}</span> : "—"}
+                    </td>
                     <td className="px-3 py-2 text-gray-700">{a.employees?.full_name ?? <span className="text-gray-400">Unassigned</span>}</td>
                     <td className="px-3 py-2">
                       <span className={`border rounded-full px-2 py-0.5 text-[11px] font-medium ${statusClasses(a.status)}`}>{a.status}</span>
                     </td>
+                    <td className="px-3 py-2"><span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${payTone}`}>{payStatus}</span></td>
+                    <td className="px-3 py-2 text-right whitespace-nowrap font-medium">{inv ? `TT$${remaining.toFixed(0)}` : "—"}</td>
+                    <td className="px-3 py-2">
+                      {medFlags.length ? <span title={`${med?.allergies ? "Allergies: " + med.allergies + "\n" : ""}${med?.medications ? "Meds: " + med.medications + "\n" : ""}${med?.contraindications ? "Contra: " + med.contraindications : ""}`} className="inline-flex gap-0.5">
+                        {medFlags.map(f => <span key={f} className="w-4 h-4 rounded bg-rose-100 text-rose-700 text-[9px] font-bold inline-flex items-center justify-center">{f}</span>)}
+                      </span> : <span className="text-gray-300">—</span>}
+                    </td>
+                    <td className="px-3 py-2">
+                      <QuickNoteInput id={a.id} initial={a.quick_note ?? ""} />
+                    </td>
                     <td className="px-3 py-2">
                       <div className="flex gap-1 items-center justify-end">
+                        {waUrl && (
+                          <a href={waUrl} target="_blank" rel="noreferrer" title="Send WhatsApp reminder"
+                             className="p-1.5 rounded hover:bg-green-50 text-green-600"><MessageCircle size={14} /></a>
+                        )}
+                        <Link to="/dashboard/appointments/$id" params={{ id: a.id }} title="Open details"
+                              className="p-1.5 rounded hover:bg-gray-100 text-gray-500"><ExternalLink size={14} /></Link>
                         {a.status !== "Confirmed" && (
                           <button title="Confirm" onClick={() => updateStatus.mutate({ id: a.id, status: "Confirmed" })}
                             className="p-1.5 rounded hover:bg-green-50 text-green-600"><Check size={14} /></button>
