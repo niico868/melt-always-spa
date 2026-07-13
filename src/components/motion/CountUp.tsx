@@ -12,7 +12,7 @@ type Props = {
   flicker?: boolean;
 };
 
-export function CountUp({ value, suffix = "", prefix = "", duration = 1.6, className, decimals = 0, flicker = false }: Props) {
+export function CountUp({ value, suffix = "", prefix = "", duration = 2.4, className, decimals = 0, flicker = false }: Props) {
   const ref = useRef<HTMLSpanElement | null>(null);
   const inView = useInView(ref, { once: true, amount: 0.5 });
   const reduce = useReducedMotion();
@@ -25,14 +25,15 @@ export function CountUp({ value, suffix = "", prefix = "", duration = 1.6, class
     let raf = 0;
     const tick = (t: number) => {
       const p = Math.min(1, (t - start) / totalMs);
-      // ease-out quint — fast rise, gentle cushion at the end
-      const eased = 1 - Math.pow(1 - p, 5);
+      // ease-in-out cubic — smooth acceleration and long, gentle cushion
+      const eased = p < 0.5
+        ? 4 * p * p * p
+        : 1 - Math.pow(-2 * p + 2, 3) / 2;
       let display = value * eased;
       if (flicker) {
-        // brief jitter between ~55% and ~92% of the way through so the
-        // number visibly ticks up like an odometer, then smooth cushion.
-        if (p > 0.55 && p < 0.92) {
-          const jitterRange = Math.max(1, value * 0.04 * (1 - p));
+        // Very subtle odometer-style jitter that fades out well before landing.
+        if (p > 0.5 && p < 0.85) {
+          const jitterRange = Math.max(0.5, value * 0.02 * (1 - p));
           display += (Math.random() - 0.5) * jitterRange;
           if (display < 0) display = 0;
           if (display > value) display = value;
