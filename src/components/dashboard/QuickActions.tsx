@@ -1,5 +1,5 @@
 import {
-  CalendarPlus, UserPlus, Receipt, ListPlus, Package, Mail, BarChart2, Settings,
+  CalendarPlus, UserPlus, Receipt, ListPlus, Mail, BarChart2, Settings,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -9,7 +9,6 @@ const ACTIONS: { icon: LucideIcon; label: string; to: string; search?: Record<st
   { icon: UserPlus, label: "Add customer", to: "/dashboard/customers", search: { new: "1" } },
   { icon: Receipt, label: "Record sale", to: "/dashboard/sales", search: { new: "1" } },
   { icon: ListPlus, label: "Add service", to: "/dashboard/services", search: { new: "1" } },
-  { icon: Package, label: "Add product", to: "/dashboard/products", search: { new: "1" } },
   { icon: Mail, label: "Send message", to: "/dashboard/marketing" },
   { icon: BarChart2, label: "View reports", to: "/dashboard/reports" },
   { icon: Settings, label: "Business settings", to: "/dashboard/settings" },
