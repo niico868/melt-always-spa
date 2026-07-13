@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { DashboardPage, PrimaryButton } from "@/components/dashboard/DashboardPage";
@@ -53,7 +53,16 @@ function CustomersPage() {
   }, [search.new, navigate]);
 
   const columns: Column<Customer>[] = [
-    { key: "full_name", header: "Name", render: r => <span className="font-medium text-gray-800">{r.full_name}</span> },
+    { key: "full_name", header: "Name", render: r => (
+      <Link
+        to="/dashboard/customers/$id"
+        params={{ id: r.id }}
+        onClick={(e) => e.stopPropagation()}
+        className="font-medium text-blue-600 hover:text-blue-800 hover:underline"
+      >
+        {r.full_name}
+      </Link>
+    ) },
     { key: "phone", header: "Phone", render: r => r.phone ?? "—" },
     { key: "email", header: "Email", render: r => r.email ?? "—" },
     { key: "tags", header: "Tags", render: r => (r.tags?.length ? (
