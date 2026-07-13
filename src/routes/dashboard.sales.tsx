@@ -85,7 +85,7 @@ function SalesPage() {
       header: "Services / Products",
       render: (r) => {
         const names = [
-          ...(r.appointment_services ?? []).map((s) => s.services?.name).filter(Boolean),
+          ...((r.appointments?.appointment_services ?? []).map((s) => s.services?.name).filter(Boolean) as string[]),
           ...(r.invoice_items ?? []).map((i) => i.description),
         ];
         if (!names.length) return <span className="text-gray-400">—</span>;

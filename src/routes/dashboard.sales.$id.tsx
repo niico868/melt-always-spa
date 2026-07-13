@@ -148,7 +148,7 @@ function Info({ label, value }: { label: string; value: React.ReactNode }) {
 
 function ItemsCard({ inv }: { inv: InvoiceRow }) {
   const [addOpen, setAddOpen] = useState(false);
-  const appointmentServices = inv.appointment_services ?? [];
+  const appointmentServices = inv.appointments?.appointment_services ?? [];
   const items = inv.invoice_items ?? [];
   const voided = !!inv.voided_at;
 
