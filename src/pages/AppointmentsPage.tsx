@@ -352,8 +352,14 @@ export function AppointmentsPage() {
                           <a href={waUrl} target="_blank" rel="noreferrer" title="Send WhatsApp reminder"
                              className="p-1.5 rounded hover:bg-green-50 text-green-600"><MessageCircle size={14} /></a>
                         )}
-                        <Link to="/dashboard/appointments/$id" params={{ id: a.id }} title="Open details"
-                              className="p-1.5 rounded hover:bg-gray-100 text-gray-500"><ExternalLink size={14} /></Link>
+                        <Link
+                          to="/dashboard/appointments/$id"
+                          params={{ id: a.id }}
+                          title="Open details"
+                          className="px-2 py-1 rounded border border-[#E8246A]/40 text-[#E8246A] hover:bg-[#FDF2F7] text-[11px] font-semibold inline-flex items-center gap-1"
+                        >
+                          <ExternalLink size={12} /> Details
+                        </Link>
                         {a.status !== "Confirmed" && (
                           <button title="Confirm" onClick={() => updateStatus.mutate({ id: a.id, status: "Confirmed" })}
                             className="p-1.5 rounded hover:bg-green-50 text-green-600"><Check size={14} /></button>
