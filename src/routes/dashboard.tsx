@@ -72,7 +72,7 @@ function DashboardLayout() {
           >
             <Menu size={20} />
           </button>
-          <div className="font-extrabold tracking-tight text-sm">Melt AWAYS</div>
+          <div className="font-extrabold tracking-tight text-sm truncate">Melt Away Spa Digital Hub</div>
           <div className="w-7" />
         </div>
         <div className="flex-1 min-h-0 lg:overflow-hidden pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">

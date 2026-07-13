@@ -148,7 +148,7 @@ function Info({ label, value }: { label: string; value: React.ReactNode }) {
 
 function ItemsCard({ inv }: { inv: InvoiceRow }) {
   const [addOpen, setAddOpen] = useState(false);
-  const appointmentServices = inv.appointment_services ?? [];
+  const appointmentServices = inv.appointments?.appointment_services ?? [];
   const items = inv.invoice_items ?? [];
   const voided = !!inv.voided_at;
 
@@ -173,7 +173,7 @@ function ItemsCard({ inv }: { inv: InvoiceRow }) {
           </tr>
         </thead>
         <tbody>
-          {appointmentServices.map((s) => (
+          {appointmentServices.map((s: { id: string; price_snapshot: number; services: { name: string } | null }) => (
             <tr key={s.id} className="border-b border-gray-50">
               <td className="py-1.5 text-gray-700">
                 {s.services?.name ?? "Service"}

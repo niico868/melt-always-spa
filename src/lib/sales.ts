@@ -19,10 +19,14 @@ export type InvoiceRow = {
   customer_id: string | null;
   staff_id: string | null;
   customers?: { id: string; full_name: string; phone: string | null; email: string | null } | null;
-  appointments?: { id: string; scheduled_at: string; employees?: { full_name: string } | null } | null;
+  appointments?: {
+    id: string;
+    scheduled_at: string;
+    employees?: { full_name: string } | null;
+    appointment_services?: { id: string; price_snapshot: number; duration_min_snapshot?: number; services: { id?: string; name: string } | null }[];
+  } | null;
   employees?: { id: string; full_name: string } | null;
   payments?: { id: string; amount: number; kind: string; method: string; recorded_at: string; note: string | null }[];
-  appointment_services?: { id: string; price_snapshot: number; services: { name: string } | null }[];
   invoice_items?: InvoiceItem[];
 };
 
@@ -52,7 +56,7 @@ export function useInvoices() {
     queryFn: async () => {
       const { data, error } = await (supabase.from("invoices") as any)
         .select(
-          "*, customers(id, full_name, phone, email), employees(id, full_name), appointments(id, scheduled_at, employees(full_name)), payments(id, amount, kind, method, recorded_at), appointment_services(id, price_snapshot, services(name)), invoice_items(id, description, line_total)",
+          "*, customers(id, full_name, phone, email), employees(id, full_name), appointments(id, scheduled_at, employees(full_name), appointment_services(id, price_snapshot, services(name))), payments(id, amount, kind, method, recorded_at), invoice_items(id, description, line_total)",
         )
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -68,7 +72,7 @@ export function useInvoice(id: string | undefined) {
     queryFn: async () => {
       const { data, error } = await (supabase.from("invoices") as any)
         .select(
-          "*, customers(id, full_name, phone, email), employees(id, full_name), appointments(id, scheduled_at, employees(full_name)), payments(id, amount, kind, method, recorded_at, note), appointment_services(id, price_snapshot, duration_min_snapshot, services(id, name)), invoice_items(*)",
+          "*, customers(id, full_name, phone, email), employees(id, full_name), appointments(id, scheduled_at, employees(full_name), appointment_services(id, price_snapshot, duration_min_snapshot, services(id, name))), payments(id, amount, kind, method, recorded_at, note), invoice_items(*)",
         )
         .eq("id", id!)
         .maybeSingle();

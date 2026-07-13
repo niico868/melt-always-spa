@@ -446,11 +446,16 @@ function BookFromConsultationDialog({
   const [when, setWhen] = useState<string>(toLocalInput());
   const [employeeId, setEmployeeId] = useState<string>("");
   const [saving, setSaving] = useState(false);
+  const [customerId, setCustomerId] = useState<string>("");
+  const [serviceId, setServiceId] = useState<string>("");
 
-  const customerId = consultation?.customers?.id ?? consultation?.customer_id ?? null;
-  const serviceId = consultation?.services?.id ?? consultation?.service_id ?? null;
-
-  useMemo(() => { if (open) { setWhen(toLocalInput()); setEmployeeId(""); } }, [open]);
+  useMemo(() => {
+    if (!open) return;
+    setWhen(toLocalInput());
+    setEmployeeId("");
+    setCustomerId(consultation?.customers?.id ?? consultation?.customer_id ?? "");
+    setServiceId(consultation?.services?.id ?? consultation?.service_id ?? "");
+  }, [open, consultation]);
 
   const { data: employees = [] } = useQuery({
     queryKey: ["employees-list"],
@@ -458,8 +463,9 @@ function BookFromConsultationDialog({
   });
 
   async function book() {
-    if (!customerId) { toast.error("Link this consultation to a customer first"); return; }
-    if (!serviceId) { toast.error("Pick a service on the consultation first"); return; }
+    if (!customerId) { toast.error("Pick a customer for this booking"); return; }
+    if (!serviceId) { toast.error("Pick a service for this booking"); return; }
+    if (!when) { toast.error("Pick a date & time"); return; }
     setSaving(true);
     const ins = await supabase.from("appointments").insert({
       customer_id: customerId,
@@ -469,7 +475,9 @@ function BookFromConsultationDialog({
       status: "Confirmed",
     });
     if (ins.error) { setSaving(false); toast.error(ins.error.message); return; }
-    await supabase.from("consultations").update({ status: "Booked" }).eq("id", consultation.id);
+    if (consultation?.id) {
+      await supabase.from("consultations").update({ status: "Booked" }).eq("id", consultation.id);
+    }
     setSaving(false);
     toast.success("Appointment booked from consultation");
     onOpenChange(false);
@@ -487,11 +495,30 @@ function BookFromConsultationDialog({
             For <span className="font-medium text-gray-900">{consultation?.client_name}</span>
             {consultation?.services?.name && <> · {consultation.services.name}</>}
           </div>
-          {!customerId && (
-            <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded p-2">
-              This consultation isn't linked to a customer record. Edit it to link before booking.
-            </div>
-          )}
+          <div className="grid gap-1.5">
+            <Label className="text-xs">Customer</Label>
+            <Select value={customerId || "none"} onValueChange={(v) => setCustomerId(v === "none" ? "" : v)}>
+              <SelectTrigger><SelectValue placeholder="Pick a customer" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">— pick a customer —</SelectItem>
+                {(lookups?.customers ?? []).map((c: any) => (
+                  <SelectItem key={c.id} value={c.id}>{c.full_name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-1.5">
+            <Label className="text-xs">Service</Label>
+            <Select value={serviceId || "none"} onValueChange={(v) => setServiceId(v === "none" ? "" : v)}>
+              <SelectTrigger><SelectValue placeholder="Pick a service" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">— pick a service —</SelectItem>
+                {(lookups?.services ?? []).map((s: any) => (
+                  <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <div className="grid gap-1.5">
             <Label className="text-xs">When</Label>
             <Input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} />
@@ -511,7 +538,7 @@ function BookFromConsultationDialog({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button disabled={saving || !customerId || !serviceId} onClick={book} className="bg-[#E8246A] hover:bg-[#C91D5C] text-white">
+          <Button disabled={saving} onClick={book} className="bg-[#E8246A] hover:bg-[#C91D5C] text-white">
             {saving ? "Booking…" : "Book appointment"}
           </Button>
         </DialogFooter>
