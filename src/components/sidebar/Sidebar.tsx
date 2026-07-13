@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Calendar, ClipboardList, Users, CreditCard,
-  Sparkles, Package, Heart, UserCheck, BarChart2, Megaphone, Settings,
+  Sparkles, Heart, UserCheck, BarChart2, Megaphone, Settings,
   ScrollText, LogOut,
 } from "lucide-react";
 import { NavItem } from "./NavItem";
@@ -15,7 +15,6 @@ const NAV = [
   { icon: Users, label: "Customers", to: "/dashboard/customers" },
   { icon: CreditCard, label: "Sales & Payments", to: "/dashboard/sales" },
   { icon: Sparkles, label: "Services", to: "/dashboard/services" },
-  { icon: Package, label: "Products", to: "/dashboard/products" },
   { icon: Heart, label: "Interest Tracking", to: "/dashboard/interests" },
   { icon: UserCheck, label: "Accounts", to: "/dashboard/employees" },
   { icon: BarChart2, label: "Reports", to: "/dashboard/reports" },
@@ -35,8 +34,8 @@ export function Sidebar() {
         <div className="bg-white/95 rounded-lg p-2 flex items-center justify-center">
           <Logo className="h-10 w-auto" />
         </div>
-        <div className="text-white/80 text-[10px] italic mt-2 leading-snug text-center">
-          Melt Elite Aesthetics
+        <div className="text-white/90 text-[10px] font-semibold mt-2 leading-snug text-center">
+          Melt Away Spa Digital Hub
         </div>
       </div>
 
