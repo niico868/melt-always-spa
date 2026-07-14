@@ -359,72 +359,46 @@ function ConsultationDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>{editing ? "Edit consultation" : "New consultation"}</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-3">
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Client name</Label>
-            <Input value={clientName} onChange={(e) => setClientName(e.target.value)} placeholder="Full name" />
-          </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Existing customer (optional)</Label>
-            <Select value={customerId || "none"} onValueChange={(v) => {
-              const id = v === "none" ? "" : v;
-              setCustomerId(id);
-              const c = (lookups?.customers ?? []).find((x: any) => x.id === id);
-              if (c && !clientName.trim()) setClientName(c.full_name);
-            }}>
-              <SelectTrigger><SelectValue placeholder="Link to customer" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Not linked</SelectItem>
-                {(lookups?.customers ?? []).map((c: any) => (
-                  <SelectItem key={c.id} value={c.id}>{c.full_name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="grid gap-1.5">
-              <Label className="text-xs">Service interest</Label>
-              <Select value={serviceId || "none"} onValueChange={(v) => setServiceId(v === "none" ? "" : v)}>
-                <SelectTrigger><SelectValue placeholder="Service" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">—</SelectItem>
-                  {(lookups?.services ?? []).map((s: any) => (
-                    <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid gap-1.5">
-              <Label className="text-xs">Status</Label>
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="New">New</SelectItem>
-                  <SelectItem value="Contacted">Contacted</SelectItem>
-                  <SelectItem value="Booked">Booked</SelectItem>
-                  <SelectItem value="Closed">Closed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Notes (optional)</Label>
-            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Internal notes…" rows={3} />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button disabled={saving} onClick={save} className="bg-[#E8246A] hover:bg-[#C91D5C] text-white">
-            {saving ? "Saving…" : editing ? "Save changes" : "Create"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <Modal open={open} onClose={() => onOpenChange(false)} title={editing ? "Edit consultation" : "New consultation"}>
+      <Field label="Client name">
+        <input value={clientName} onChange={(e) => setClientName(e.target.value)} placeholder="Full name" className={inputCls} />
+      </Field>
+      <Field label="Existing customer (optional)">
+        <select value={customerId} onChange={(e) => {
+          const id = e.target.value;
+          setCustomerId(id);
+          const c = (lookups?.customers ?? []).find((x: any) => x.id === id);
+          if (c && !clientName.trim()) setClientName(c.full_name);
+        }} className={inputCls}>
+          <option value="">Not linked</option>
+          {(lookups?.customers ?? []).map((c: any) => (
+            <option key={c.id} value={c.id}>{c.full_name}</option>
+          ))}
+        </select>
+      </Field>
+      <div className="grid grid-cols-2 gap-2">
+        <Field label="Service interest">
+          <select value={serviceId} onChange={(e) => setServiceId(e.target.value)} className={inputCls}>
+            <option value="">—</option>
+            {(lookups?.services ?? []).map((s: any) => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Status">
+          <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputCls}>
+            {["New","Contacted","Booked","Closed"].map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </Field>
+      </div>
+      <Field label="Notes (optional)">
+        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Internal notes…" rows={3} className={inputCls} />
+      </Field>
+      <div className="flex justify-end gap-2 pt-2">
+        <button type="button" onClick={() => onOpenChange(false)} className="px-3 py-1.5 text-xs text-gray-600">Cancel</button>
+        <PrimaryButton onClick={save}>{saving ? "Saving…" : editing ? "Save changes" : "Create"}</PrimaryButton>
+      </div>
+    </Modal>
   );
 }
 
@@ -481,64 +455,42 @@ function BookFromConsultationDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>Book appointment</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-3 text-sm">
-          <div className="text-xs text-gray-500">
-            For <span className="font-medium text-gray-900">{consultation?.client_name}</span>
-            {consultation?.services?.name && <> · {consultation.services.name}</>}
-          </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Customer</Label>
-            <Select value={customerId || "none"} onValueChange={(v) => setCustomerId(v === "none" ? "" : v)}>
-              <SelectTrigger><SelectValue placeholder="Pick a customer" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">— pick a customer —</SelectItem>
-                {(lookups?.customers ?? []).map((c: any) => (
-                  <SelectItem key={c.id} value={c.id}>{c.full_name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Service</Label>
-            <Select value={serviceId || "none"} onValueChange={(v) => setServiceId(v === "none" ? "" : v)}>
-              <SelectTrigger><SelectValue placeholder="Pick a service" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">— pick a service —</SelectItem>
-                {(lookups?.services ?? []).map((s: any) => (
-                  <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">When</Label>
-            <Input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} />
-          </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Therapist (optional)</Label>
-            <Select value={employeeId || "none"} onValueChange={(v) => setEmployeeId(v === "none" ? "" : v)}>
-              <SelectTrigger><SelectValue placeholder="Unassigned" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Unassigned</SelectItem>
-                {employees.map((e: any) => (
-                  <SelectItem key={e.id} value={e.id}>{e.full_name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button disabled={saving} onClick={book} className="bg-[#E8246A] hover:bg-[#C91D5C] text-white">
-            {saving ? "Booking…" : "Book appointment"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <Modal open={open} onClose={() => onOpenChange(false)} title="Book appointment">
+      <div className="text-xs text-gray-500 mb-2">
+        For <span className="font-medium text-gray-900">{consultation?.client_name}</span>
+        {consultation?.services?.name && <> · {consultation.services.name}</>}
+      </div>
+      <Field label="Customer">
+        <select value={customerId} onChange={(e) => setCustomerId(e.target.value)} className={inputCls}>
+          <option value="">— pick a customer —</option>
+          {(lookups?.customers ?? []).map((c: any) => (
+            <option key={c.id} value={c.id}>{c.full_name}</option>
+          ))}
+        </select>
+      </Field>
+      <Field label="Service">
+        <select value={serviceId} onChange={(e) => setServiceId(e.target.value)} className={inputCls}>
+          <option value="">— pick a service —</option>
+          {(lookups?.services ?? []).map((s: any) => (
+            <option key={s.id} value={s.id}>{s.name}</option>
+          ))}
+        </select>
+      </Field>
+      <Field label="When">
+        <input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} className={inputCls} />
+      </Field>
+      <Field label="Therapist (optional)">
+        <select value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} className={inputCls}>
+          <option value="">Unassigned</option>
+          {employees.map((e: any) => (
+            <option key={e.id} value={e.id}>{e.full_name}</option>
+          ))}
+        </select>
+      </Field>
+      <div className="flex justify-end gap-2 pt-2">
+        <button type="button" onClick={() => onOpenChange(false)} className="px-3 py-1.5 text-xs text-gray-600">Cancel</button>
+        <PrimaryButton onClick={book}>{saving ? "Booking…" : "Book appointment"}</PrimaryButton>
+      </div>
+    </Modal>
   );
 }
