@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Calendar, ClipboardList, Users, CreditCard,
-  Sparkles, Heart, UserCheck, BarChart2, Megaphone, Settings,
+  Sparkles, Heart, UserCheck, UserCog, BarChart2, Megaphone, Settings,
   ScrollText, LogOut,
 } from "lucide-react";
 import { NavItem } from "./NavItem";
@@ -16,6 +16,7 @@ const NAV = [
   { icon: CreditCard, label: "Sales & Payments", to: "/dashboard/sales" },
   { icon: Sparkles, label: "Services", to: "/dashboard/services" },
   { icon: Heart, label: "Interest Tracking", to: "/dashboard/interests" },
+  { icon: UserCog, label: "Therapists", to: "/dashboard/therapists" },
   { icon: UserCheck, label: "Accounts", to: "/dashboard/employees" },
   { icon: BarChart2, label: "Reports", to: "/dashboard/reports" },
   { icon: Megaphone, label: "Marketing", to: "/dashboard/marketing" },
