@@ -430,30 +430,6 @@ function toLocalInput(iso?: string | null) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-function QuickNoteInput({ id, initial }: { id: string; initial: string }) {
-  const qc = useQueryClient();
-  const [val, setVal] = useState(initial);
-  const [saving, setSaving] = useState(false);
-  async function save() {
-    if (val === initial) return;
-    setSaving(true);
-    const { error } = await (supabase.from("appointments") as any).update({ quick_note: val || null }).eq("id", id);
-    setSaving(false);
-    if (error) { toast.error(error.message); return; }
-    qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
-    qc.invalidateQueries({ queryKey: ["appt-detail", id] });
-  }
-  return (
-    <input
-      value={val}
-      onChange={e => setVal(e.target.value)}
-      onBlur={save}
-      placeholder="e.g. Confirmed via phone"
-      className={`text-[11px] px-2 py-1 border rounded w-40 ${saving ? "bg-gray-50" : ""}`}
-    />
-  );
-}
-
 function AppointmentDialog({
   open, onOpenChange, editing, onSaved,
 }: { open: boolean; onOpenChange: (v: boolean) => void; editing: any | null; onSaved: () => void; }) {
@@ -463,7 +439,6 @@ function AppointmentDialog({
   const [employeeId, setEmployeeId] = useState<string>("");
   const [when, setWhen] = useState<string>(toLocalInput());
   const [status, setStatus] = useState<string>("Pending");
-  const [room, setRoom] = useState<string>("");
   const [saving, setSaving] = useState(false);
 
   // Reset when opening / editing changes
@@ -475,7 +450,6 @@ function AppointmentDialog({
     setEmployeeId(editing?.employees?.id ?? "");
     setWhen(toLocalInput(editing?.scheduled_at ?? null));
     setStatus(editing?.status ?? "Pending");
-    setRoom(editing?.room ?? "");
   }, [open, editing]);
 
   const pickedServices = (lookups?.services ?? []).filter((s: any) => serviceIds.includes(s.id));
@@ -495,7 +469,6 @@ function AppointmentDialog({
       employee_id: employeeId || null,
       scheduled_at: new Date(when).toISOString(),
       status,
-      room: room || null,
       duration_min: totalDur,
     };
     let apptId: string | undefined = editing?.id;
@@ -528,83 +501,54 @@ function AppointmentDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>{editing ? "Edit appointment" : "New appointment"}</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-3">
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Client</Label>
-            <Select value={customerId} onValueChange={setCustomerId}>
-              <SelectTrigger><SelectValue placeholder="Select client" /></SelectTrigger>
-              <SelectContent>
-                {(lookups?.customers ?? []).map((c: any) => (
-                  <SelectItem key={c.id} value={c.id}>{c.full_name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Services (select one or more)</Label>
-            <div className="max-h-44 overflow-y-auto border rounded-md p-2 space-y-1 bg-white">
-              {(lookups?.services ?? []).map((s: any) => (
-                <label key={s.id} className="flex items-center gap-2 text-xs hover:bg-gray-50 rounded px-1 py-1 cursor-pointer">
-                  <input type="checkbox" checked={serviceIds.includes(s.id)}
-                    onChange={e => setServiceIds(prev => e.target.checked ? [...prev, s.id] : prev.filter(x => x !== s.id))} />
-                  <span className="flex-1">{s.name}</span>
-                  <span className="text-gray-500">TT${Number(s.base_price).toLocaleString()}</span>
-                </label>
-              ))}
-            </div>
-            {pickedServices.length > 0 && (
-              <div className="text-[11px] text-gray-600 mt-1">
-                {pickedServices.length} service{pickedServices.length > 1 ? "s" : ""} · ~{totalDur} min · TT${totalPrice.toLocaleString()}
-              </div>
-            )}
-          </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Therapist (optional)</Label>
-            <Select value={employeeId || "none"} onValueChange={(v) => setEmployeeId(v === "none" ? "" : v)}>
-              <SelectTrigger><SelectValue placeholder="Unassigned" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Unassigned</SelectItem>
-                {(lookups?.employees ?? []).map((e: any) => (
-                  <SelectItem key={e.id} value={e.id}>{e.full_name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">Room (optional)</Label>
-            <Input value={room} onChange={e => setRoom(e.target.value)} placeholder="e.g. Room 1" />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="grid gap-1.5">
-              <Label className="text-xs">When</Label>
-              <Input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} />
-            </div>
-            <div className="grid gap-1.5">
-              <Label className="text-xs">Status</Label>
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Pending">Pending</SelectItem>
-                  <SelectItem value="Confirmed">Confirmed</SelectItem>
-                  <SelectItem value="Completed">Completed</SelectItem>
-                  <SelectItem value="Cancelled">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+    <Modal open={open} onClose={() => onOpenChange(false)} title={editing ? "Edit appointment" : "New appointment"}>
+      <Field label="Client">
+        <select value={customerId} onChange={e => setCustomerId(e.target.value)} className={inputCls} required>
+          <option value="">Select client</option>
+          {(lookups?.customers ?? []).map((c: any) => (
+            <option key={c.id} value={c.id}>{c.full_name}</option>
+          ))}
+        </select>
+      </Field>
+      <Field label="Services (select one or more)">
+        <div className="max-h-44 overflow-y-auto border border-gray-200 rounded-lg p-2 space-y-1 bg-white">
+          {(lookups?.services ?? []).map((s: any) => (
+            <label key={s.id} className="flex items-center gap-2 text-xs hover:bg-gray-50 rounded px-1 py-1 cursor-pointer">
+              <input type="checkbox" checked={serviceIds.includes(s.id)}
+                onChange={e => setServiceIds(prev => e.target.checked ? [...prev, s.id] : prev.filter(x => x !== s.id))} />
+              <span className="flex-1">{s.name}</span>
+              <span className="text-gray-500">TT${Number(s.base_price).toLocaleString()}</span>
+            </label>
+          ))}
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button disabled={saving} onClick={save} className="bg-[#E8246A] hover:bg-[#C91D5C] text-white">
-            {saving ? "Saving…" : editing ? "Save changes" : "Create"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        {pickedServices.length > 0 && (
+          <div className="text-[11px] text-gray-600 mt-1">
+            {pickedServices.length} service{pickedServices.length > 1 ? "s" : ""} · ~{totalDur} min · TT${totalPrice.toLocaleString()}
+          </div>
+        )}
+      </Field>
+      <div className="grid grid-cols-2 gap-2">
+        <Field label="Therapist (optional)">
+          <select value={employeeId} onChange={e => setEmployeeId(e.target.value)} className={inputCls}>
+            <option value="">Unassigned</option>
+            {(lookups?.employees ?? []).map((e: any) => (
+              <option key={e.id} value={e.id}>{e.full_name}</option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Status">
+          <select value={status} onChange={e => setStatus(e.target.value)} className={inputCls}>
+            {["Pending","Confirmed","Completed","Cancelled"].map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </Field>
+      </div>
+      <Field label="When">
+        <input type="datetime-local" value={when} onChange={e => setWhen(e.target.value)} className={inputCls} />
+      </Field>
+      <div className="flex justify-end gap-2 pt-2">
+        <button type="button" onClick={() => onOpenChange(false)} className="px-3 py-1.5 text-xs text-gray-600">Cancel</button>
+        <PrimaryButton onClick={save}>{saving ? "Saving…" : editing ? "Save changes" : "Create"}</PrimaryButton>
+      </div>
+    </Modal>
   );
 }
