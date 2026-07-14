@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CalendarDays, Plus, Search, Check, X, Pencil, Trash2, Clock, List, Calendar as CalIcon, MessageCircle, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { buildWhatsAppUrl } from "@/lib/appointments-detail";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -142,6 +142,8 @@ function statusClasses(s: string) {
 
 export function AppointmentsPage() {
   const qc = useQueryClient();
+  const navigate = useNavigate();
+  const search = useSearch({ from: "/dashboard/appointments/" });
   const [range, setRange] = useState<Range>("upcoming");
   const [status, setStatus] = useState<Status>("all");
   const [q, setQ] = useState("");
@@ -149,6 +151,14 @@ export function AppointmentsPage() {
   const [editing, setEditing] = useState<any | null>(null);
   const [view, setView] = useState<"list" | "day">("list");
   const [dayDate, setDayDate] = useState<string>(new Date().toISOString().slice(0, 10));
+
+  useEffect(() => {
+    if (search.new === "1") {
+      setEditing(null);
+      setOpen(true);
+      navigate({ to: "/dashboard/appointments", search: {}, replace: true });
+    }
+  }, [search.new, navigate]);
 
   const listQ = useAppointments(range, status, q);
   const dayQ = useDayAppointments(dayDate);
