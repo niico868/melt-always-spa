@@ -122,13 +122,16 @@ function OverviewTab({ customer }: { customer: any }) {
   const lifetime = (sales ?? []).reduce((s, r) => s + Number(r.amount || 0), 0);
   const visits = (appts ?? []).filter(a => a.status === "Completed").length;
   const lastVisit = (appts ?? []).find(a => a.status === "Completed")?.scheduled_at;
+  const dob = customer.date_of_birth;
+  const age = dob ? Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 864e5)) : null;
+  const dobLabel = dob ? `${fmtDate(dob)}${age != null ? ` · ${age} yrs` : ""}` : "Not on file";
   return (
     <div className="grid md:grid-cols-3 gap-3 text-xs">
       <div className="md:col-span-2 space-y-2">
         <div className="grid grid-cols-2 gap-2">
           {customer.phone && <InfoRow icon={<Phone size={12} />} label="Phone" value={customer.phone} />}
           {customer.email && <InfoRow icon={<Mail size={12} />} label="Email" value={customer.email} />}
-          {customer.date_of_birth && <InfoRow icon={<Cake size={12} />} label="DOB" value={fmtDate(customer.date_of_birth)} />}
+          <InfoRow icon={<Cake size={12} />} label="Birthday" value={dobLabel} />
           {customer.preferred_contact && <InfoRow icon={<MessageCircle size={12} />} label="Prefers" value={customer.preferred_contact} />}
           {(customer.address || customer.city) && <InfoRow icon={<MapPin size={12} />} label="Address" value={[customer.address, customer.city].filter(Boolean).join(", ")} />}
         </div>
