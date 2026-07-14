@@ -3,18 +3,14 @@ import { Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ClipboardList, Plus, Search, Check, Pencil, Trash2, Phone, Mail, CalendarPlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
-} from "@/components/ui/dialog";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { ColumnFilterButton, applyColumnFilters, type ColumnFilters, type FilterDef } from "@/components/dashboard/ColumnFilter";
+import { Modal, Field, inputCls } from "@/components/dashboard/Modal";
+import { PrimaryButton } from "@/components/dashboard/DashboardPage";
 
 type Range = "today" | "week" | "month" | "all";
 type Status = "all" | "New" | "Contacted" | "Booked" | "Closed";
@@ -150,12 +146,12 @@ export function ConsultationsPage() {
     <div className="h-full overflow-auto px-3 sm:px-4 pt-3 pb-6 flex flex-col gap-3">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
-          <h1 className="text-lg sm:text-xl font-bold text-[#1A1A2E] leading-tight">Consultations</h1>
+          <h1 className="text-xl sm:text-2xl md:text-[26px] font-extrabold text-[#1A1A2E] leading-tight">Consultations</h1>
           <p className="text-xs text-gray-500">Track inbound leads from consultation submissions through to booked appointments.</p>
         </div>
-        <Button onClick={() => { setEditing(null); setOpen(true); }} className="bg-[#E8246A] hover:bg-[#C91D5C] text-white">
-          <Plus size={16} /> New consultation
-        </Button>
+        <PrimaryButton onClick={() => { setEditing(null); setOpen(true); }}>
+          <Plus size={12} className="inline mr-1" />New consultation
+        </PrimaryButton>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -199,9 +195,9 @@ export function ConsultationsPage() {
       </div>
 
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-auto max-h-[calc(100dvh-340px)] min-h-[240px]">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-[11px] uppercase tracking-wide text-gray-500">
+            <thead className="bg-gray-50 text-[11px] uppercase tracking-wide text-gray-500 sticky top-0 z-10">
               <tr>
                 <th className="text-left font-medium px-3 py-2">Submitted</th>
                 <th className="text-left font-medium px-3 py-2">Client</th>
