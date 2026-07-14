@@ -15,9 +15,9 @@ function ServicesPage() {
   const [editing, setEditing] = useState<Partial<Service> | null>(null);
 
   const columns: Column<Service>[] = [
-    { key: "swatch", header: "", render: r => <span className="inline-block w-3 h-3 rounded" style={{ background: r.fill_color }} /> },
-    { key: "name", header: "Service", render: r => <span className="font-medium text-gray-800">{r.name}</span> },
-    { key: "base_price", header: "Base price", className: "text-right", render: r => fmtMoney(r.base_price) },
+    { key: "swatch", header: "", sortType: "none", render: r => <span className="inline-block w-3 h-3 rounded" style={{ background: r.fill_color }} /> },
+    { key: "name", header: "Service", sortType: "text", accessor: r => r.name, render: r => <span className="font-medium text-gray-800">{r.name}</span> },
+    { key: "base_price", header: "Base price", className: "text-right", sortType: "currency", accessor: r => r.base_price, render: r => fmtMoney(r.base_price) },
   ];
 
   return (
