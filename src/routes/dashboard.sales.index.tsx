@@ -74,6 +74,8 @@ function SalesPage() {
     {
       key: "invoice_number",
       header: "Invoice",
+      sortType: "text",
+      accessor: (r) => r.invoice_number,
       render: (r) => <span className="font-mono text-[11px] text-gray-800">{r.invoice_number}</span>,
     },
     { key: "date", header: "Date", sortType: "date", accessor: (r) => r.created_at, render: (r) => fmtDateTime(r.created_at) },
@@ -154,13 +156,6 @@ function SalesPage() {
       statusOrder: ["Void", "Draft", "Sent", "PartiallyPaid", "Paid"],
       accessor: (r) => r.status,
       render: (r) => <StatusBadge status={r.status} />,
-    },
-    {
-      key: "invoice_number",
-      header: "Invoice",
-      sortType: "text",
-      accessor: (r) => r.invoice_number,
-      render: (r) => <span className="font-mono text-[11px] text-gray-800">{r.invoice_number}</span>,
     },
   ];
 
