@@ -72,7 +72,7 @@ function InterestsPage() {
 
   const columns: Column<Row>[] = [
     {
-      key: "client_name", header: "Client",
+      key: "client_name", header: "Client", sortType: "text", accessor: (r) => r.client_name,
       render: (r) => r.customers?.id ? (
         <Link to="/dashboard/customers/$id" params={{ id: r.customers.id }} onClick={(e) => e.stopPropagation()} className="font-medium text-blue-600 hover:underline">
           {r.client_name}
@@ -80,7 +80,7 @@ function InterestsPage() {
       ) : <span className="font-medium text-gray-800">{r.client_name}</span>,
     },
     {
-      key: "contact", header: "Contact",
+      key: "contact", header: "Contact", sortType: "text", accessor: (r) => r.customers?.phone || r.customers?.email || "",
       render: (r) => {
         const email = r.customers?.email;
         const phone = r.customers?.phone;
@@ -93,10 +93,10 @@ function InterestsPage() {
         );
       },
     },
-    { key: "service_name", header: "Interested in", render: (r) => r.services?.name ?? r.service_name ?? "—" },
-    { key: "submitted_at", header: "Submitted", render: (r) => fmtDateTime(r.submitted_at) },
+    { key: "service_name", header: "Interested in", sortType: "text", accessor: (r) => r.services?.name ?? r.service_name ?? "", render: (r) => r.services?.name ?? r.service_name ?? "—" },
+    { key: "submitted_at", header: "Submitted", sortType: "date", accessor: (r) => r.submitted_at, render: (r) => fmtDateTime(r.submitted_at) },
     {
-      key: "status", header: "Status",
+      key: "status", header: "Status", sortType: "status", statusOrder: [...CONSULT_STATUSES], accessor: (r) => r.status,
       render: (r) => (
         <select
           value={r.status}
