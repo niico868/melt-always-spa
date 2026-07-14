@@ -61,20 +61,20 @@ function AuditPage() {
   }
 
   const columns: Column<AuditRow>[] = [
-    { key: "created_at", header: "When", render: r => <span className="text-[11px] text-gray-500">{fmtDateTime(r.created_at)}</span> },
-    { key: "actor_email", header: "Actor", render: r => <span className="font-medium text-gray-800">{r.actor_email || "—"}</span> },
-    { key: "action", header: "Action", render: r => {
+    { key: "created_at", header: "When", sortType: "date", accessor: r => r.created_at, render: r => <span className="text-[11px] text-gray-500">{fmtDateTime(r.created_at)}</span> },
+    { key: "actor_email", header: "Actor", sortType: "text", accessor: r => r.actor_email || "", render: r => <span className="font-medium text-gray-800">{r.actor_email || "—"}</span> },
+    { key: "action", header: "Action", sortType: "text", accessor: r => r.action, render: r => {
       const Icon = actionIcon[r.action] ?? ScrollText;
       return <span className={`inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded ${actionTone[r.action] ?? "bg-gray-100"}`}><Icon size={11} />{r.action}</span>;
     }},
-    { key: "entity", header: "Where", render: r => (
+    { key: "entity", header: "Where", sortType: "text", accessor: r => r.entity ?? "", render: r => (
       <span className="text-[11px]">
         <span className="text-gray-700">{r.entity ?? "—"}</span>
         {r.entity_id && <span className="text-gray-400"> · {r.entity_id.slice(0,8)}</span>}
       </span>
     )},
-    { key: "summary", header: "Summary", render: r => <span className="text-[11px] text-gray-600">{r.summary || "—"}</span> },
-    { key: "diff", header: "Details", render: r => r.diff ? (
+    { key: "summary", header: "Summary", sortType: "text", accessor: r => r.summary || "", render: r => <span className="text-[11px] text-gray-600">{r.summary || "—"}</span> },
+    { key: "diff", header: "Details", sortType: "none", render: r => r.diff ? (
       <details className="text-[10px]">
         <summary className="cursor-pointer text-[#E8246A]">view</summary>
         <pre className="mt-1 p-2 bg-gray-50 rounded max-h-40 overflow-auto text-[10px] whitespace-pre-wrap">{JSON.stringify(r.diff, null, 2)}</pre>

@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { ColumnFilterButton, applyColumnFilters, type ColumnFilters, type FilterDef } from "@/components/dashboard/ColumnFilter";
 import { Modal, Field, inputCls } from "@/components/dashboard/Modal";
 import { PrimaryButton } from "@/components/dashboard/DashboardPage";
+import { useTableSort, SortableTh, SortResetChip, type SortField } from "@/components/dashboard/useTableSort";
 
 type Range = "today" | "week" | "upcoming" | "all";
 type Status = "all" | "Pending" | "Confirmed" | "Completed" | "Cancelled";
@@ -171,6 +172,34 @@ export function AppointmentsPage() {
   ];
   const rows = applyColumnFilters(rawRows as any[], filterDefs, colFilters);
 
+  const sortFields: SortField<any>[] = [
+    { key: "when", type: "date", value: (r) => r.scheduled_at },
+    { key: "client", type: "text", value: (r) => r.customers?.full_name ?? "" },
+    { key: "services", type: "text", value: (r) => (r.appointment_services?.[0]?.services?.name) ?? r.services?.name ?? "" },
+    { key: "therapist", type: "text", value: (r) => r.employees?.full_name ?? "" },
+    { key: "status", type: "status", statusOrder: ["Pending", "Confirmed", "Completed", "Cancelled"], value: (r) => r.status },
+    { key: "payment", type: "status", statusOrder: ["Outstanding", "Partial", "Paid"], value: (r) => {
+      const inv = r.invoices;
+      if (!inv) return "";
+      const paid = ((inv.payments ?? []) as any[]).reduce((s, p) => s + (p.kind === "refund" ? -Number(p.amount) : Number(p.amount)), 0);
+      const remaining = Math.max(0, Number(inv.total ?? 0) - paid);
+      return remaining <= 0 && Number(inv.total) > 0 ? "Paid" : paid > 0 ? "Partial" : "Outstanding";
+    }},
+    { key: "remaining", type: "currency", value: (r) => {
+      const inv = r.invoices;
+      if (!inv) return null;
+      const paid = ((inv.payments ?? []) as any[]).reduce((s, p) => s + (p.kind === "refund" ? -Number(p.amount) : Number(p.amount)), 0);
+      return Math.max(0, Number(inv.total ?? 0) - paid);
+    }},
+    { key: "med", type: "number", value: (r) => {
+      const m = r.appointment_medical;
+      if (!m) return 0;
+      return (m.allergies ? 1 : 0) + (m.medications ? 1 : 0) + (m.contraindications ? 1 : 0);
+    }},
+  ];
+  const { sort, setSort, toggle: toggleSort, sorted } = useTableSort<any>(sortFields);
+  const sortedRows = sorted(rows as any[]);
+
   const stats = useMemo(() => {
     const total = rows.length;
     const confirmed = rows.filter((r: any) => r.status === "Confirmed").length;
@@ -274,6 +303,7 @@ export function AppointmentsPage() {
         {view === "day" && (
           <ColumnFilterButton defs={filterDefs} rows={rawRows as any[]} filters={colFilters} onChange={setColFilters} />
         )}
+        <SortResetChip sort={sort} onReset={() => setSort(null)} />
       </div>
 
       {view === "day" ? (
@@ -285,14 +315,14 @@ export function AppointmentsPage() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-[11px] uppercase tracking-wide text-gray-500 sticky top-0 z-10">
               <tr>
-                <th className="text-left font-medium px-3 py-2">When</th>
-                <th className="text-left font-medium px-3 py-2">Client</th>
-                <th className="text-left font-medium px-3 py-2">Services</th>
-                <th className="text-left font-medium px-3 py-2">Therapist</th>
-                <th className="text-left font-medium px-3 py-2">Status</th>
-                <th className="text-left font-medium px-3 py-2">Payment</th>
-                <th className="text-right font-medium px-3 py-2">Remaining</th>
-                <th className="text-left font-medium px-3 py-2">Med</th>
+                <SortableTh sortKey="when" label="When" type="date" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="client" label="Client" type="text" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="services" label="Services" type="text" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="therapist" label="Therapist" type="text" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="status" label="Status" type="status" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="payment" label="Payment" type="status" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="remaining" label="Remaining" type="currency" currentSort={sort} onToggle={toggleSort} className="text-right" />
+                <SortableTh sortKey="med" label="Med" type="number" currentSort={sort} onToggle={toggleSort} />
                 <th className="text-right font-medium px-3 py-2">Actions</th>
               </tr>
             </thead>
@@ -300,13 +330,13 @@ export function AppointmentsPage() {
               {isLoading && (
                 <tr><td colSpan={9} className="px-3 py-6 text-center text-xs text-gray-400">Loading…</td></tr>
               )}
-              {!isLoading && rows.length === 0 && (
+              {!isLoading && sortedRows.length === 0 && (
                 <tr><td colSpan={9} className="px-3 py-10 text-center text-xs text-gray-400">
                   <Clock className="mx-auto mb-2" size={20} />
                   No appointments in this view.
                 </td></tr>
               )}
-              {rows.map((a: any) => {
+              {sortedRows.map((a: any) => {
                 const d = new Date(a.scheduled_at);
                 const svcList = (a.appointment_services ?? []).map((x: any) => x.services?.name).filter(Boolean);
                 const svcNames = svcList.length ? svcList : [a.services?.name].filter(Boolean);

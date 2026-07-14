@@ -53,7 +53,7 @@ function AccountsPage() {
   const [inviteOpen, setInviteOpen] = useState(false);
 
   const columns: Column<AccountRow>[] = [
-    { key: "user", header: "User", render: r => (
+    { key: "user", header: "User", sortType: "text", accessor: r => r.full_name || r.email, render: r => (
       <div className="flex items-center gap-2">
         <span className="inline-flex w-7 h-7 rounded-full items-center justify-center text-[10px] font-bold text-[#E8246A] bg-[#FDF2F7]">
           <User size={13} />
@@ -64,7 +64,7 @@ function AccountsPage() {
         </div>
       </div>
     )},
-    { key: "roles", header: "Role", render: r => (
+    { key: "roles", header: "Role", sortType: "text", accessor: r => r.roles[0] ?? "", render: r => (
       isAdmin ? (
         <select
           value={r.roles[0] ?? ""}
@@ -80,13 +80,13 @@ function AccountsPage() {
         </span>
       )
     )},
-    { key: "status", header: "Status", render: r => (
+    { key: "status", header: "Status", sortType: "status", statusOrder: ["Active", "Invited"], accessor: r => r.invited ? "Invited" : "Active", render: r => (
       <span className={`text-[10px] px-1.5 py-0.5 rounded ${r.invited ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"}`}>
         {r.invited ? "Invited" : "Active"}
       </span>
     )},
-    { key: "last", header: "Last sign in", render: r => r.last_sign_in_at ? fmtDate(r.last_sign_in_at) : "—" },
-    { key: "created_at", header: "Created", render: r => fmtDate(r.created_at) },
+    { key: "last", header: "Last sign in", sortType: "date", accessor: r => r.last_sign_in_at ?? "", render: r => r.last_sign_in_at ? fmtDate(r.last_sign_in_at) : "—" },
+    { key: "created_at", header: "Created", sortType: "date", accessor: r => r.created_at, render: r => fmtDate(r.created_at) },
   ];
 
   return (

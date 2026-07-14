@@ -53,7 +53,7 @@ function CustomersPage() {
   }, [search.new, navigate]);
 
   const columns: Column<Customer>[] = [
-    { key: "full_name", header: "Name", render: r => (
+    { key: "full_name", header: "Name", sortType: "text", accessor: r => r.full_name, render: r => (
       <Link
         to="/dashboard/customers/$id"
         params={{ id: r.id }}
@@ -63,19 +63,19 @@ function CustomersPage() {
         {r.full_name}
       </Link>
     ) },
-    { key: "phone", header: "Phone", render: r => r.phone ?? "—" },
-    { key: "email", header: "Email", render: r => r.email ?? "—" },
-    { key: "tags", header: "Tags", render: r => (r.tags?.length ? (
+    { key: "phone", header: "Phone", sortType: "text", accessor: r => r.phone ?? "", render: r => r.phone ?? "—" },
+    { key: "email", header: "Email", sortType: "text", accessor: r => r.email ?? "", render: r => r.email ?? "—" },
+    { key: "tags", header: "Tags", sortType: "text", accessor: r => r.tags?.join(", ") ?? "", render: r => (r.tags?.length ? (
       <span className="flex flex-wrap gap-1">{r.tags.map(t => <span key={t} className="px-1.5 py-0.5 rounded bg-[#FDF2F7] text-[#E8246A] text-[10px]">{t}</span>)}</span>
     ) : "—") },
-    { key: "medical", header: "Medical", render: r => {
+    { key: "medical", header: "Medical", sortType: "number", sortValue: r => (r.allergies ? 1 : 0) + (r.medications ? 1 : 0) + (r.medical_conditions ? 1 : 0), render: r => {
       const flags: string[] = [];
       if (r.allergies) flags.push("Allergies");
       if (r.medications) flags.push("Meds");
       if (r.medical_conditions) flags.push("Conditions");
       return flags.length ? <span className="text-[10px] text-amber-700">{flags.join(" · ")}</span> : <span className="text-gray-300">—</span>;
     } },
-    { key: "created_at", header: "Joined", render: r => fmtDate(r.created_at) },
+    { key: "created_at", header: "Joined", sortType: "date", accessor: r => r.created_at, render: r => fmtDate(r.created_at) },
   ];
   return (
     <DashboardPage

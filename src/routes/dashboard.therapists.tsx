@@ -15,14 +15,14 @@ function TherapistsPage() {
   const [editing, setEditing] = useState<Partial<Employee> | null>(null);
 
   const columns: Column<Employee>[] = [
-    { key: "name", header: "Therapist", render: r => (
+    { key: "name", header: "Therapist", sortType: "text", accessor: r => r.full_name, render: r => (
       <div className="flex items-center gap-2">
         <span className="inline-flex w-7 h-7 rounded-full items-center justify-center text-[#E8246A] bg-[#FDF2F7]"><User size={13} /></span>
         <span className="font-medium text-gray-800">{r.full_name}</span>
       </div>
     )},
-    { key: "role", header: "Role", render: r => <span className="text-[11px] text-gray-600">{r.role}</span> },
-    { key: "slots", header: "Daily slots", className: "text-right", render: r => r.slots_total },
+    { key: "role", header: "Role", sortType: "text", accessor: r => r.role, render: r => <span className="text-[11px] text-gray-600">{r.role}</span> },
+    { key: "slots", header: "Daily slots", className: "text-right", sortType: "number", accessor: r => r.slots_total, render: r => r.slots_total },
   ];
 
   return (
