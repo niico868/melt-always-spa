@@ -76,10 +76,11 @@ function SalesPage() {
       header: "Invoice",
       render: (r) => <span className="font-mono text-[11px] text-gray-800">{r.invoice_number}</span>,
     },
-    { key: "date", header: "Date", accessor: (r) => r.created_at, render: (r) => fmtDateTime(r.created_at) },
+    { key: "date", header: "Date", sortType: "date", accessor: (r) => r.created_at, render: (r) => fmtDateTime(r.created_at) },
     {
       key: "appointment",
       header: "Appointment",
+      sortType: "date",
       accessor: (r) => r.appointments?.scheduled_at ?? "",
       render: (r) => r.appointments?.scheduled_at
         ? <span className="text-gray-700">{fmtDate(r.appointments.scheduled_at)}</span>
@@ -88,6 +89,7 @@ function SalesPage() {
     {
       key: "customer",
       header: "Customer",
+      sortType: "text",
       accessor: (r) => r.customers?.full_name,
       render: (r) => r.customers?.id ? (
         <Link
@@ -103,6 +105,7 @@ function SalesPage() {
     {
       key: "items",
       header: "Services / Products",
+      sortType: "none",
       render: (r) => {
         const names = [
           ...((r.appointments?.appointment_services ?? []).map((s) => s.services?.name).filter(Boolean) as string[]),
@@ -120,19 +123,25 @@ function SalesPage() {
     {
       key: "staff",
       header: "Staff",
+      sortType: "text",
+      accessor: (r) => r.employees?.full_name ?? r.appointments?.employees?.full_name ?? "",
       render: (r) => r.employees?.full_name ?? r.appointments?.employees?.full_name ?? <span className="text-gray-400">—</span>,
     },
-    { key: "total", header: "Total", className: "text-right", render: (r) => <span className="font-medium">{fmtMoney(r.total)}</span> },
+    { key: "total", header: "Total", className: "text-right", sortType: "currency", accessor: (r) => Number(r.total), render: (r) => <span className="font-medium">{fmtMoney(r.total)}</span> },
     {
       key: "paid",
       header: "Paid",
       className: "text-right",
+      sortType: "currency",
+      sortValue: (r) => paidFrom(r.payments),
       render: (r) => <span className="text-emerald-700">{fmtMoney(paidFrom(r.payments))}</span>,
     },
     {
       key: "remaining",
       header: "Balance",
       className: "text-right",
+      sortType: "currency",
+      sortValue: (r) => Math.max(0, Number(r.total) - paidFrom(r.payments)),
       render: (r) => {
         const bal = Math.max(0, Number(r.total) - paidFrom(r.payments));
         return <span className={bal > 0 ? "text-amber-700 font-medium" : "text-gray-400"}>{fmtMoney(bal)}</span>;
@@ -141,7 +150,17 @@ function SalesPage() {
     {
       key: "status",
       header: "Status",
+      sortType: "status",
+      statusOrder: ["Void", "Draft", "Sent", "PartiallyPaid", "Paid"],
+      accessor: (r) => r.status,
       render: (r) => <StatusBadge status={r.status} />,
+    },
+    {
+      key: "invoice_number",
+      header: "Invoice",
+      sortType: "text",
+      accessor: (r) => r.invoice_number,
+      render: (r) => <span className="font-mono text-[11px] text-gray-800">{r.invoice_number}</span>,
     },
   ];
 
