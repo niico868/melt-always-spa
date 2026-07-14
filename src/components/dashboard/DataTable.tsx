@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef, useEffect, type ReactNode } from "react";
-import { Search, Loader2, SlidersHorizontal, MoreVertical, Download, CheckSquare, Square } from "lucide-react";
+import { Search, Loader2, SlidersHorizontal, MoreVertical, Download, CheckSquare, Square, ArrowUp, ArrowDown, ArrowUpDown, Eye, EyeOff, RotateCcw } from "lucide-react";
 
 export type Column<T> = {
   key: string;
@@ -7,7 +7,31 @@ export type Column<T> = {
   render?: (row: T) => ReactNode;
   accessor?: (row: T) => string | number | null | undefined;
   className?: string;
+  /** Data type used to pick sort semantics & indicator labels. Defaults to "text". Use "none" to disable sorting. */
+  sortType?: "text" | "number" | "currency" | "date" | "status" | "boolean" | "none";
+  /** Custom order for status values (top → bottom). If omitted, alphabetical. */
+  statusOrder?: string[];
+  /** Custom value used for sorting when accessor isn't sufficient. */
+  sortValue?: (row: T) => string | number | Date | boolean | null | undefined;
 };
+
+type SortDir = "asc" | "desc";
+
+function sortLabels(type: Column<any>["sortType"]) {
+  switch (type) {
+    case "number":
+    case "currency":
+      return { asc: "Lowest → Highest", desc: "Highest → Lowest" };
+    case "date":
+      return { asc: "Oldest → Newest", desc: "Newest → Oldest" };
+    case "boolean":
+      return { asc: "No → Yes", desc: "Yes → No" };
+    case "status":
+      return { asc: "Status order", desc: "Reverse order" };
+    default:
+      return { asc: "A → Z", desc: "Z → A" };
+  }
+}
 
 export function DataTable<T extends { id: string | number }>({
   rows,
@@ -37,6 +61,8 @@ export function DataTable<T extends { id: string | number }>({
   const [q, setQ] = useState("");
   const [selected, setSelected] = useState<Set<string | number>>(new Set());
   const [menuOpen, setMenuOpen] = useState(false);
+  const [sort, setSort] = useState<{ key: string; dir: SortDir } | null>(null);
+  const [hiddenCols, setHiddenCols] = useState<Set<string>>(new Set());
   const menuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!menuOpen) return;
@@ -44,10 +70,13 @@ export function DataTable<T extends { id: string | number }>({
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
   }, [menuOpen]);
+
+  const visibleColumns = useMemo(() => columns.filter(c => !hiddenCols.has(c.key)), [columns, hiddenCols]);
+
   const filtered = useMemo(() => {
     if (!rows) return [];
-    if (!q.trim()) return rows;
     const needle = q.trim().toLowerCase();
+    if (!needle) return rows;
     return rows.filter(row =>
       columns.some(c => {
         const val = c.accessor ? c.accessor(row) : (row as any)[c.key];
@@ -56,6 +85,56 @@ export function DataTable<T extends { id: string | number }>({
     );
   }, [rows, q, columns]);
 
+  const sorted = useMemo(() => {
+    if (!sort) return filtered;
+    const col = columns.find(c => c.key === sort.key);
+    if (!col || col.sortType === "none") return filtered;
+    const dir = sort.dir === "asc" ? 1 : -1;
+    const type = col.sortType ?? "text";
+    const getVal = (row: T): any => {
+      if (col.sortValue) return col.sortValue(row);
+      if (col.accessor) return col.accessor(row);
+      return (row as any)[col.key];
+    };
+    const arr = [...filtered];
+    arr.sort((a, b) => {
+      const va = getVal(a);
+      const vb = getVal(b);
+      const aNull = va == null || va === "";
+      const bNull = vb == null || vb === "";
+      if (aNull && bNull) return 0;
+      if (aNull) return 1;
+      if (bNull) return -1;
+      if (type === "status" && col.statusOrder?.length) {
+        const ai = col.statusOrder.indexOf(String(va));
+        const bi = col.statusOrder.indexOf(String(vb));
+        const an = ai === -1 ? Number.MAX_SAFE_INTEGER : ai;
+        const bn = bi === -1 ? Number.MAX_SAFE_INTEGER : bi;
+        return (an - bn) * dir;
+      }
+      if (type === "number" || type === "currency") {
+        return (Number(va) - Number(vb)) * dir;
+      }
+      if (type === "date") {
+        return (new Date(va as any).getTime() - new Date(vb as any).getTime()) * dir;
+      }
+      if (type === "boolean") {
+        return ((va ? 1 : 0) - (vb ? 1 : 0)) * dir;
+      }
+      return String(va).localeCompare(String(vb), undefined, { numeric: true, sensitivity: "base" }) * dir;
+    });
+    return arr;
+  }, [filtered, sort, columns]);
+
+  function toggleSort(col: Column<T>) {
+    if (col.sortType === "none") return;
+    setSort(prev => {
+      if (!prev || prev.key !== col.key) return { key: col.key, dir: "asc" };
+      if (prev.dir === "asc") return { key: col.key, dir: "desc" };
+      return null;
+    });
+  }
+
   function toggle(id: string | number) {
     setSelected(prev => {
       const next = new Set(prev);
@@ -63,20 +142,20 @@ export function DataTable<T extends { id: string | number }>({
       return next;
     });
   }
-  const allSelected = filtered.length > 0 && filtered.every(r => selected.has(r.id));
+  const allSelected = sorted.length > 0 && sorted.every(r => selected.has(r.id));
   function toggleAll() {
     if (allSelected) setSelected(new Set());
-    else setSelected(new Set(filtered.map(r => r.id)));
+    else setSelected(new Set(sorted.map(r => r.id)));
   }
 
   function exportCsv(source: T[]) {
     if (source.length === 0) return;
-    const header = columns.map(c => c.header || c.key).join(",");
+    const header = visibleColumns.map(c => c.header || c.key).join(",");
     const escape = (v: unknown) => {
       const s = v == null ? "" : String(v);
       return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
     };
-    const body = source.map(r => columns.map(c => {
+    const body = source.map(r => visibleColumns.map(c => {
       const v = c.accessor ? c.accessor(r) : (r as any)[c.key];
       return escape(v);
     }).join(",")).join("\n");
@@ -104,6 +183,16 @@ export function DataTable<T extends { id: string | number }>({
           </div>
         )}
         <div className="ml-auto flex items-center gap-1">
+          {sort && (
+            <button
+              type="button"
+              onClick={() => setSort(null)}
+              title="Reset sort to default"
+              className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-lg border border-gray-200 text-[10px] text-gray-500 hover:text-[#E8246A] hover:border-[#E8246A]/40"
+            >
+              <RotateCcw size={11} /> Reset sort
+            </button>
+          )}
           {selected.size > 0 && (
             <span className="text-[11px] text-gray-500 mr-1">{selected.size} selected</span>
           )}
@@ -124,16 +213,16 @@ export function DataTable<T extends { id: string | number }>({
               <MoreVertical size={13} />
             </button>
             {menuOpen && (
-              <div className="absolute right-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1 text-xs">
+              <div className="absolute right-0 mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1 text-xs max-h-80 overflow-auto">
                 <button
-                  onClick={() => { exportCsv(filtered); setMenuOpen(false); }}
+                  onClick={() => { exportCsv(sorted); setMenuOpen(false); }}
                   className="w-full text-left px-3 py-1.5 hover:bg-gray-50 flex items-center gap-2"
                 >
-                  <Download size={12} /> Export visible ({filtered.length})
+                  <Download size={12} /> Export visible ({sorted.length})
                 </button>
                 <button
                   disabled={selected.size === 0}
-                  onClick={() => { exportCsv(filtered.filter(r => selected.has(r.id))); setMenuOpen(false); }}
+                  onClick={() => { exportCsv(sorted.filter(r => selected.has(r.id))); setMenuOpen(false); }}
                   className="w-full text-left px-3 py-1.5 hover:bg-gray-50 flex items-center gap-2 disabled:opacity-40 disabled:hover:bg-transparent"
                 >
                   <Download size={12} /> Export selected ({selected.size})
@@ -146,6 +235,34 @@ export function DataTable<T extends { id: string | number }>({
                 >
                   Clear selection
                 </button>
+                <button
+                  disabled={!sort}
+                  onClick={() => { setSort(null); setMenuOpen(false); }}
+                  className="w-full text-left px-3 py-1.5 hover:bg-gray-50 flex items-center gap-2 disabled:opacity-40 disabled:hover:bg-transparent"
+                >
+                  <RotateCcw size={12} /> Reset sort
+                </button>
+                <div className="border-t border-gray-100 my-1" />
+                <div className="px-3 py-1 text-[10px] uppercase tracking-wide text-gray-400">Columns</div>
+                {columns.filter(c => c.header).map(c => {
+                  const hidden = hiddenCols.has(c.key);
+                  return (
+                    <button
+                      key={c.key}
+                      onClick={() => {
+                        setHiddenCols(prev => {
+                          const next = new Set(prev);
+                          next.has(c.key) ? next.delete(c.key) : next.add(c.key);
+                          return next;
+                        });
+                      }}
+                      className="w-full text-left px-3 py-1.5 hover:bg-gray-50 flex items-center gap-2"
+                    >
+                      {hidden ? <EyeOff size={12} className="text-gray-400" /> : <Eye size={12} className="text-[#E8246A]" />}
+                      <span className={hidden ? "text-gray-400 line-through" : ""}>{c.header}</span>
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -160,13 +277,13 @@ export function DataTable<T extends { id: string | number }>({
           <div className="p-8 text-center text-xs text-red-500">
             {(error as Error).message ?? "Failed to load."}
           </div>
-        ) : filtered.length === 0 ? (
+        ) : sorted.length === 0 ? (
           <div className="p-8 text-center text-xs text-gray-400">{empty}</div>
         ) : (
           <>
           {/* Mobile stacked cards */}
           <div className="md:hidden divide-y divide-gray-100">
-            {filtered.map(row => (
+            {sorted.map(row => (
               <div
                 key={row.id}
                 onClick={onRowClick ? () => onRowClick(row) : undefined}
@@ -182,7 +299,7 @@ export function DataTable<T extends { id: string | number }>({
                     </button>
                   )}
                   <dl className="flex-1 min-w-0 space-y-1">
-                    {columns.map(c => (
+                    {visibleColumns.map(c => (
                       <div key={c.key} className="flex items-baseline gap-2">
                         <dt className="text-[10px] uppercase tracking-wide text-gray-400 min-w-[70px] flex-shrink-0">{c.header}</dt>
                         <dd className="text-xs text-gray-800 flex-1 min-w-0 break-words">
@@ -209,16 +326,46 @@ export function DataTable<T extends { id: string | number }>({
                     </button>
                   </th>
                 )}
-                {columns.map(c => (
-                  <th key={c.key} className={`text-left font-medium px-3 py-2 ${c.className ?? ""}`}>
-                    {c.header}
-                  </th>
-                ))}
+                {visibleColumns.map(c => {
+                  const sortable = c.sortType !== "none" && !!c.header;
+                  const active = sort?.key === c.key;
+                  const dir = active ? sort!.dir : null;
+                  const labels = sortLabels(c.sortType);
+                  const title = sortable
+                    ? active
+                      ? dir === "asc"
+                        ? `Sorted ${labels.asc} — click for ${labels.desc}`
+                        : `Sorted ${labels.desc} — click to reset`
+                      : `Sort ${labels.asc}`
+                    : undefined;
+                  const isRight = (c.className ?? "").includes("text-right");
+                  return (
+                    <th key={c.key} className={`font-medium px-3 py-2 ${c.className ?? "text-left"}`}>
+                      {sortable ? (
+                        <button
+                          type="button"
+                          onClick={() => toggleSort(c)}
+                          title={title}
+                          className={`inline-flex items-center gap-1 group hover:text-[#E8246A] ${active ? "text-[#E8246A]" : ""} ${isRight ? "ml-auto" : ""}`}
+                        >
+                          <span>{c.header}</span>
+                          {active ? (
+                            dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />
+                          ) : (
+                            <ArrowUpDown size={11} className="opacity-0 group-hover:opacity-60 transition-opacity" />
+                          )}
+                        </button>
+                      ) : (
+                        c.header
+                      )}
+                    </th>
+                  );
+                })}
                 {rowActions && <th className="w-10" />}
               </tr>
             </thead>
             <tbody>
-              {filtered.map(row => (
+              {sorted.map(row => (
                 <tr
                   key={row.id}
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
@@ -231,7 +378,7 @@ export function DataTable<T extends { id: string | number }>({
                       </button>
                     </td>
                   )}
-                  {columns.map(c => (
+                  {visibleColumns.map(c => (
                     <td key={c.key} className={`px-3 py-2 ${c.className ?? ""}`}>
                       {c.render ? c.render(row) : String((row as any)[c.key] ?? "—")}
                     </td>
