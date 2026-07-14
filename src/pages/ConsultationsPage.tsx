@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { ColumnFilterButton, applyColumnFilters, type ColumnFilters, type FilterDef } from "@/components/dashboard/ColumnFilter";
 import { Modal, Field, inputCls } from "@/components/dashboard/Modal";
 import { PrimaryButton } from "@/components/dashboard/DashboardPage";
+import { useTableSort, SortableTh, SortResetChip, type SortField } from "@/components/dashboard/useTableSort";
 
 type Range = "today" | "week" | "month" | "all";
 type Status = "all" | "New" | "Contacted" | "Booked" | "Closed";
@@ -107,6 +108,15 @@ export function ConsultationsPage() {
     { key: "date", label: "Submitted", type: "text", get: (r: any) => new Date(r.submitted_at).toLocaleDateString() },
   ];
   const rows = applyColumnFilters(rawRows as any[], filterDefs, colFilters);
+  const sortFields: SortField<any>[] = [
+    { key: "submitted", type: "date", value: (r) => r.submitted_at },
+    { key: "client", type: "text", value: (r) => r.client_name ?? "" },
+    { key: "contact", type: "text", value: (r) => r.customers?.email || r.customers?.phone || "" },
+    { key: "service", type: "text", value: (r) => r.services?.name ?? r.service_name ?? "" },
+    { key: "status", type: "status", statusOrder: ["New", "Contacted", "Booked", "Closed"], value: (r) => r.status },
+  ];
+  const { sort, setSort, toggle: toggleSort, sorted } = useTableSort<any>(sortFields);
+  const sortedRows = sorted(rows as any[]);
 
   const stats = useMemo(() => {
     const total = rows.length;
@@ -192,6 +202,7 @@ export function ConsultationsPage() {
           </SelectContent>
         </Select>
         <ColumnFilterButton defs={filterDefs} rows={rawRows as any[]} filters={colFilters} onChange={setColFilters} />
+        <SortResetChip sort={sort} onReset={() => setSort(null)} />
       </div>
 
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
@@ -199,11 +210,11 @@ export function ConsultationsPage() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-[11px] uppercase tracking-wide text-gray-500 sticky top-0 z-10">
               <tr>
-                <th className="text-left font-medium px-3 py-2">Submitted</th>
-                <th className="text-left font-medium px-3 py-2">Client</th>
-                <th className="text-left font-medium px-3 py-2">Contact</th>
-                <th className="text-left font-medium px-3 py-2">Service interest</th>
-                <th className="text-left font-medium px-3 py-2">Status</th>
+                <SortableTh sortKey="submitted" label="Submitted" type="date" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="client" label="Client" type="text" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="contact" label="Contact" type="text" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="service" label="Service interest" type="text" currentSort={sort} onToggle={toggleSort} />
+                <SortableTh sortKey="status" label="Status" type="status" currentSort={sort} onToggle={toggleSort} />
                 <th className="text-right font-medium px-3 py-2">Actions</th>
               </tr>
             </thead>
@@ -211,13 +222,13 @@ export function ConsultationsPage() {
               {isLoading && (
                 <tr><td colSpan={6} className="px-3 py-6 text-center text-xs text-gray-400">Loading…</td></tr>
               )}
-              {!isLoading && rows.length === 0 && (
+              {!isLoading && sortedRows.length === 0 && (
                 <tr><td colSpan={6} className="px-3 py-10 text-center text-xs text-gray-400">
                   <ClipboardList className="mx-auto mb-2" size={20} />
                   No consultations in this view.
                 </td></tr>
               )}
-              {rows.map((c: any) => {
+              {sortedRows.map((c: any) => {
                 const d = new Date(c.submitted_at);
                 const email = c.customers?.email;
                 const phone = c.customers?.phone;
