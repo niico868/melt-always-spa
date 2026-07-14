@@ -48,8 +48,15 @@ export function UpcomingAppointments() {
           </thead>
           <tbody>
             {rows.map((a: any) => (
-              <tr key={a.id} className="group text-xs border-b border-gray-50 last:border-0">
-                <td className="text-gray-700 py-1.5 whitespace-nowrap">{new Date(a.scheduled_at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}</td>
+              <tr key={a.id} className="group text-xs border-b border-gray-50 last:border-0 align-top">
+                <td className="py-1.5 whitespace-nowrap">
+                  <div className="text-gray-900 font-medium leading-tight">
+                    {new Date(a.scheduled_at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
+                  </div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-wide leading-tight">
+                    {new Date(a.scheduled_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "2-digit" }).replace(/ /g, "/")}
+                  </div>
+                </td>
                 <td className="text-gray-900 font-medium py-1.5 truncate">
                   {a.customers?.id ? (
                     <Link to="/dashboard/customers/$id" params={{ id: a.customers.id }} className="hover:text-[#E8246A] hover:underline">

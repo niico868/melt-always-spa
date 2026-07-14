@@ -17,16 +17,21 @@ export function useDashboardKpis() {
       const monthStart = startOfMonth().toISOString();
       const prevMonthStart = startOfPrevMonth().toISOString();
 
-      const [aptToday, consWeek, customersMonth, salesMonth, salesPrev] = await Promise.all([
+      const [aptToday, consWeek, customersMonth, paysMonth, paysPrev] = await Promise.all([
         supabase.from("appointments").select("id", { count: "exact", head: true }).gte("scheduled_at", startToday).lt("scheduled_at", endToday),
         supabase.from("consultations").select("id", { count: "exact", head: true }).gte("submitted_at", weekStart),
         supabase.from("customers").select("id", { count: "exact", head: true }).gte("created_at", monthStart),
-        supabase.from("sales").select("amount").gte("sold_at", monthStart),
-        supabase.from("sales").select("amount").gte("sold_at", prevMonthStart).lt("sold_at", monthStart),
+        (supabase.from("payments") as any).select("amount, kind, recorded_at, invoices!inner(status)").gte("recorded_at", monthStart),
+        (supabase.from("payments") as any).select("amount, kind, recorded_at, invoices!inner(status)").gte("recorded_at", prevMonthStart).lt("recorded_at", monthStart),
       ]);
 
-      const sumThis = (salesMonth.data ?? []).reduce((s, r) => s + Number(r.amount), 0);
-      const sumPrev = (salesPrev.data ?? []).reduce((s, r) => s + Number(r.amount), 0);
+      const netSum = (rows: any[]) => rows.reduce((s, p) => {
+        if (p.invoices?.status === "Void") return s;
+        const sign = p.kind === "refund" ? -1 : 1;
+        return s + sign * Number(p.amount);
+      }, 0);
+      const sumThis = netSum(paysMonth.data ?? []);
+      const sumPrev = netSum(paysPrev.data ?? []);
       const trend = sumPrev > 0 ? Math.round(((sumThis - sumPrev) / sumPrev) * 100) : null;
 
       return {
@@ -44,13 +49,20 @@ export function useRecentSales() {
   return useQuery({
     queryKey: ["dashboard", "recent-sales"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("sales")
-        .select("id, description, amount, sold_at")
-        .order("sold_at", { ascending: false })
-        .limit(6);
+      const { data, error } = await (supabase.from("payments") as any)
+        .select("id, amount, kind, recorded_at, invoices!inner(status, invoice_number, customers(full_name))")
+        .order("recorded_at", { ascending: false })
+        .limit(20);
       if (error) throw error;
-      return data ?? [];
+      return (data ?? [])
+        .filter((p: any) => p.invoices?.status !== "Void")
+        .slice(0, 6)
+        .map((p: any) => ({
+          id: p.id,
+          description: `${p.invoices?.customers?.full_name ?? "Walk-in"} · ${p.invoices?.invoice_number ?? ""}`,
+          amount: p.kind === "refund" ? -Number(p.amount) : Number(p.amount),
+          sold_at: p.recorded_at,
+        }));
     },
   });
 }

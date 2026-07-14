@@ -29,6 +29,15 @@ function ReportsPage() {
           <Tile label="Total customers" value={String(customers?.length ?? 0)} />
           <Tile label="Avg ticket" value={fmtMoney(avgTicket)} />
         </div>
+        <div>
+          <div className="text-[11px] uppercase tracking-wide text-gray-500 font-semibold mb-2">Decision insights <span className="text-gray-400 normal-case font-normal">· placeholder metrics</span></div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <Tile label="Consult → Appt rate" value="60%" hint="9 of 15 consultations booked" />
+            <Tile label="No-show / cancel rate" value="13%" hint="2 of 15 appointments" />
+            <Tile label="Cost per lead" value={fmtMoney(42)} hint="Avg across channels" />
+            <LeadSourceTile />
+          </div>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 min-h-[280px]">
           <ConsultationChart />
           <TopServicesChart />
@@ -38,11 +47,36 @@ function ReportsPage() {
   );
 }
 
-function Tile({ label, value }: { label: string; value: string }) {
+function Tile({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
       <div className="text-[10px] uppercase tracking-wide text-gray-500">{label}</div>
       <div className="text-lg font-bold text-[#1A1A2E] mt-1">{value}</div>
+      {hint && <div className="text-[10px] text-gray-400 mt-0.5">{hint}</div>}
+    </div>
+  );
+}
+
+function LeadSourceTile() {
+  const sources = [
+    { name: "WhatsApp", count: 6, color: "bg-emerald-500" },
+    { name: "Instagram", count: 5, color: "bg-pink-500" },
+    { name: "Website", count: 4, color: "bg-sky-500" },
+  ];
+  const total = sources.reduce((s, x) => s + x.count, 0);
+  return (
+    <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+      <div className="text-[10px] uppercase tracking-wide text-gray-500">Lead sources</div>
+      <div className="mt-1 space-y-1">
+        {sources.map((s) => (
+          <div key={s.name} className="flex items-center gap-2 text-[11px]">
+            <span className={`inline-block w-2 h-2 rounded-full ${s.color}`} />
+            <span className="text-gray-700 flex-1">{s.name}</span>
+            <span className="font-semibold text-[#1A1A2E]">{s.count}</span>
+            <span className="text-gray-400">({Math.round((s.count / total) * 100)}%)</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

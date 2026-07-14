@@ -78,6 +78,14 @@ function SalesPage() {
     },
     { key: "date", header: "Date", accessor: (r) => r.created_at, render: (r) => fmtDateTime(r.created_at) },
     {
+      key: "appointment",
+      header: "Appointment",
+      accessor: (r) => r.appointments?.scheduled_at ?? "",
+      render: (r) => r.appointments?.scheduled_at
+        ? <span className="text-gray-700">{fmtDate(r.appointments.scheduled_at)}</span>
+        : <span className="text-gray-400">—</span>,
+    },
+    {
       key: "customer",
       header: "Customer",
       accessor: (r) => r.customers?.full_name,
@@ -135,7 +143,6 @@ function SalesPage() {
       header: "Status",
       render: (r) => <StatusBadge status={r.status} />,
     },
-    { key: "updated", header: "Updated", render: (r) => fmtDate(r.updated_at) },
   ];
 
   return (
