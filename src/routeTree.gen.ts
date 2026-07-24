@@ -9,149 +9,54 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VisitingRouteImport } from './routes/visiting'
-import { Route as TreatmentFinderRouteImport } from './routes/treatment-finder'
-import { Route as TimelineRouteImport } from './routes/timeline'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SetPasswordRouteImport } from './routes/set-password'
-import { Route as ServicesRouteImport } from './routes/services'
-import { Route as ReviewsRouteImport } from './routes/reviews'
-import { Route as ProductsRouteImport } from './routes/products'
-import { Route as PoliciesRouteImport } from './routes/policies'
-import { Route as PackagesRouteImport } from './routes/packages'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as JournalRouteImport } from './routes/journal'
-import { Route as GalleryRouteImport } from './routes/gallery'
-import { Route as FaqRouteImport } from './routes/faq'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CertificationsRouteImport } from './routes/certifications'
-import { Route as BookingRouteImport } from './routes/booking'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AccountRouteImport } from './routes/account'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as JournalIndexRouteImport } from './routes/journal.index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AccountRouteImport } from './routes/account'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BookingRouteImport } from './routes/booking'
+import { Route as CertificationsRouteImport } from './routes/certifications'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as JournalRouteImport } from './routes/journal'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as PackagesRouteImport } from './routes/packages'
+import { Route as PoliciesRouteImport } from './routes/policies'
+import { Route as ProductsRouteImport } from './routes/products'
+import { Route as ReviewsRouteImport } from './routes/reviews'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as SetPasswordRouteImport } from './routes/set-password'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TimelineRouteImport } from './routes/timeline'
+import { Route as TreatmentFinderRouteImport } from './routes/treatment-finder'
+import { Route as VisitingRouteImport } from './routes/visiting'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
-import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
-import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
-import { Route as DashboardTherapistsRouteImport } from './routes/dashboard.therapists'
-import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
-import { Route as DashboardServicesRouteImport } from './routes/dashboard.services'
-import { Route as DashboardSalesRouteImport } from './routes/dashboard.sales'
-import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
-import { Route as DashboardMarketingRouteImport } from './routes/dashboard.marketing'
-import { Route as DashboardInterestsRouteImport } from './routes/dashboard.interests'
-import { Route as DashboardEmployeesRouteImport } from './routes/dashboard.employees'
-import { Route as DashboardCustomersRouteImport } from './routes/dashboard.customers'
-import { Route as DashboardConsultationsRouteImport } from './routes/dashboard.consultations'
-import { Route as DashboardAuditRouteImport } from './routes/dashboard.audit'
 import { Route as DashboardAppointmentsRouteImport } from './routes/dashboard.appointments'
-import { Route as DashboardSalesIndexRouteImport } from './routes/dashboard.sales.index'
-import { Route as DashboardCustomersIndexRouteImport } from './routes/dashboard.customers.index'
+import { Route as DashboardAuditRouteImport } from './routes/dashboard.audit'
+import { Route as DashboardConsultationsRouteImport } from './routes/dashboard.consultations'
+import { Route as DashboardCustomersRouteImport } from './routes/dashboard.customers'
+import { Route as DashboardEmployeesRouteImport } from './routes/dashboard.employees'
+import { Route as DashboardInterestsRouteImport } from './routes/dashboard.interests'
+import { Route as DashboardMarketingRouteImport } from './routes/dashboard.marketing'
+import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
+import { Route as DashboardSalesRouteImport } from './routes/dashboard.sales'
+import { Route as DashboardServicesRouteImport } from './routes/dashboard.services'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
+import { Route as DashboardTherapistsRouteImport } from './routes/dashboard.therapists'
+import { Route as JournalIndexRouteImport } from './routes/journal.index'
+import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
+import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as DashboardAppointmentsIndexRouteImport } from './routes/dashboard.appointments.index'
-import { Route as DashboardSalesIdRouteImport } from './routes/dashboard.sales.$id'
-import { Route as DashboardCustomersIdRouteImport } from './routes/dashboard.customers.$id'
 import { Route as DashboardAppointmentsIdRouteImport } from './routes/dashboard.appointments.$id'
+import { Route as DashboardCustomersIndexRouteImport } from './routes/dashboard.customers.index'
+import { Route as DashboardCustomersIdRouteImport } from './routes/dashboard.customers.$id'
+import { Route as DashboardSalesIndexRouteImport } from './routes/dashboard.sales.index'
+import { Route as DashboardSalesIdRouteImport } from './routes/dashboard.sales.$id'
 
-const VisitingRoute = VisitingRouteImport.update({
-  id: '/visiting',
-  path: '/visiting',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TreatmentFinderRoute = TreatmentFinderRouteImport.update({
-  id: '/treatment-finder',
-  path: '/treatment-finder',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TimelineRoute = TimelineRouteImport.update({
-  id: '/timeline',
-  path: '/timeline',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SetPasswordRoute = SetPasswordRouteImport.update({
-  id: '/set-password',
-  path: '/set-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReviewsRoute = ReviewsRouteImport.update({
-  id: '/reviews',
-  path: '/reviews',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProductsRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PoliciesRoute = PoliciesRouteImport.update({
-  id: '/policies',
-  path: '/policies',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PackagesRoute = PackagesRouteImport.update({
-  id: '/packages',
-  path: '/packages',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JournalRoute = JournalRouteImport.update({
-  id: '/journal',
-  path: '/journal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GalleryRoute = GalleryRouteImport.update({
-  id: '/gallery',
-  path: '/gallery',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CertificationsRoute = CertificationsRouteImport.update({
-  id: '/certifications',
-  path: '/certifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BookingRoute = BookingRouteImport.update({
-  id: '/booking',
-  path: '/booking',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AccountRoute = AccountRouteImport.update({
-  id: '/account',
-  path: '/account',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -159,84 +64,109 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JournalIndexRoute = JournalIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => JournalRoute,
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingRoute = BookingRouteImport.update({
+  id: '/booking',
+  path: '/booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificationsRoute = CertificationsRouteImport.update({
+  id: '/certifications',
+  path: '/certifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PackagesRoute = PackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesRoute = PoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsRoute = ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetPasswordRoute = SetPasswordRouteImport.update({
+  id: '/set-password',
+  path: '/set-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TreatmentFinderRoute = TreatmentFinderRouteImport.update({
+  id: '/treatment-finder',
+  path: '/treatment-finder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VisitingRoute = VisitingRouteImport.update({
+  id: '/visiting',
+  path: '/visiting',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const LocationsSlugRoute = LocationsSlugRouteImport.update({
-  id: '/locations/$slug',
-  path: '/locations/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JournalSlugRoute = JournalSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => JournalRoute,
-} as any)
-const DashboardTherapistsRoute = DashboardTherapistsRouteImport.update({
-  id: '/therapists',
-  path: '/therapists',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardServicesRoute = DashboardServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardSalesRoute = DashboardSalesRouteImport.update({
-  id: '/sales',
-  path: '/sales',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardReportsRoute = DashboardReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardMarketingRoute = DashboardMarketingRouteImport.update({
-  id: '/marketing',
-  path: '/marketing',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardInterestsRoute = DashboardInterestsRouteImport.update({
-  id: '/interests',
-  path: '/interests',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardEmployeesRoute = DashboardEmployeesRouteImport.update({
-  id: '/employees',
-  path: '/employees',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardCustomersRoute = DashboardCustomersRouteImport.update({
-  id: '/customers',
-  path: '/customers',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardConsultationsRoute = DashboardConsultationsRouteImport.update({
-  id: '/consultations',
-  path: '/consultations',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardAuditRoute = DashboardAuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardAppointmentsRoute = DashboardAppointmentsRouteImport.update({
@@ -244,15 +174,75 @@ const DashboardAppointmentsRoute = DashboardAppointmentsRouteImport.update({
   path: '/appointments',
   getParentRoute: () => DashboardRoute,
 } as any)
-const DashboardSalesIndexRoute = DashboardSalesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DashboardSalesRoute,
+const DashboardAuditRoute = DashboardAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => DashboardRoute,
 } as any)
-const DashboardCustomersIndexRoute = DashboardCustomersIndexRouteImport.update({
+const DashboardConsultationsRoute = DashboardConsultationsRouteImport.update({
+  id: '/consultations',
+  path: '/consultations',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCustomersRoute = DashboardCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEmployeesRoute = DashboardEmployeesRouteImport.update({
+  id: '/employees',
+  path: '/employees',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardInterestsRoute = DashboardInterestsRouteImport.update({
+  id: '/interests',
+  path: '/interests',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardMarketingRoute = DashboardMarketingRouteImport.update({
+  id: '/marketing',
+  path: '/marketing',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardReportsRoute = DashboardReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSalesRoute = DashboardSalesRouteImport.update({
+  id: '/sales',
+  path: '/sales',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardServicesRoute = DashboardServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardTherapistsRoute = DashboardTherapistsRouteImport.update({
+  id: '/therapists',
+  path: '/therapists',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const JournalIndexRoute = JournalIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DashboardCustomersRoute,
+  getParentRoute: () => JournalRoute,
+} as any)
+const JournalSlugRoute = JournalSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => JournalRoute,
+} as any)
+const LocationsSlugRoute = LocationsSlugRouteImport.update({
+  id: '/locations/$slug',
+  path: '/locations/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardAppointmentsIndexRoute =
   DashboardAppointmentsIndexRouteImport.update({
@@ -260,20 +250,30 @@ const DashboardAppointmentsIndexRoute =
     path: '/',
     getParentRoute: () => DashboardAppointmentsRoute,
   } as any)
-const DashboardSalesIdRoute = DashboardSalesIdRouteImport.update({
+const DashboardAppointmentsIdRoute = DashboardAppointmentsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
-  getParentRoute: () => DashboardSalesRoute,
+  getParentRoute: () => DashboardAppointmentsRoute,
+} as any)
+const DashboardCustomersIndexRoute = DashboardCustomersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardCustomersRoute,
 } as any)
 const DashboardCustomersIdRoute = DashboardCustomersIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => DashboardCustomersRoute,
 } as any)
-const DashboardAppointmentsIdRoute = DashboardAppointmentsIdRouteImport.update({
+const DashboardSalesIndexRoute = DashboardSalesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardSalesRoute,
+} as any)
+const DashboardSalesIdRoute = DashboardSalesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
-  getParentRoute: () => DashboardAppointmentsRoute,
+  getParentRoute: () => DashboardSalesRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -574,144 +574,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/visiting': {
-      id: '/visiting'
-      path: '/visiting'
-      fullPath: '/visiting'
-      preLoaderRoute: typeof VisitingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/treatment-finder': {
-      id: '/treatment-finder'
-      path: '/treatment-finder'
-      fullPath: '/treatment-finder'
-      preLoaderRoute: typeof TreatmentFinderRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/timeline': {
-      id: '/timeline'
-      path: '/timeline'
-      fullPath: '/timeline'
-      preLoaderRoute: typeof TimelineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/set-password': {
-      id: '/set-password'
-      path: '/set-password'
-      fullPath: '/set-password'
-      preLoaderRoute: typeof SetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reviews': {
-      id: '/reviews'
-      path: '/reviews'
-      fullPath: '/reviews'
-      preLoaderRoute: typeof ReviewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/policies': {
-      id: '/policies'
-      path: '/policies'
-      fullPath: '/policies'
-      preLoaderRoute: typeof PoliciesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/packages': {
-      id: '/packages'
-      path: '/packages'
-      fullPath: '/packages'
-      preLoaderRoute: typeof PackagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/journal': {
-      id: '/journal'
-      path: '/journal'
-      fullPath: '/journal'
-      preLoaderRoute: typeof JournalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gallery': {
-      id: '/gallery'
-      path: '/gallery'
-      fullPath: '/gallery'
-      preLoaderRoute: typeof GalleryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/certifications': {
-      id: '/certifications'
-      path: '/certifications'
-      fullPath: '/certifications'
-      preLoaderRoute: typeof CertificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/booking': {
-      id: '/booking'
-      path: '/booking'
-      fullPath: '/booking'
-      preLoaderRoute: typeof BookingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -721,116 +588,151 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/journal/': {
-      id: '/journal/'
-      path: '/'
-      fullPath: '/journal/'
-      preLoaderRoute: typeof JournalIndexRouteImport
-      parentRoute: typeof JournalRoute
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/booking': {
+      id: '/booking'
+      path: '/booking'
+      fullPath: '/booking'
+      preLoaderRoute: typeof BookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certifications': {
+      id: '/certifications'
+      path: '/certifications'
+      fullPath: '/certifications'
+      preLoaderRoute: typeof CertificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/packages': {
+      id: '/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof PackagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/policies': {
+      id: '/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof PoliciesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/set-password': {
+      id: '/set-password'
+      path: '/set-password'
+      fullPath: '/set-password'
+      preLoaderRoute: typeof SetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/treatment-finder': {
+      id: '/treatment-finder'
+      path: '/treatment-finder'
+      fullPath: '/treatment-finder'
+      preLoaderRoute: typeof TreatmentFinderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/visiting': {
+      id: '/visiting'
+      path: '/visiting'
+      fullPath: '/visiting'
+      preLoaderRoute: typeof VisitingRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/locations/$slug': {
-      id: '/locations/$slug'
-      path: '/locations/$slug'
-      fullPath: '/locations/$slug'
-      preLoaderRoute: typeof LocationsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/journal/$slug': {
-      id: '/journal/$slug'
-      path: '/$slug'
-      fullPath: '/journal/$slug'
-      preLoaderRoute: typeof JournalSlugRouteImport
-      parentRoute: typeof JournalRoute
-    }
-    '/dashboard/therapists': {
-      id: '/dashboard/therapists'
-      path: '/therapists'
-      fullPath: '/dashboard/therapists'
-      preLoaderRoute: typeof DashboardTherapistsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/settings': {
-      id: '/dashboard/settings'
-      path: '/settings'
-      fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof DashboardSettingsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/services': {
-      id: '/dashboard/services'
-      path: '/services'
-      fullPath: '/dashboard/services'
-      preLoaderRoute: typeof DashboardServicesRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/sales': {
-      id: '/dashboard/sales'
-      path: '/sales'
-      fullPath: '/dashboard/sales'
-      preLoaderRoute: typeof DashboardSalesRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/reports': {
-      id: '/dashboard/reports'
-      path: '/reports'
-      fullPath: '/dashboard/reports'
-      preLoaderRoute: typeof DashboardReportsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/marketing': {
-      id: '/dashboard/marketing'
-      path: '/marketing'
-      fullPath: '/dashboard/marketing'
-      preLoaderRoute: typeof DashboardMarketingRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/interests': {
-      id: '/dashboard/interests'
-      path: '/interests'
-      fullPath: '/dashboard/interests'
-      preLoaderRoute: typeof DashboardInterestsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/employees': {
-      id: '/dashboard/employees'
-      path: '/employees'
-      fullPath: '/dashboard/employees'
-      preLoaderRoute: typeof DashboardEmployeesRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/customers': {
-      id: '/dashboard/customers'
-      path: '/customers'
-      fullPath: '/dashboard/customers'
-      preLoaderRoute: typeof DashboardCustomersRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/consultations': {
-      id: '/dashboard/consultations'
-      path: '/consultations'
-      fullPath: '/dashboard/consultations'
-      preLoaderRoute: typeof DashboardConsultationsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/audit': {
-      id: '/dashboard/audit'
-      path: '/audit'
-      fullPath: '/dashboard/audit'
-      preLoaderRoute: typeof DashboardAuditRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/appointments': {
@@ -840,19 +742,103 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAppointmentsRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/dashboard/sales/': {
-      id: '/dashboard/sales/'
-      path: '/'
-      fullPath: '/dashboard/sales/'
-      preLoaderRoute: typeof DashboardSalesIndexRouteImport
-      parentRoute: typeof DashboardSalesRoute
+    '/dashboard/audit': {
+      id: '/dashboard/audit'
+      path: '/audit'
+      fullPath: '/dashboard/audit'
+      preLoaderRoute: typeof DashboardAuditRouteImport
+      parentRoute: typeof DashboardRoute
     }
-    '/dashboard/customers/': {
-      id: '/dashboard/customers/'
+    '/dashboard/consultations': {
+      id: '/dashboard/consultations'
+      path: '/consultations'
+      fullPath: '/dashboard/consultations'
+      preLoaderRoute: typeof DashboardConsultationsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/customers': {
+      id: '/dashboard/customers'
+      path: '/customers'
+      fullPath: '/dashboard/customers'
+      preLoaderRoute: typeof DashboardCustomersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/employees': {
+      id: '/dashboard/employees'
+      path: '/employees'
+      fullPath: '/dashboard/employees'
+      preLoaderRoute: typeof DashboardEmployeesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/interests': {
+      id: '/dashboard/interests'
+      path: '/interests'
+      fullPath: '/dashboard/interests'
+      preLoaderRoute: typeof DashboardInterestsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/marketing': {
+      id: '/dashboard/marketing'
+      path: '/marketing'
+      fullPath: '/dashboard/marketing'
+      preLoaderRoute: typeof DashboardMarketingRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/reports': {
+      id: '/dashboard/reports'
+      path: '/reports'
+      fullPath: '/dashboard/reports'
+      preLoaderRoute: typeof DashboardReportsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/sales': {
+      id: '/dashboard/sales'
+      path: '/sales'
+      fullPath: '/dashboard/sales'
+      preLoaderRoute: typeof DashboardSalesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/services': {
+      id: '/dashboard/services'
+      path: '/services'
+      fullPath: '/dashboard/services'
+      preLoaderRoute: typeof DashboardServicesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/therapists': {
+      id: '/dashboard/therapists'
+      path: '/therapists'
+      fullPath: '/dashboard/therapists'
+      preLoaderRoute: typeof DashboardTherapistsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/journal/': {
+      id: '/journal/'
       path: '/'
-      fullPath: '/dashboard/customers/'
-      preLoaderRoute: typeof DashboardCustomersIndexRouteImport
-      parentRoute: typeof DashboardCustomersRoute
+      fullPath: '/journal/'
+      preLoaderRoute: typeof JournalIndexRouteImport
+      parentRoute: typeof JournalRoute
+    }
+    '/journal/$slug': {
+      id: '/journal/$slug'
+      path: '/$slug'
+      fullPath: '/journal/$slug'
+      preLoaderRoute: typeof JournalSlugRouteImport
+      parentRoute: typeof JournalRoute
+    }
+    '/locations/$slug': {
+      id: '/locations/$slug'
+      path: '/locations/$slug'
+      fullPath: '/locations/$slug'
+      preLoaderRoute: typeof LocationsSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/appointments/': {
       id: '/dashboard/appointments/'
@@ -861,12 +847,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAppointmentsIndexRouteImport
       parentRoute: typeof DashboardAppointmentsRoute
     }
-    '/dashboard/sales/$id': {
-      id: '/dashboard/sales/$id'
+    '/dashboard/appointments/$id': {
+      id: '/dashboard/appointments/$id'
       path: '/$id'
-      fullPath: '/dashboard/sales/$id'
-      preLoaderRoute: typeof DashboardSalesIdRouteImport
-      parentRoute: typeof DashboardSalesRoute
+      fullPath: '/dashboard/appointments/$id'
+      preLoaderRoute: typeof DashboardAppointmentsIdRouteImport
+      parentRoute: typeof DashboardAppointmentsRoute
+    }
+    '/dashboard/customers/': {
+      id: '/dashboard/customers/'
+      path: '/'
+      fullPath: '/dashboard/customers/'
+      preLoaderRoute: typeof DashboardCustomersIndexRouteImport
+      parentRoute: typeof DashboardCustomersRoute
     }
     '/dashboard/customers/$id': {
       id: '/dashboard/customers/$id'
@@ -875,12 +868,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCustomersIdRouteImport
       parentRoute: typeof DashboardCustomersRoute
     }
-    '/dashboard/appointments/$id': {
-      id: '/dashboard/appointments/$id'
+    '/dashboard/sales/': {
+      id: '/dashboard/sales/'
+      path: '/'
+      fullPath: '/dashboard/sales/'
+      preLoaderRoute: typeof DashboardSalesIndexRouteImport
+      parentRoute: typeof DashboardSalesRoute
+    }
+    '/dashboard/sales/$id': {
+      id: '/dashboard/sales/$id'
       path: '/$id'
-      fullPath: '/dashboard/appointments/$id'
-      preLoaderRoute: typeof DashboardAppointmentsIdRouteImport
-      parentRoute: typeof DashboardAppointmentsRoute
+      fullPath: '/dashboard/sales/$id'
+      preLoaderRoute: typeof DashboardSalesIdRouteImport
+      parentRoute: typeof DashboardSalesRoute
     }
   }
 }
