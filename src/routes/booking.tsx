@@ -114,17 +114,21 @@ function Booking() {
     saveLead(lead);
     // Persist to backend (dedupe by phone/email, create consultation lead)
     try {
-      await (supabase.rpc as any)("public_submit_consultation", {
-        p_full_name: lead.fullName,
-        p_phone: lead.phone,
-        p_email: lead.email,
-        p_concern: concern,
-        p_areas: allAreas.join(", "),
-        p_notes: lead.notes,
-        p_preferred_date: lead.preferredDate,
-        p_preferred_time: lead.preferredTime,
-        p_location: "El Dorado",
-        p_suggested_package: suggestion.pkg,
+      await fetch("/api/public/submit-consultation", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          full_name: lead.fullName,
+          phone: lead.phone,
+          email: lead.email,
+          concern,
+          areas: allAreas.join(", "),
+          notes: lead.notes,
+          preferred_date: lead.preferredDate,
+          preferred_time: lead.preferredTime,
+          location: "El Dorado",
+          suggested_package: suggestion.pkg,
+        }),
       });
     } catch (err) {
       console.warn("consultation submit failed", err);
