@@ -10,13 +10,13 @@ export const Route = createFileRoute("/api/public/submit-consultation")({
         } catch {
           return new Response(JSON.stringify({ error: "Invalid JSON" }), { status: 400, headers: { "content-type": "application/json" } });
         }
-        const s = (v: unknown) => (typeof v === "string" ? v.slice(0, 2000) : null);
+        const s = (v: unknown) => (typeof v === "string" ? v.slice(0, 2000) : undefined);
         const full_name = s(body.full_name);
         if (!full_name || full_name.trim().length < 2) {
           return new Response(JSON.stringify({ error: "Name is required" }), { status: 400, headers: { "content-type": "application/json" } });
         }
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const { data, error } = await supabaseAdmin.rpc("public_submit_consultation", {
+        const { data, error } = await (supabaseAdmin.rpc as any)("public_submit_consultation", {
           p_full_name: full_name,
           p_phone: s(body.phone),
           p_email: s(body.email),

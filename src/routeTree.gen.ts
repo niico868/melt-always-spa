@@ -47,6 +47,7 @@ import { Route as DashboardTherapistsRouteImport } from './routes/dashboard.ther
 import { Route as JournalIndexRouteImport } from './routes/journal.index'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as ApiPublicSubmitConsultationRouteImport } from './routes/api/public/submit-consultation'
 import { Route as DashboardAppointmentsIndexRouteImport } from './routes/dashboard.appointments.index'
 import { Route as DashboardAppointmentsIdRouteImport } from './routes/dashboard.appointments.$id'
 import { Route as DashboardCustomersIndexRouteImport } from './routes/dashboard.customers.index'
@@ -244,6 +245,12 @@ const LocationsSlugRoute = LocationsSlugRouteImport.update({
   path: '/locations/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicSubmitConsultationRoute =
+  ApiPublicSubmitConsultationRouteImport.update({
+    id: '/api/public/submit-consultation',
+    path: '/api/public/submit-consultation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardAppointmentsIndexRoute =
   DashboardAppointmentsIndexRouteImport.update({
     id: '/',
@@ -315,6 +322,7 @@ export interface FileRoutesByFullPath {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
   '/dashboard/sales/$id': typeof DashboardSalesIdRoute
@@ -356,6 +364,7 @@ export interface FileRoutesByTo {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard': typeof DashboardIndexRoute
   '/journal': typeof JournalIndexRoute
+  '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
   '/dashboard/sales/$id': typeof DashboardSalesIdRoute
@@ -403,6 +412,7 @@ export interface FileRoutesById {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
   '/dashboard/sales/$id': typeof DashboardSalesIdRoute
@@ -451,6 +461,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/api/public/submit-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
     | '/dashboard/sales/$id'
@@ -492,6 +503,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard'
     | '/journal'
+    | '/api/public/submit-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
     | '/dashboard/sales/$id'
@@ -538,6 +550,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/api/public/submit-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
     | '/dashboard/sales/$id'
@@ -570,6 +583,7 @@ export interface RootRouteChildren {
   TreatmentFinderRoute: typeof TreatmentFinderRoute
   VisitingRoute: typeof VisitingRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
+  ApiPublicSubmitConsultationRoute: typeof ApiPublicSubmitConsultationRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -840,6 +854,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/submit-consultation': {
+      id: '/api/public/submit-consultation'
+      path: '/api/public/submit-consultation'
+      fullPath: '/api/public/submit-consultation'
+      preLoaderRoute: typeof ApiPublicSubmitConsultationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/appointments/': {
       id: '/dashboard/appointments/'
       path: '/'
@@ -1000,6 +1021,7 @@ const rootRouteChildren: RootRouteChildren = {
   TreatmentFinderRoute: TreatmentFinderRoute,
   VisitingRoute: VisitingRoute,
   LocationsSlugRoute: LocationsSlugRoute,
+  ApiPublicSubmitConsultationRoute: ApiPublicSubmitConsultationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
