@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, Phone, Mail, MapPin, Clock } from "lucide-react";
 import { SITE, NAV } from "@/lib/site";
+import newMasLogo from "@/assets/melt-aways-logo-v4.png.asset.json";
 
 export function Footer() {
   return (
@@ -14,7 +15,7 @@ export function Footer() {
               className="h-28 w-auto [filter:contrast(1.15)_saturate(1.35)]"
             />
             <span className="text-xs text-taupe italic tracking-wide">a subsidiary of</span>
-            <img src={SITE.logoMAS} alt="Melt Aways Spa" className="h-20 w-auto" />
+            <img src={newMasLogo.url} alt="Melt Aways Spa" className="h-24 w-auto" />
           </div>
           <p className="mt-4 max-w-sm text-sm text-taupe leading-relaxed">
             A wellness, body-contouring, and aesthetic spa in Trinidad & Tobago. We guide women and men

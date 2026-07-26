@@ -43,10 +43,10 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   const accountLink: "/account" | "/dashboard" = user?.role === "client" ? "/account" : "/dashboard";
-  const linkClass = "nav-underline text-[13px] tracking-[0.08em] uppercase text-foreground/75 hover:text-primary transition-colors";
+  const linkClass = "nav-underline text-[13px] font-semibold tracking-[0.08em] uppercase text-foreground/85 hover:text-primary transition-colors";
   return (
     <header className={`sticky top-0 z-40 glass-nav border-b border-border/40 header-fade transition-transform duration-300 ease-out ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
-      <div className="mx-auto max-w-[1400px] px-5 lg:px-10 h-[calc(4rem+0.67em)] lg:h-[calc(5rem+0.67em)] grid grid-cols-[1fr_auto_1fr] items-center gap-6">
+      <div className="mx-auto max-w-[1400px] px-5 lg:px-10 pt-1 pb-2 lg:pt-1 lg:pb-3 grid grid-cols-[1fr_auto_1fr] items-center gap-6">
         {/* LEFT NAV */}
         <nav className="hidden lg:flex items-center justify-around gap-8">
           {NAV_LEFT.map((n: any) => (
@@ -55,8 +55,8 @@ export function Header() {
         </nav>
 
         {/* CENTER LOGO */}
-        <Link to="/" className="flex items-center justify-center py-3 lg:py-4 lg:col-start-2" aria-label="Melt Elite Aesthetics home">
-          <Logo className="h-16 lg:h-20 w-auto" />
+        <Link to="/" className="flex items-center justify-center py-1 lg:py-1.5 lg:col-start-2" aria-label="Melt Elite Aesthetics home">
+          <Logo className="h-14 lg:h-16 w-auto" />
         </Link>
 
         {/* RIGHT NAV + ACTIONS */}
@@ -66,23 +66,18 @@ export function Header() {
               <NavLink key={n.to} to={n.to} label={n.label} flag={n.flag} linkClass={linkClass} />
             ))}
           </nav>
-          <span className="h-5 w-px bg-border" />
           {user ? (
             <div className="flex items-center gap-3">
-              <Link to={accountLink} className="inline-flex items-center gap-1.5 text-[13px] text-taupe hover:text-primary">
+              <Link to={accountLink} className="inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 text-[13px] font-semibold text-foreground/85 hover:border-primary hover:text-primary transition">
                 <User className="w-4 h-4" /> {user.fullName.split(" ")[0]}
               </Link>
-              <button onClick={() => { signOut(); nav({ to: "/" }); }} className="text-[13px] text-taupe hover:text-primary">Sign out</button>
+              <button onClick={() => { signOut(); nav({ to: "/" }); }} className="text-[13px] font-semibold text-taupe hover:text-primary">Sign out</button>
             </div>
           ) : (
-            <Link to="/login" className="inline-flex items-center gap-1.5 text-[13px] text-taupe hover:text-primary">
+            <Link to="/login" className="inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 text-[13px] font-semibold text-foreground/85 hover:border-primary hover:text-primary transition">
               <User className="w-4 h-4" /> Account
             </Link>
           )}
-          <Link to="/booking"
-            className="inline-flex items-center rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-[13px] tracking-wide font-medium hover:opacity-90 transition soft-shadow">
-            Book Consultation
-          </Link>
         </div>
 
         {/* MOBILE TOGGLE */}
