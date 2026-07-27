@@ -125,9 +125,19 @@ function OverviewTab({ customer }: { customer: any }) {
   const dob = customer.date_of_birth;
   const age = dob ? Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 864e5)) : null;
   const dobLabel = dob ? `${fmtDate(dob)}${age != null ? ` · ${age} yrs` : ""}` : "Not on file";
+  const cs = String(customer.client_status ?? "lead").replace(/_/g, " ");
+  const csTone =
+    customer.client_status === "active_treatment" || customer.client_status === "maintenance" ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
+    customer.client_status === "archived" || customer.client_status === "inactive" ? "bg-gray-100 text-gray-500 border-gray-200" :
+    customer.client_status === "treatment_plan_completed" ? "bg-blue-50 text-blue-700 border-blue-200" :
+    "bg-pink-50 text-[#E8246A] border-pink-200";
   return (
     <div className="grid md:grid-cols-3 gap-3 text-xs">
       <div className="md:col-span-2 space-y-2">
+        <div className="flex items-center gap-2">
+          <span className={`inline-block text-[11px] px-2 py-0.5 rounded-full border capitalize font-medium ${csTone}`}>{cs}</span>
+          {customer.last_activity_at && <span className="text-[10px] text-gray-400">Last activity {fmtDate(customer.last_activity_at)}</span>}
+        </div>
         <div className="grid grid-cols-2 gap-2">
           {customer.phone && <InfoRow icon={<Phone size={12} />} label="Phone" value={customer.phone} />}
           {customer.email && <InfoRow icon={<Mail size={12} />} label="Email" value={customer.email} />}
