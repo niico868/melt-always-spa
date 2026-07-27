@@ -119,7 +119,7 @@ function MedBlock({ label, value, tone }: { label: string; value: string | null;
 function OverviewTab({ customer }: { customer: any }) {
   const { data: sales } = useCustomerSales(customer.id);
   const { data: appts } = useCustomerAppointments(customer.id);
-  const lifetime = (sales ?? []).reduce((s, r) => s + Number(r.amount || 0), 0);
+  const lifetime = (sales ?? []).reduce((s: number, r: any) => s + Number(r.amount || 0), 0);
   const visits = (appts ?? []).filter(a => a.status === "Completed").length;
   const lastVisit = (appts ?? []).find(a => a.status === "Completed")?.scheduled_at;
   const dob = customer.date_of_birth;
@@ -248,14 +248,17 @@ function ConsultationsTab({ customerId }: { customerId: string }) {
 
 function SalesTab({ customerId }: { customerId: string }) {
   const { data, isLoading } = useCustomerSales(customerId);
-  const total = (data ?? []).reduce((s, r: any) => s + Number(r.amount || 0), 0);
+  const total = (data ?? []).reduce((s: number, r: any) => s + Number(r.amount || 0), 0);
   if (isLoading) return <p className="text-xs text-gray-400">Loading…</p>;
   if (!data?.length) return <p className="text-xs text-gray-400 py-6 text-center">No sales.</p>;
   return <div>
     <div className="text-[11px] text-gray-500 mb-2">Lifetime: <span className="font-semibold text-gray-800">{fmtMoney(total)}</span></div>
     <ul className="space-y-2">{data.map((s: any) => (
       <li key={s.id} className="border border-gray-100 rounded-lg p-3 text-xs flex justify-between">
-        <div><div className="font-medium text-gray-800">{s.description}</div><div className="text-gray-500">{fmtDate(s.sold_at)}</div></div>
+        <div>
+          <Link to="/dashboard/sales/$id" params={{ id: s.id }} className="font-medium text-[#E8246A] hover:underline">{s.description}</Link>
+          <div className="text-gray-500">{fmtDate(s.sold_at)} · <span className={s.status === "Void" ? "text-gray-400" : s.status === "Paid" ? "text-emerald-700" : "text-amber-700"}>{s.status}</span></div>
+        </div>
         <span className="text-gray-800 font-medium">{fmtMoney(s.amount)}</span>
       </li>
     ))}</ul>
