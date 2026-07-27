@@ -9,7 +9,7 @@ import {
   useAddPayment, useDeletePayment, useVoidInvoice, useDuplicateInvoice, paidFrom, PAYMENT_METHODS,
   type InvoiceRow, type InvoiceItem,
 } from "@/lib/sales";
-import { useServices, useProducts } from "@/lib/dashboard-tables";
+import { useServices } from "@/lib/dashboard-tables";
 import { StatusBadge } from "./dashboard.sales";
 import { toast } from "sonner";
 
@@ -244,9 +244,8 @@ function InvoiceItemRow({ invoiceId, item, disabled }: { invoiceId: string; item
 
 function AddItemModal({ invoiceId, onClose }: { invoiceId: string; onClose: () => void }) {
   const { data: services = [] } = useServices();
-  const { data: products = [] } = useProducts();
   const add = useAddInvoiceItem(invoiceId);
-  const [kind, setKind] = useState<"service" | "product" | "manual">("service");
+  const [kind, setKind] = useState<"service" | "manual">("service");
   const [refId, setRefId] = useState("");
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState("1");
@@ -258,9 +257,6 @@ function AddItemModal({ invoiceId, onClose }: { invoiceId: string; onClose: () =
     if (kind === "service") {
       const s = services.find((x) => x.id === id);
       if (s) { setDescription(s.name); setUnitPrice(String(s.base_price)); }
-    } else if (kind === "product") {
-      const p = products.find((x) => x.id === id);
-      if (p) { setDescription(p.name); setUnitPrice(String(p.price)); }
     }
   }
 
@@ -270,7 +266,6 @@ function AddItemModal({ invoiceId, onClose }: { invoiceId: string; onClose: () =
       invoice_id: invoiceId,
       kind,
       service_id: kind === "service" ? refId || null : null,
-      product_id: kind === "product" ? refId || null : null,
       description: description.trim(),
       quantity: Number(quantity) || 1,
       unit_price: Number(unitPrice) || 0,
@@ -284,7 +279,7 @@ function AddItemModal({ invoiceId, onClose }: { invoiceId: string; onClose: () =
     <Modal open onClose={onClose} title="Add line item">
       <Field label="Type">
         <div className="flex gap-2">
-          {(["service", "product", "manual"] as const).map((k) => (
+          {(["service", "manual"] as const).map((k) => (
             <button
               key={k}
               onClick={() => { setKind(k); setRefId(""); setDescription(""); setUnitPrice("0"); }}
@@ -300,14 +295,6 @@ function AddItemModal({ invoiceId, onClose }: { invoiceId: string; onClose: () =
           <select className={inputCls} value={refId} onChange={(e) => onPickRef(e.target.value)}>
             <option value="">Select…</option>
             {services.map((s) => <option key={s.id} value={s.id}>{s.name} — {fmtMoney(s.base_price)}</option>)}
-          </select>
-        </Field>
-      )}
-      {kind === "product" && (
-        <Field label="Product">
-          <select className={inputCls} value={refId} onChange={(e) => onPickRef(e.target.value)}>
-            <option value="">Select…</option>
-            {products.map((p) => <option key={p.id} value={p.id}>{p.name} — {fmtMoney(p.price)}</option>)}
           </select>
         </Field>
       )}

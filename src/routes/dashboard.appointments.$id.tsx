@@ -186,6 +186,7 @@ function FinancialCard({ id, invoice, paid, remaining }: { id: string; invoice: 
   return (
     <Card title={`Financial · ${invoice.invoice_number}`} action={
       <div className="flex gap-1">
+        <a href={`/dashboard/sales/${invoice.id}`} className="text-[11px] px-2 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-50 inline-flex items-center gap-1">Open invoice</a>
         <button onClick={() => setPayOpen("payment")} className="text-[11px] px-2 py-1 rounded bg-green-600 text-white inline-flex items-center gap-1"><DollarSign size={11}/>Payment</button>
         <button onClick={() => setPayOpen("refund")} className="text-[11px] px-2 py-1 rounded border border-rose-300 text-rose-600 inline-flex items-center gap-1"><RotateCcw size={11}/>Refund</button>
         <button onClick={() => window.print()} className="text-[11px] px-2 py-1 rounded border inline-flex items-center gap-1"><Printer size={11}/>Print</button>

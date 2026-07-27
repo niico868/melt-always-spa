@@ -34,7 +34,6 @@ export type InvoiceItem = {
   id: string;
   invoice_id: string;
   kind: string;
-  product_id: string | null;
   service_id: string | null;
   description: string;
   quantity: number;
@@ -153,7 +152,6 @@ export function useDuplicateInvoice() {
         const rows = items.map((it) => ({
           invoice_id: newId,
           kind: it.kind,
-          product_id: it.product_id,
           service_id: it.service_id,
           description: it.description,
           quantity: it.quantity,
@@ -172,11 +170,10 @@ export function useDuplicateInvoice() {
 export function useAddInvoiceItem(id: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (row: { invoice_id: string; kind?: string; product_id?: string | null; service_id?: string | null; description: string; quantity: number; unit_price: number; line_discount?: number }) => {
+    mutationFn: async (row: { invoice_id: string; kind?: string; service_id?: string | null; description: string; quantity: number; unit_price: number; line_discount?: number }) => {
       const { error } = await (supabase.from("invoice_items") as any).insert({
         invoice_id: row.invoice_id,
         kind: row.kind ?? "service",
-        product_id: row.product_id ?? null,
         service_id: row.service_id ?? null,
         description: row.description,
         quantity: row.quantity,

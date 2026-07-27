@@ -206,24 +206,6 @@ export function useCustomerConsultations(customerId: string | undefined) {
   });
 }
 
-// ---------- Sales ----------
-export type Sale = {
-  id: string; description: string; amount: number; sold_at: string;
-  customer_id: string | null; customers: { full_name: string } | null;
-};
-export function useSales() {
-  return useQuery({
-    queryKey: ["sales"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("sales")
-        .select("id, description, amount, sold_at, customer_id, customers(full_name)")
-        .order("sold_at", { ascending: false });
-      if (error) throw error;
-      return (data ?? []) as unknown as Sale[];
-    },
-  });
-}
-
 // ---------- Services ----------
 export type Service = { id: string; name: string; base_price: number; fill_color: string; created_at: string };
 export function useServices() {
@@ -259,45 +241,6 @@ export function useDeleteService() {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["services"] }),
-  });
-}
-
-// ---------- Products ----------
-export type Product = { id: string; name: string; sku: string | null; price: number; stock: number; low_stock_threshold: number; created_at: string };
-export function useProducts() {
-  return useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("products").select("*").order("name");
-      if (error) throw error;
-      return (data ?? []) as Product[];
-    },
-  });
-}
-export function useUpsertProduct() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (row: { id?: string; name: string; sku: string; price: number; stock: number; low_stock_threshold: number }) => {
-      const payload = { name: row.name, sku: row.sku || null, price: row.price, stock: row.stock, low_stock_threshold: row.low_stock_threshold };
-      if (row.id) {
-        const { error } = await supabase.from("products").update(payload).eq("id", row.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.from("products").insert(payload);
-        if (error) throw error;
-      }
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["products"] }),
-  });
-}
-export function useDeleteProduct() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("products").delete().eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["products"] }),
   });
 }
 

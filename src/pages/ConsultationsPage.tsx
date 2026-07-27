@@ -425,11 +425,16 @@ function BookFromConsultationDialog({
 }: { consultation: any | null; onOpenChange: (v: boolean) => void; onBooked: () => void; }) {
   const open = !!consultation;
   const { data: lookups } = useLookups();
+  const qc = useQueryClient();
   const [when, setWhen] = useState<string>(toLocalInput());
   const [employeeId, setEmployeeId] = useState<string>("");
   const [saving, setSaving] = useState(false);
   const [customerId, setCustomerId] = useState<string>("");
   const [serviceId, setServiceId] = useState<string>("");
+  const [creatingCustomer, setCreatingCustomer] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [newEmail, setNewEmail] = useState("");
 
   useMemo(() => {
     if (!open) return;
@@ -437,6 +442,11 @@ function BookFromConsultationDialog({
     setEmployeeId("");
     setCustomerId(consultation?.customers?.id ?? consultation?.customer_id ?? "");
     setServiceId(consultation?.services?.id ?? consultation?.service_id ?? "");
+    const hasLinked = !!(consultation?.customers?.id ?? consultation?.customer_id);
+    setCreatingCustomer(!hasLinked);
+    setNewName(consultation?.client_name ?? "");
+    setNewPhone(consultation?.customers?.phone ?? "");
+    setNewEmail(consultation?.customers?.email ?? "");
   }, [open, consultation]);
 
   const { data: employees = [] } = useQuery({
@@ -444,13 +454,38 @@ function BookFromConsultationDialog({
     queryFn: async () => (await supabase.from("employees").select("id, full_name").order("full_name")).data ?? [],
   });
 
+  async function createCustomerInline(): Promise<string | null> {
+    if (!newName.trim() || newName.trim().length < 2) { toast.error("Enter the customer's name"); return null; }
+    const { data, error } = await (supabase.rpc as any)("upsert_customer_by_contact", {
+      p_full_name: newName.trim(),
+      p_phone: newPhone.trim() || null,
+      p_email: newEmail.trim() || null,
+      p_notes: null,
+    });
+    if (error) { toast.error(error.message); return null; }
+    const newId = data as string;
+    if (consultation?.id) {
+      await supabase.from("consultations").update({ customer_id: newId }).eq("id", consultation.id);
+    }
+    qc.invalidateQueries({ queryKey: ["cons-lookups"] });
+    qc.invalidateQueries({ queryKey: ["consultations-page"] });
+    return newId;
+  }
+
   async function book() {
-    if (!customerId) { toast.error("Pick a customer for this booking"); return; }
+    let cid = customerId;
+    if (creatingCustomer) {
+      const created = await createCustomerInline();
+      if (!created) return;
+      cid = created;
+      setCustomerId(created);
+    }
+    if (!cid) { toast.error("Pick a customer for this booking"); return; }
     if (!serviceId) { toast.error("Pick a service for this booking"); return; }
     if (!when) { toast.error("Pick a date & time"); return; }
     setSaving(true);
     const ins = await supabase.from("appointments").insert({
-      customer_id: customerId,
+      customer_id: cid,
       service_id: serviceId,
       employee_id: employeeId || null,
       scheduled_at: new Date(when).toISOString(),
@@ -472,14 +507,35 @@ function BookFromConsultationDialog({
         For <span className="font-medium text-gray-900">{consultation?.client_name}</span>
         {consultation?.services?.name && <> · {consultation.services.name}</>}
       </div>
-      <Field label="Customer">
-        <select value={customerId} onChange={(e) => setCustomerId(e.target.value)} className={inputCls}>
-          <option value="">— pick a customer —</option>
-          {(lookups?.customers ?? []).map((c: any) => (
-            <option key={c.id} value={c.id}>{c.full_name}</option>
-          ))}
-        </select>
-      </Field>
+      <div className="flex items-center justify-between mb-1">
+        <label className="text-[11px] text-gray-500">Customer</label>
+        <button
+          type="button"
+          onClick={() => setCreatingCustomer((v) => !v)}
+          className="text-[11px] text-[#E8246A] hover:underline"
+        >
+          {creatingCustomer ? "Pick existing instead" : "+ Create new customer"}
+        </button>
+      </div>
+      {creatingCustomer ? (
+        <div className="space-y-2 mb-3 border border-gray-100 rounded-lg p-2 bg-gray-50">
+          <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Full name" className={inputCls} />
+          <div className="grid grid-cols-2 gap-2">
+            <input value={newPhone} onChange={(e) => setNewPhone(e.target.value)} placeholder="Phone" className={inputCls} />
+            <input value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="Email" className={inputCls} />
+          </div>
+          <div className="text-[10px] text-gray-500">A new customer profile will be created and linked to this consultation.</div>
+        </div>
+      ) : (
+        <Field label="">
+          <select value={customerId} onChange={(e) => setCustomerId(e.target.value)} className={inputCls}>
+            <option value="">— pick a customer —</option>
+            {(lookups?.customers ?? []).map((c: any) => (
+              <option key={c.id} value={c.id}>{c.full_name}</option>
+            ))}
+          </select>
+        </Field>
+      )}
       <Field label="Service">
         <select value={serviceId} onChange={(e) => setServiceId(e.target.value)} className={inputCls}>
           <option value="">— pick a service —</option>

@@ -11,6 +11,42 @@ import { useDashboardKpis } from "@/lib/dashboard-queries";
 
 export const Route = createFileRoute("/dashboard/reports")({ component: ReportsPage });
 
+function useEmployeePerformance() {
+  return useQuery({
+    queryKey: ["reports", "employee-perf"],
+    queryFn: async () => {
+      const since = new Date();
+      since.setDate(since.getDate() - 90);
+      const { data: appts } = await supabase
+        .from("appointments")
+        .select("id, status, employee_id, employees(id, full_name)")
+        .gte("scheduled_at", since.toISOString());
+      const { data: invs } = await (supabase.from("invoices") as any)
+        .select("total, status, voided_at, appointments(employee_id)")
+        .gte("created_at", since.toISOString());
+      const map = new Map<string, { name: string; completed: number; total: number; noShow: number; revenue: number }>();
+      for (const a of (appts ?? []) as any[]) {
+        const key = a.employee_id ?? "unassigned";
+        const name = a.employees?.full_name ?? "Unassigned";
+        const cur = map.get(key) ?? { name, completed: 0, total: 0, noShow: 0, revenue: 0 };
+        cur.total += 1;
+        if (a.status === "Completed") cur.completed += 1;
+        if (a.status === "No Show" || a.status === "Cancelled") cur.noShow += 1;
+        map.set(key, cur);
+      }
+      for (const i of (invs ?? []) as any[]) {
+        if (i.status === "Void" || i.voided_at) continue;
+        const key = i.appointments?.employee_id ?? "unassigned";
+        const cur = map.get(key);
+        if (cur) { cur.revenue += Number(i.total); map.set(key, cur); }
+      }
+      return Array.from(map.entries())
+        .map(([id, v]) => ({ id, ...v }))
+        .sort((a, b) => b.revenue - a.revenue);
+    },
+  });
+}
+
 function useConversionMetrics() {
   return useQuery({
     queryKey: ["reports", "conversion"],
@@ -43,6 +79,7 @@ function ReportsPage() {
   const { data: kpis } = useDashboardKpis();
   const { data: customers } = useCustomers();
   const { data: m } = useConversionMetrics();
+  const { data: perf } = useEmployeePerformance();
 
   return (
     <DashboardPage title="Reports" subtitle="Business performance at a glance">
@@ -73,6 +110,41 @@ function ReportsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 min-h-[280px]">
           <ConsultationChart />
           <TopServicesChart />
+        </div>
+        <div>
+          <div className="text-[11px] uppercase tracking-wide text-gray-500 font-semibold mb-2">Employee performance · last 90 days</div>
+          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden">
+            <table className="w-full text-xs">
+              <thead className="bg-gray-50 text-gray-500">
+                <tr>
+                  <th className="text-left font-medium py-2 px-3">Therapist</th>
+                  <th className="text-right font-medium py-2 px-3">Booked</th>
+                  <th className="text-right font-medium py-2 px-3">Completed</th>
+                  <th className="text-right font-medium py-2 px-3">No-show / cancel</th>
+                  <th className="text-right font-medium py-2 px-3">Completion</th>
+                  <th className="text-right font-medium py-2 px-3">Revenue</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(perf ?? []).length === 0 && (
+                  <tr><td colSpan={6} className="text-center text-gray-400 py-4">No appointments yet in this window.</td></tr>
+                )}
+                {(perf ?? []).map((p) => {
+                  const rate = p.total ? Math.round((p.completed / p.total) * 100) : 0;
+                  return (
+                    <tr key={p.id} className="border-t border-gray-100">
+                      <td className="py-2 px-3 font-medium text-gray-800">{p.name}</td>
+                      <td className="py-2 px-3 text-right text-gray-700">{p.total}</td>
+                      <td className="py-2 px-3 text-right text-emerald-700">{p.completed}</td>
+                      <td className="py-2 px-3 text-right text-rose-600">{p.noShow}</td>
+                      <td className="py-2 px-3 text-right text-gray-700">{rate}%</td>
+                      <td className="py-2 px-3 text-right font-semibold text-[#1A1A2E]">{fmtMoney(p.revenue)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </DashboardPage>
