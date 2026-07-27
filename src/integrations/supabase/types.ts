@@ -581,7 +581,6 @@ export type Database = {
           kind: string
           line_discount: number
           line_total: number | null
-          product_id: string | null
           quantity: number
           service_id: string | null
           unit_price: number
@@ -594,7 +593,6 @@ export type Database = {
           kind?: string
           line_discount?: number
           line_total?: number | null
-          product_id?: string | null
           quantity?: number
           service_id?: string | null
           unit_price?: number
@@ -607,7 +605,6 @@ export type Database = {
           kind?: string
           line_discount?: number
           line_total?: number | null
-          product_id?: string | null
           quantity?: number
           service_id?: string | null
           unit_price?: number
@@ -618,13 +615,6 @@ export type Database = {
             columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "invoices"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "invoice_items_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
             referencedColumns: ["id"]
           },
           {
@@ -756,36 +746,6 @@ export type Database = {
           },
         ]
       }
-      products: {
-        Row: {
-          created_at: string
-          id: string
-          low_stock_threshold: number
-          name: string
-          price: number
-          sku: string | null
-          stock: number
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          low_stock_threshold?: number
-          name: string
-          price?: number
-          sku?: string | null
-          stock?: number
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          low_stock_threshold?: number
-          name?: string
-          price?: number
-          sku?: string | null
-          stock?: number
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           created_at: string
@@ -806,61 +766,6 @@ export type Database = {
           role?: string
         }
         Relationships: []
-      }
-      sales: {
-        Row: {
-          amount: number
-          created_at: string
-          customer_id: string | null
-          description: string
-          id: string
-          product_id: string | null
-          service_id: string | null
-          sold_at: string
-        }
-        Insert: {
-          amount: number
-          created_at?: string
-          customer_id?: string | null
-          description: string
-          id?: string
-          product_id?: string | null
-          service_id?: string | null
-          sold_at?: string
-        }
-        Update: {
-          amount?: number
-          created_at?: string
-          customer_id?: string | null
-          description?: string
-          id?: string
-          product_id?: string | null
-          service_id?: string | null
-          sold_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "sales_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "customers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sales_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sales_service_id_fkey"
-            columns: ["service_id"]
-            isOneToOne: false
-            referencedRelation: "services"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       services: {
         Row: {
