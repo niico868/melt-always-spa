@@ -54,6 +54,7 @@ import { Route as DashboardCustomersIndexRouteImport } from './routes/dashboard.
 import { Route as DashboardCustomersIdRouteImport } from './routes/dashboard.customers.$id'
 import { Route as DashboardSalesIndexRouteImport } from './routes/dashboard.sales.index'
 import { Route as DashboardSalesIdRouteImport } from './routes/dashboard.sales.$id'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -282,6 +283,12 @@ const DashboardSalesIdRoute = DashboardSalesIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => DashboardSalesRoute,
 } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -329,6 +336,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/appointments/': typeof DashboardAppointmentsIndexRoute
   '/dashboard/customers/': typeof DashboardCustomersIndexRoute
   '/dashboard/sales/': typeof DashboardSalesIndexRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -371,6 +379,7 @@ export interface FileRoutesByTo {
   '/dashboard/appointments': typeof DashboardAppointmentsIndexRoute
   '/dashboard/customers': typeof DashboardCustomersIndexRoute
   '/dashboard/sales': typeof DashboardSalesIndexRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -419,6 +428,7 @@ export interface FileRoutesById {
   '/dashboard/appointments/': typeof DashboardAppointmentsIndexRoute
   '/dashboard/customers/': typeof DashboardCustomersIndexRoute
   '/dashboard/sales/': typeof DashboardSalesIndexRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -468,6 +478,7 @@ export interface FileRouteTypes {
     | '/dashboard/appointments/'
     | '/dashboard/customers/'
     | '/dashboard/sales/'
+    | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -510,6 +521,7 @@ export interface FileRouteTypes {
     | '/dashboard/appointments'
     | '/dashboard/customers'
     | '/dashboard/sales'
+    | '/lovable/email/queue/process'
   id:
     | '__root__'
     | '/'
@@ -557,6 +569,7 @@ export interface FileRouteTypes {
     | '/dashboard/appointments/'
     | '/dashboard/customers/'
     | '/dashboard/sales/'
+    | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -584,6 +597,7 @@ export interface RootRouteChildren {
   VisitingRoute: typeof VisitingRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
   ApiPublicSubmitConsultationRoute: typeof ApiPublicSubmitConsultationRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -903,6 +917,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSalesIdRouteImport
       parentRoute: typeof DashboardSalesRoute
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1022,6 +1043,7 @@ const rootRouteChildren: RootRouteChildren = {
   VisitingRoute: VisitingRoute,
   LocationsSlugRoute: LocationsSlugRoute,
   ApiPublicSubmitConsultationRoute: ApiPublicSubmitConsultationRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
