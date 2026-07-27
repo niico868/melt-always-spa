@@ -1,24 +1,48 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { DashboardPage } from "@/components/dashboard/DashboardPage";
 import { fmtMoney } from "@/components/dashboard/DataTable";
 import { ConsultationChart } from "@/components/dashboard/ConsultationChart";
 import { TopServicesChart } from "@/components/dashboard/TopServicesChart";
-import { useSales, useCustomers } from "@/lib/dashboard-tables";
+import { useCustomers } from "@/lib/dashboard-tables";
 import { useDashboardKpis } from "@/lib/dashboard-queries";
 
 export const Route = createFileRoute("/dashboard/reports")({ component: ReportsPage });
 
+function useConversionMetrics() {
+  return useQuery({
+    queryKey: ["reports", "conversion"],
+    queryFn: async () => {
+      const [{ data: consults }, { data: appts }, { data: invs }] = await Promise.all([
+        supabase.from("consultations").select("id, status"),
+        supabase.from("appointments").select("id, status"),
+        (supabase.from("invoices") as any).select("total, status, voided_at"),
+      ]);
+      const totalConsults = consults?.length ?? 0;
+      const converted = (consults ?? []).filter(c => c.status === "Booked" || c.status === "Completed").length;
+      const consultRate = totalConsults ? Math.round((converted / totalConsults) * 100) : 0;
+      const totalAppts = appts?.length ?? 0;
+      const missed = (appts ?? []).filter(a => a.status === "No Show" || a.status === "Cancelled").length;
+      const noShowRate = totalAppts ? Math.round((missed / totalAppts) * 100) : 0;
+      const nonVoid = (invs ?? []).filter((i: any) => i.status !== "Void");
+      const avgTicket = nonVoid.length
+        ? nonVoid.reduce((s: number, i: any) => s + Number(i.total), 0) / nonVoid.length
+        : 0;
+      return {
+        totalConsults, converted, consultRate,
+        totalAppts, missed, noShowRate,
+        avgTicket,
+      };
+    },
+  });
+}
+
 function ReportsPage() {
   const { data: kpis } = useDashboardKpis();
-  const { data: sales } = useSales();
   const { data: customers } = useCustomers();
-
-  const avgTicket = useMemo(() => {
-    if (!sales || sales.length === 0) return 0;
-    const sum = sales.reduce((s, r) => s + Number(r.amount), 0);
-    return sum / sales.length;
-  }, [sales]);
+  const { data: m } = useConversionMetrics();
 
   return (
     <DashboardPage title="Reports" subtitle="Business performance at a glance">
@@ -27,14 +51,22 @@ function ReportsPage() {
           <Tile label="Sales (month)" value={fmtMoney(kpis?.salesMonth ?? 0)} />
           <Tile label="Appointments today" value={String(kpis?.appointmentsToday ?? 0)} />
           <Tile label="Total customers" value={String(customers?.length ?? 0)} />
-          <Tile label="Avg ticket" value={fmtMoney(avgTicket)} />
+          <Tile label="Avg ticket" value={fmtMoney(m?.avgTicket ?? 0)} />
         </div>
         <div>
-          <div className="text-[11px] uppercase tracking-wide text-gray-500 font-semibold mb-2">Decision insights <span className="text-gray-400 normal-case font-normal">· placeholder metrics</span></div>
+          <div className="text-[11px] uppercase tracking-wide text-gray-500 font-semibold mb-2">Decision insights</div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <Tile label="Consult → Appt rate" value="60%" hint="9 of 15 consultations booked" />
-            <Tile label="No-show / cancel rate" value="13%" hint="2 of 15 appointments" />
-            <Tile label="Cost per lead" value={fmtMoney(42)} hint="Avg across channels" />
+            <Tile
+              label="Consult → Appt rate"
+              value={`${m?.consultRate ?? 0}%`}
+              hint={`${m?.converted ?? 0} of ${m?.totalConsults ?? 0} consultations booked`}
+            />
+            <Tile
+              label="No-show / cancel rate"
+              value={`${m?.noShowRate ?? 0}%`}
+              hint={`${m?.missed ?? 0} of ${m?.totalAppts ?? 0} appointments`}
+            />
+            <Tile label="Cost per lead" value="—" hint="Add ad spend to track" />
             <LeadSourceTile />
           </div>
         </div>
