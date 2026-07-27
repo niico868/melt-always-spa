@@ -259,6 +259,44 @@ export type Database = {
         }
         Relationships: []
       }
+      client_events: {
+        Row: {
+          created_at: string
+          customer_id: string
+          event_type: string
+          from_status: Database["public"]["Enums"]["client_status"] | null
+          id: string
+          metadata: Json
+          to_status: Database["public"]["Enums"]["client_status"] | null
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          event_type: string
+          from_status?: Database["public"]["Enums"]["client_status"] | null
+          id?: string
+          metadata?: Json
+          to_status?: Database["public"]["Enums"]["client_status"] | null
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          event_type?: string
+          from_status?: Database["public"]["Enums"]["client_status"] | null
+          id?: string
+          metadata?: Json
+          to_status?: Database["public"]["Enums"]["client_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_events_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       consultations: {
         Row: {
           client_name: string
@@ -358,6 +396,8 @@ export type Database = {
           service_id: string | null
           service_name: string
           session_number: number | null
+          status: Database["public"]["Enums"]["treatment_status"]
+          treatment_plan_id: string | null
         }
         Insert: {
           after_photo_url?: string | null
@@ -374,6 +414,8 @@ export type Database = {
           service_id?: string | null
           service_name: string
           session_number?: number | null
+          status?: Database["public"]["Enums"]["treatment_status"]
+          treatment_plan_id?: string | null
         }
         Update: {
           after_photo_url?: string | null
@@ -390,6 +432,8 @@ export type Database = {
           service_id?: string | null
           service_name?: string
           session_number?: number | null
+          status?: Database["public"]["Enums"]["treatment_status"]
+          treatment_plan_id?: string | null
         }
         Relationships: [
           {
@@ -420,6 +464,13 @@ export type Database = {
             referencedRelation: "services"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "customer_treatments_treatment_plan_id_fkey"
+            columns: ["treatment_plan_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_plans"
+            referencedColumns: ["id"]
+          },
         ]
       }
       customers: {
@@ -427,11 +478,14 @@ export type Database = {
           address: string | null
           allergies: string | null
           city: string | null
+          client_status: Database["public"]["Enums"]["client_status"]
+          client_status_changed_at: string
           created_at: string
           date_of_birth: string | null
           email: string | null
           full_name: string
           id: string
+          last_activity_at: string
           marketing_opt_in: boolean | null
           medical_conditions: string | null
           medical_notes: string | null
@@ -447,11 +501,14 @@ export type Database = {
           address?: string | null
           allergies?: string | null
           city?: string | null
+          client_status?: Database["public"]["Enums"]["client_status"]
+          client_status_changed_at?: string
           created_at?: string
           date_of_birth?: string | null
           email?: string | null
           full_name: string
           id?: string
+          last_activity_at?: string
           marketing_opt_in?: boolean | null
           medical_conditions?: string | null
           medical_notes?: string | null
@@ -467,11 +524,14 @@ export type Database = {
           address?: string | null
           allergies?: string | null
           city?: string | null
+          client_status?: Database["public"]["Enums"]["client_status"]
+          client_status_changed_at?: string
           created_at?: string
           date_of_birth?: string | null
           email?: string | null
           full_name?: string
           id?: string
+          last_activity_at?: string
           marketing_opt_in?: boolean | null
           medical_conditions?: string | null
           medical_notes?: string | null
@@ -826,6 +886,41 @@ export type Database = {
         }
         Relationships: []
       }
+      treatment_plans: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["treatment_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          name: string
+          status?: Database["public"]["Enums"]["treatment_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          name?: string
+          status?: Database["public"]["Enums"]["treatment_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_plans_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -852,6 +947,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      customer_has_active_treatment: {
+        Args: { _customer_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -875,6 +974,16 @@ export type Database = {
         Returns: string
       }
       recompute_invoice: { Args: { _invoice_id: string }; Returns: undefined }
+      set_client_status: {
+        Args: {
+          _customer_id: string
+          _event: string
+          _metadata?: Json
+          _new: Database["public"]["Enums"]["client_status"]
+        }
+        Returns: undefined
+      }
+      sweep_client_activity: { Args: never; Returns: undefined }
       upsert_customer_by_contact: {
         Args: {
           p_email?: string
@@ -887,6 +996,23 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "staff" | "manager" | "receptionist"
+      client_status:
+        | "lead"
+        | "registered"
+        | "consultation_booked"
+        | "consultation_completed"
+        | "active_treatment"
+        | "treatment_plan_completed"
+        | "maintenance"
+        | "inactive"
+        | "archived"
+      treatment_status:
+        | "Planned"
+        | "Scheduled"
+        | "In Progress"
+        | "Completed"
+        | "Paused"
+        | "Discontinued"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1015,6 +1141,25 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "staff", "manager", "receptionist"],
+      client_status: [
+        "lead",
+        "registered",
+        "consultation_booked",
+        "consultation_completed",
+        "active_treatment",
+        "treatment_plan_completed",
+        "maintenance",
+        "inactive",
+        "archived",
+      ],
+      treatment_status: [
+        "Planned",
+        "Scheduled",
+        "In Progress",
+        "Completed",
+        "Paused",
+        "Discontinued",
+      ],
     },
   },
 } as const
