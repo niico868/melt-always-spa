@@ -9,6 +9,7 @@ import {
   useSetServices, useUpsertMedical, useAddNote, useDeleteNote, useAddPayment,
   useUpdateInvoice, buildWhatsAppUrl,
 } from "@/lib/appointments-detail";
+import { APPT_STATUSES } from "@/lib/dashboard-tables";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -112,7 +113,7 @@ function AppointmentCard({ id, appt, services }: { id: string; appt: any; servic
         <Field label="Date & time"><input type="datetime-local" value={when} onChange={e => setWhen(e.target.value)} className={inputCls} /></Field>
         <Field label="Status">
           <select value={status} onChange={e => setStatus(e.target.value)} className={inputCls}>
-            {["Pending","Confirmed","Completed","Cancelled"].map(s => <option key={s}>{s}</option>)}
+            {APPT_STATUSES.map(s => <option key={s}>{s}</option>)}
           </select>
         </Field>
         <Field label="Therapist">
