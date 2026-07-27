@@ -168,11 +168,27 @@ export function useCustomerSales(customerId: string | undefined) {
     queryKey: ["customer_sales", customerId],
     enabled: !!customerId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("sales")
-        .select("id, description, amount, sold_at")
-        .eq("customer_id", customerId!).order("sold_at", { ascending: false });
+      // Real revenue lives on invoices/payments; the legacy `sales` table is unused.
+      const { data, error } = await (supabase.from("invoices") as any)
+        .select("id, invoice_number, total, status, created_at, voided_at, payments(amount, kind)")
+        .eq("customer_id", customerId!)
+        .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as any[];
+      return (data ?? []).map((inv: any) => {
+        const paid = (inv.payments ?? []).reduce((s: number, p: any) => {
+          const sign = p.kind === "refund" ? -1 : 1;
+          return s + sign * Number(p.amount);
+        }, 0);
+        return {
+          id: inv.id,
+          description: `Invoice ${inv.invoice_number}`,
+          amount: inv.status === "Void" ? 0 : Number(inv.total),
+          sold_at: inv.created_at,
+          paid,
+          status: inv.status,
+          invoice_number: inv.invoice_number,
+        };
+      });
     },
   });
 }
@@ -353,8 +369,13 @@ export function useUpdateConsultationStatus() {
 }
 
 export const CONSULT_STATUSES = [
-  "New Lead", "Contacted", "Consultation Booked", "Treatment Recommended",
-  "Package Offered", "Paid", "Completed", "Follow-Up Needed", "Not Suitable", "Lost Lead",
+  "Not Started", "Contacted", "Booked", "Completed",
+  "Follow-Up Required", "Not Suitable", "Lost",
+] as const;
+
+export const APPT_STATUSES = [
+  "Pending", "Confirmed", "Checked In", "In Progress",
+  "Completed", "No Show", "Cancelled", "Rescheduled",
 ] as const;
 
 // ---------- Simple modal dialog helper ----------

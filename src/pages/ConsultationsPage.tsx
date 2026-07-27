@@ -12,9 +12,10 @@ import { ColumnFilterButton, applyColumnFilters, type ColumnFilters, type Filter
 import { Modal, Field, inputCls } from "@/components/dashboard/Modal";
 import { PrimaryButton } from "@/components/dashboard/DashboardPage";
 import { useTableSort, SortableTh, SortResetChip, type SortField } from "@/components/dashboard/useTableSort";
+import { CONSULT_STATUSES } from "@/lib/dashboard-tables";
 
 type Range = "today" | "week" | "month" | "all";
-type Status = "all" | "New" | "Contacted" | "Booked" | "Closed";
+type Status = "all" | (typeof CONSULT_STATUSES)[number];
 
 function rangeBounds(r: Range, specificDate?: string) {
   if (specificDate) {
@@ -80,9 +81,12 @@ function useLookups() {
 
 function statusClasses(s: string) {
   switch (s) {
+    case "Completed":
     case "Booked": return "bg-green-50 text-green-700 border-green-200";
-    case "Contacted": return "bg-amber-50 text-amber-700 border-amber-200";
-    case "Closed": return "bg-gray-100 text-gray-600 border-gray-200";
+    case "Contacted":
+    case "Follow-Up Required": return "bg-amber-50 text-amber-700 border-amber-200";
+    case "Lost":
+    case "Not Suitable": return "bg-gray-100 text-gray-600 border-gray-200";
     default: return "bg-blue-50 text-blue-700 border-blue-200";
   }
 }
@@ -120,7 +124,7 @@ export function ConsultationsPage() {
 
   const stats = useMemo(() => {
     const total = rows.length;
-    const fresh = rows.filter((r: any) => r.status === "New").length;
+    const fresh = rows.filter((r: any) => r.status === "Not Started").length;
     const contacted = rows.filter((r: any) => r.status === "Contacted").length;
     const booked = rows.filter((r: any) => r.status === "Booked").length;
     return { total, fresh, contacted, booked };
@@ -195,10 +199,7 @@ export function ConsultationsPage() {
           <SelectTrigger className="w-full md:w-[160px] h-9 text-xs"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
-            <SelectItem value="New">New</SelectItem>
-            <SelectItem value="Contacted">Contacted</SelectItem>
-            <SelectItem value="Booked">Booked</SelectItem>
-            <SelectItem value="Closed">Closed</SelectItem>
+            {CONSULT_STATUSES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
           </SelectContent>
         </Select>
         <ColumnFilterButton defs={filterDefs} rows={rawRows as any[]} filters={colFilters} onChange={setColFilters} />
@@ -258,7 +259,7 @@ export function ConsultationsPage() {
                     </td>
                     <td className="px-3 py-2">
                       <div className="flex gap-1 items-center justify-end">
-                        {c.status === "New" && (
+                        {c.status === "Not Started" && (
                           <button title="Mark contacted" onClick={() => updateStatus.mutate({ id: c.id, status: "Contacted" })}
                             className="p-1.5 rounded hover:bg-amber-50 text-amber-600"><Check size={14} /></button>
                         )}
@@ -332,7 +333,7 @@ function ConsultationDialog({
   const [clientName, setClientName] = useState("");
   const [customerId, setCustomerId] = useState<string>("");
   const [serviceId, setServiceId] = useState<string>("");
-  const [status, setStatus] = useState<string>("New");
+  const [status, setStatus] = useState<string>("Not Started");
   const [notes, setNotes] = useState<string>("");
   const [saving, setSaving] = useState(false);
 
@@ -341,7 +342,7 @@ function ConsultationDialog({
     setClientName(editing?.client_name ?? "");
     setCustomerId(editing?.customers?.id ?? "");
     setServiceId(editing?.services?.id ?? "");
-    setStatus(editing?.status ?? "New");
+    setStatus(editing?.status ?? "Not Started");
     setNotes("");
   }, [open, editing]);
 
@@ -398,7 +399,7 @@ function ConsultationDialog({
         </Field>
         <Field label="Status">
           <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputCls}>
-            {["New","Contacted","Booked","Closed"].map(s => <option key={s} value={s}>{s}</option>)}
+            {CONSULT_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </Field>
       </div>

@@ -102,18 +102,19 @@ export function useTopServices() {
     queryKey: ["dashboard", "top-services"],
     queryFn: async () => {
       const monthStart = startOfMonth().toISOString();
-      const { data, error } = await supabase
-        .from("sales")
-        .select("amount, services(name, fill_color)")
-        .gte("sold_at", monthStart);
+      // Aggregate service revenue from actual appointment services on non-void invoices this month.
+      const { data, error } = await (supabase.from("appointment_services") as any)
+        .select("price_snapshot, services(name, fill_color), appointments!inner(scheduled_at, invoices(status))")
+        .gte("appointments.scheduled_at", monthStart);
       if (error) throw error;
       const buckets = new Map<string, { name: string; revenue: number; fill: string }>();
-      for (const row of data ?? []) {
-        const svc = (row as any).services;
-        const name = svc?.name ?? "Other";
-        const fill = svc?.fill_color ?? "#FDF2F7";
+      for (const row of (data ?? []) as any[]) {
+        const inv = row.appointments?.invoices?.[0] ?? row.appointments?.invoices;
+        if (inv?.status === "Void") continue;
+        const name = row.services?.name ?? "Other";
+        const fill = row.services?.fill_color ?? "#FDF2F7";
         const cur = buckets.get(name) ?? { name, revenue: 0, fill };
-        cur.revenue += Number(row.amount);
+        cur.revenue += Number(row.price_snapshot ?? 0);
         buckets.set(name, cur);
       }
       const total = Array.from(buckets.values()).reduce((s, b) => s + b.revenue, 0) || 1;

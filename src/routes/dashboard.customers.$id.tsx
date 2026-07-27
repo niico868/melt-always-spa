@@ -119,15 +119,25 @@ function MedBlock({ label, value, tone }: { label: string; value: string | null;
 function OverviewTab({ customer }: { customer: any }) {
   const { data: sales } = useCustomerSales(customer.id);
   const { data: appts } = useCustomerAppointments(customer.id);
-  const lifetime = (sales ?? []).reduce((s, r) => s + Number(r.amount || 0), 0);
+  const lifetime = (sales ?? []).reduce((s: number, r: any) => s + Number(r.amount || 0), 0);
   const visits = (appts ?? []).filter(a => a.status === "Completed").length;
   const lastVisit = (appts ?? []).find(a => a.status === "Completed")?.scheduled_at;
   const dob = customer.date_of_birth;
   const age = dob ? Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 864e5)) : null;
   const dobLabel = dob ? `${fmtDate(dob)}${age != null ? ` · ${age} yrs` : ""}` : "Not on file";
+  const cs = String(customer.client_status ?? "lead").replace(/_/g, " ");
+  const csTone =
+    customer.client_status === "active_treatment" || customer.client_status === "maintenance" ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
+    customer.client_status === "archived" || customer.client_status === "inactive" ? "bg-gray-100 text-gray-500 border-gray-200" :
+    customer.client_status === "treatment_plan_completed" ? "bg-blue-50 text-blue-700 border-blue-200" :
+    "bg-pink-50 text-[#E8246A] border-pink-200";
   return (
     <div className="grid md:grid-cols-3 gap-3 text-xs">
       <div className="md:col-span-2 space-y-2">
+        <div className="flex items-center gap-2">
+          <span className={`inline-block text-[11px] px-2 py-0.5 rounded-full border capitalize font-medium ${csTone}`}>{cs}</span>
+          {customer.last_activity_at && <span className="text-[10px] text-gray-400">Last activity {fmtDate(customer.last_activity_at)}</span>}
+        </div>
         <div className="grid grid-cols-2 gap-2">
           {customer.phone && <InfoRow icon={<Phone size={12} />} label="Phone" value={customer.phone} />}
           {customer.email && <InfoRow icon={<Mail size={12} />} label="Email" value={customer.email} />}
@@ -248,14 +258,17 @@ function ConsultationsTab({ customerId }: { customerId: string }) {
 
 function SalesTab({ customerId }: { customerId: string }) {
   const { data, isLoading } = useCustomerSales(customerId);
-  const total = (data ?? []).reduce((s, r: any) => s + Number(r.amount || 0), 0);
+  const total = (data ?? []).reduce((s: number, r: any) => s + Number(r.amount || 0), 0);
   if (isLoading) return <p className="text-xs text-gray-400">Loading…</p>;
   if (!data?.length) return <p className="text-xs text-gray-400 py-6 text-center">No sales.</p>;
   return <div>
     <div className="text-[11px] text-gray-500 mb-2">Lifetime: <span className="font-semibold text-gray-800">{fmtMoney(total)}</span></div>
     <ul className="space-y-2">{data.map((s: any) => (
       <li key={s.id} className="border border-gray-100 rounded-lg p-3 text-xs flex justify-between">
-        <div><div className="font-medium text-gray-800">{s.description}</div><div className="text-gray-500">{fmtDate(s.sold_at)}</div></div>
+        <div>
+          <Link to="/dashboard/sales/$id" params={{ id: s.id }} className="font-medium text-[#E8246A] hover:underline">{s.description}</Link>
+          <div className="text-gray-500">{fmtDate(s.sold_at)} · <span className={s.status === "Void" ? "text-gray-400" : s.status === "Paid" ? "text-emerald-700" : "text-amber-700"}>{s.status}</span></div>
+        </div>
         <span className="text-gray-800 font-medium">{fmtMoney(s.amount)}</span>
       </li>
     ))}</ul>
