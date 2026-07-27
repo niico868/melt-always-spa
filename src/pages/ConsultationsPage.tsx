@@ -333,7 +333,7 @@ function ConsultationDialog({
   const [clientName, setClientName] = useState("");
   const [customerId, setCustomerId] = useState<string>("");
   const [serviceId, setServiceId] = useState<string>("");
-  const [status, setStatus] = useState<string>("New");
+  const [status, setStatus] = useState<string>("Not Started");
   const [notes, setNotes] = useState<string>("");
   const [saving, setSaving] = useState(false);
 
@@ -342,7 +342,7 @@ function ConsultationDialog({
     setClientName(editing?.client_name ?? "");
     setCustomerId(editing?.customers?.id ?? "");
     setServiceId(editing?.services?.id ?? "");
-    setStatus(editing?.status ?? "New");
+    setStatus(editing?.status ?? "Not Started");
     setNotes("");
   }, [open, editing]);
 
@@ -399,7 +399,7 @@ function ConsultationDialog({
         </Field>
         <Field label="Status">
           <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputCls}>
-            {["New","Contacted","Booked","Closed"].map(s => <option key={s} value={s}>{s}</option>)}
+            {CONSULT_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </Field>
       </div>
