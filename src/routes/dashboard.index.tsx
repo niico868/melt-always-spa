@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { CalendarDays, Plus } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { RecentSales } from "@/components/dashboard/RecentSales";
@@ -9,6 +9,7 @@ import { AlertsTray } from "@/components/dashboard/AlertsTray";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { useDashboardKpis } from "@/lib/dashboard-queries";
 import { useSession } from "@/lib/use-session";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Recharts is heavy — split it out so mobile first paint stays light.
 const ConsultationChart = lazy(() =>
@@ -29,9 +30,21 @@ export const Route = createFileRoute("/dashboard/")({
 function Dashboard() {
   const { data } = useDashboardKpis();
   const { profile, user } = useSession();
+  const isMobile = useIsMobile();
+  const [showSecondaryMobileCards, setShowSecondaryMobileCards] = useState(false);
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "there";
   const today = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   const fmt = (v: number) => `TT$${v.toLocaleString()}`;
+
+  useEffect(() => {
+    if (!isMobile) {
+      setShowSecondaryMobileCards(true);
+      return;
+    }
+    setShowSecondaryMobileCards(false);
+    const timer = window.setTimeout(() => setShowSecondaryMobileCards(true), 900);
+    return () => window.clearTimeout(timer);
+  }, [isMobile]);
 
   const appointmentsKpi = { title: "Appointments", value: String(data?.appointmentsToday ?? "—"), label: "Today", iconKey: "calendar" as const };
   const consultationsKpi = { title: "New Consultations", value: String(data?.consultationsWeek ?? "—"), label: "This week", iconKey: "users" as const };
@@ -44,6 +57,52 @@ function Dashboard() {
     goalProgress: true,
     iconKey: "bag" as const,
   };
+
+  if (isMobile) {
+    return (
+      <div className="flex min-h-full flex-col gap-3 px-3 pb-4 pt-3">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <div className="min-w-0">
+            <h1 className="truncate text-base font-bold leading-tight text-[#1A1A2E]">
+              Welcome back, <span className="text-[#E8246A]">{displayName}</span>
+            </h1>
+            <p className="text-[11px] text-gray-500">{today}</p>
+          </div>
+          <Link
+            to="/dashboard/appointments"
+            search={{ new: "1" } as never}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#E8246A] px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-[#C91D5C]"
+          >
+            <Plus size={14} />
+            <span>New</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <KpiCard data={appointmentsKpi} />
+          <KpiCard data={salesKpi} />
+          <KpiCard data={consultationsKpi} />
+          <KpiCard data={customersKpi} />
+        </div>
+
+        <div className="min-h-[210px]"><UpcomingAppointments /></div>
+        <QuickActions />
+
+        {showSecondaryMobileCards ? (
+          <>
+            <div className="min-h-[190px]"><RecentSales /></div>
+            <div className="min-h-[190px]"><RecentConsultations /></div>
+            <div className="min-h-[160px]"><AlertsTray /></div>
+          </>
+        ) : (
+          <div className="rounded-xl border border-gray-100 bg-white p-3 text-xs text-gray-400 shadow-sm">
+            Loading remaining dashboard sections…
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="lg:h-full flex flex-col px-3 sm:px-4 pt-3 pb-4 gap-3 lg:overflow-hidden">
       {/* Header */}

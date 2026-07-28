@@ -185,6 +185,10 @@
   }
 }
 
+body.dashboard-shell [data-public-chrome] {
+  display: none !important;
+}
+
 @utility soft-shadow {
   box-shadow: 0 10px 40px -20px color-mix(in oklab, var(--rose) 50%, transparent);
 }

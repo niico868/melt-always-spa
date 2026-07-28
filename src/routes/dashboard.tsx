@@ -18,6 +18,11 @@ function DashboardLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.body.classList.add("dashboard-shell");
+    return () => document.body.classList.remove("dashboard-shell");
+  }, []);
+
+  useEffect(() => {
     if (!loading && !session) navigate({ to: "/auth" });
   }, [loading, session, navigate]);
 
@@ -74,7 +79,7 @@ function DashboardLayout() {
 
       <main className="flex-1 min-w-0 lg:overflow-hidden flex flex-col">
         {/* Mobile top bar */}
-        <div className="lg:hidden sticky top-0 z-30 flex items-center justify-between bg-[#E8246A] text-white px-3 py-2.5 shadow">
+        <div className="lg:hidden sticky top-0 z-50 flex items-center justify-between bg-[#E8246A] text-white px-3 py-2.5 shadow">
           <button
             aria-label="Open menu"
             onClick={() => setOpen(true)}
