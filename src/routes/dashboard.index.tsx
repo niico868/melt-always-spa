@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 import { CalendarDays, Plus } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
-import { ConsultationChart } from "@/components/dashboard/ConsultationChart";
-import { TopServicesChart } from "@/components/dashboard/TopServicesChart";
 import { RecentSales } from "@/components/dashboard/RecentSales";
 import { UpcomingAppointments } from "@/components/dashboard/UpcomingAppointments";
 import { RecentConsultations } from "@/components/dashboard/RecentConsultations";
@@ -10,6 +9,18 @@ import { AlertsTray } from "@/components/dashboard/AlertsTray";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { useDashboardKpis } from "@/lib/dashboard-queries";
 import { useSession } from "@/lib/use-session";
+
+// Recharts is heavy — split it out so mobile first paint stays light.
+const ConsultationChart = lazy(() =>
+  import("@/components/dashboard/ConsultationChart").then(m => ({ default: m.ConsultationChart })),
+);
+const TopServicesChart = lazy(() =>
+  import("@/components/dashboard/TopServicesChart").then(m => ({ default: m.TopServicesChart })),
+);
+
+function ChartSkeleton() {
+  return <div className="w-full h-full min-h-[200px] rounded-xl bg-white border border-gray-100 animate-pulse" />;
+}
 
 export const Route = createFileRoute("/dashboard/")({
   component: Dashboard,
@@ -74,13 +85,17 @@ function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:min-h-0">
             <div className="min-h-[200px] lg:min-h-0"><RecentSales /></div>
             <div className="min-h-[200px] lg:min-h-0"><RecentConsultations /></div>
-            <div className="min-h-[200px] lg:min-h-0"><TopServicesChart /></div>
+            <div className="min-h-[200px] lg:min-h-0">
+              <Suspense fallback={<ChartSkeleton />}><TopServicesChart /></Suspense>
+            </div>
           </div>
           {/* Bottom row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:min-h-0">
             <div className="lg:min-h-0"><AlertsTray /></div>
             <div className="lg:min-h-0"><UpcomingAppointments /></div>
-            <div className="lg:min-h-0 min-h-[220px]"><ConsultationChart /></div>
+            <div className="lg:min-h-0 min-h-[220px]">
+              <Suspense fallback={<ChartSkeleton />}><ConsultationChart /></Suspense>
+            </div>
           </div>
         </div>
         <div className="lg:min-h-0">
