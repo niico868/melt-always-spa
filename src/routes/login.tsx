@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
@@ -7,6 +7,9 @@ import { lovable } from "@/integrations/lovable/index";
 
 export const Route = createFileRoute("/login")({
   ssr: false,
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" ? s.next : undefined,
+  }),
   head: () => ({ meta: [
     { title: "Sign In — Melt Elite Aesthetics" },
     { name: "robots", content: "noindex" },
@@ -25,6 +28,8 @@ async function routeAfterLogin(userId: string): Promise<string> {
 
 function Login() {
   const nav = useNavigate();
+  const { next } = useSearch({ from: "/login" });
+  const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : null;
   const [tab, setTab] = useState<Tab>("client");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,9 +41,12 @@ function Login() {
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
-      if (data.user) nav({ to: (await routeAfterLogin(data.user.id)) as any });
+      if (data.user) {
+        if (safeNext) { window.location.href = safeNext; return; }
+        nav({ to: (await routeAfterLogin(data.user.id)) as any });
+      }
     });
-  }, [nav]);
+  }, [nav, safeNext]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -48,6 +56,7 @@ function Login() {
       if (error) throw error;
       if (!data.user) throw new Error("Sign in failed.");
       setInfo("Success. Redirecting…");
+      if (safeNext) { window.location.href = safeNext; return; }
       const to = await routeAfterLogin(data.user.id);
       setTimeout(() => nav({ to: to as any }), 400);
     } catch (err: any) {
@@ -61,13 +70,16 @@ function Login() {
     setError(null); setInfo("Redirecting to Google…"); setGoogleBusy(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: safeNext
+          ? `${window.location.origin}${safeNext}`
+          : window.location.origin,
       });
       if (result.error) throw result.error;
       if (result.redirected) return;
       const { data } = await supabase.auth.getUser();
       if (!data.user) throw new Error("Google sign in failed.");
       setInfo("Success. Redirecting…");
+      if (safeNext) { window.location.href = safeNext; return; }
       const to = await routeAfterLogin(data.user.id);
       setTimeout(() => nav({ to: to as any }), 400);
     } catch (err: any) {
