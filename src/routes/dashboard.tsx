@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { Component, type ReactNode, useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { MobileBottomNav } from "@/components/sidebar/MobileBottomNav";
@@ -23,11 +23,21 @@ function DashboardLayout() {
 
   useEffect(() => {
     if (!session) return;
-    supabase.auth.mfa.getAuthenticatorAssuranceLevel().then(({ data }) => {
-      if (data?.nextLevel === "aal2" && data.currentLevel !== "aal2") {
-        navigate({ to: "/auth" });
-      }
-    });
+    // Best-effort MFA check — never let a hung request block the dashboard
+    // (iOS Safari/Chrome can stall pending network calls on tab restore).
+    let cancelled = false;
+    const timer = setTimeout(() => { cancelled = true; }, 4000);
+    supabase.auth.mfa
+      .getAuthenticatorAssuranceLevel()
+      .then(({ data }) => {
+        if (cancelled) return;
+        if (data?.nextLevel === "aal2" && data.currentLevel !== "aal2") {
+          navigate({ to: "/auth" });
+        }
+      })
+      .catch(() => { /* ignore */ })
+      .finally(() => clearTimeout(timer));
+    return () => { cancelled = true; clearTimeout(timer); };
   }, [session, navigate]);
 
   if (loading || !session) {
@@ -76,10 +86,41 @@ function DashboardLayout() {
           <div className="w-7" />
         </div>
         <div className="flex-1 min-h-0 lg:overflow-hidden pb-[calc(64px+env(safe-area-inset-bottom))] lg:pb-0">
-          <Outlet />
+          <DashboardErrorBoundary>
+            <Outlet />
+          </DashboardErrorBoundary>
         </div>
       </main>
       <MobileBottomNav onMore={() => setOpen(true)} />
     </div>
   );
+}
+
+class DashboardErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  componentDidCatch(error: Error) { console.error("[dashboard] render error", error); }
+  render() {
+    if (!this.state.error) return this.props.children;
+    return (
+      <div className="p-5 h-full flex items-center justify-center">
+        <div className="max-w-sm w-full bg-white border border-gray-200 rounded-xl p-5 text-center">
+          <h2 className="text-base font-bold text-[#1A1A2E] mb-1">This page didn't load</h2>
+          <p className="text-xs text-gray-500 mb-4">Something went wrong rendering the dashboard. Try again — your data is safe.</p>
+          <div className="flex gap-2 justify-center">
+            <button
+              type="button"
+              onClick={() => { this.setState({ error: null }); }}
+              className="bg-[#E8246A] text-white rounded-lg px-3 py-1.5 text-xs font-medium"
+            >Try again</button>
+            <button
+              type="button"
+              onClick={() => { if (typeof window !== "undefined") window.location.reload(); }}
+              className="bg-white text-gray-700 border border-gray-200 rounded-lg px-3 py-1.5 text-xs font-medium"
+            >Reload</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
