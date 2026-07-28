@@ -21,6 +21,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as JournalRouteImport } from './routes/journal'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -31,6 +32,8 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as TreatmentFinderRouteImport } from './routes/treatment-finder'
 import { Route as VisitingRouteImport } from './routes/visiting'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardAppointmentsRouteImport } from './routes/dashboard.appointments'
 import { Route as DashboardAuditRouteImport } from './routes/dashboard.audit'
@@ -48,6 +51,7 @@ import { Route as JournalIndexRouteImport } from './routes/journal.index'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ApiPublicSubmitConsultationRouteImport } from './routes/api/public/submit-consultation'
 import { Route as DashboardAppointmentsIndexRouteImport } from './routes/dashboard.appointments.index'
 import { Route as DashboardAppointmentsIdRouteImport } from './routes/dashboard.appointments.$id'
@@ -119,6 +123,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PackagesRoute = PackagesRouteImport.update({
   id: '/packages',
   path: '/packages',
@@ -169,6 +178,18 @@ const VisitingRoute = VisitingRouteImport.update({
   path: '/visiting',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -254,6 +275,12 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicSubmitConsultationRoute =
   ApiPublicSubmitConsultationRouteImport.update({
     id: '/api/public/submit-consultation',
@@ -321,6 +348,7 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/journal': typeof JournalRouteWithChildren
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
   '/products': typeof ProductsRoute
@@ -331,6 +359,8 @@ export interface FileRoutesByFullPath {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRouteWithChildren
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
@@ -348,6 +378,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
@@ -370,6 +401,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
   '/products': typeof ProductsRoute
@@ -380,6 +412,8 @@ export interface FileRoutesByTo {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
   '/dashboard/employees': typeof DashboardEmployeesRoute
@@ -394,6 +428,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/journal': typeof JournalIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
@@ -419,6 +454,7 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/journal': typeof JournalRouteWithChildren
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/packages': typeof PackagesRoute
   '/policies': typeof PoliciesRoute
   '/products': typeof ProductsRoute
@@ -429,6 +465,8 @@ export interface FileRoutesById {
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
   '/visiting': typeof VisitingRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/dashboard/appointments': typeof DashboardAppointmentsRouteWithChildren
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
@@ -446,6 +484,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
@@ -472,6 +511,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/journal'
     | '/login'
+    | '/mcp'
     | '/packages'
     | '/policies'
     | '/products'
@@ -482,6 +522,8 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/treatment-finder'
     | '/visiting'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/dashboard/appointments'
     | '/dashboard/audit'
     | '/dashboard/consultations'
@@ -499,6 +541,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/journal/'
     | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/submit-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
@@ -521,6 +564,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/gallery'
     | '/login'
+    | '/mcp'
     | '/packages'
     | '/policies'
     | '/products'
@@ -531,6 +575,8 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/treatment-finder'
     | '/visiting'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/dashboard/audit'
     | '/dashboard/consultations'
     | '/dashboard/employees'
@@ -545,6 +591,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/journal'
     | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/submit-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
@@ -569,6 +616,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/journal'
     | '/login'
+    | '/mcp'
     | '/packages'
     | '/policies'
     | '/products'
@@ -579,6 +627,8 @@ export interface FileRouteTypes {
     | '/timeline'
     | '/treatment-finder'
     | '/visiting'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/dashboard/appointments'
     | '/dashboard/audit'
     | '/dashboard/consultations'
@@ -596,6 +646,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/journal/'
     | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/submit-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
@@ -621,6 +672,7 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   JournalRoute: typeof JournalRouteWithChildren
   LoginRoute: typeof LoginRoute
+  McpRoute: typeof McpRoute
   PackagesRoute: typeof PackagesRoute
   PoliciesRoute: typeof PoliciesRoute
   ProductsRoute: typeof ProductsRoute
@@ -631,8 +683,11 @@ export interface RootRouteChildren {
   TimelineRoute: typeof TimelineRoute
   TreatmentFinderRoute: typeof TreatmentFinderRoute
   VisitingRoute: typeof VisitingRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicSubmitConsultationRoute: typeof ApiPublicSubmitConsultationRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -725,6 +780,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/packages': {
       id: '/packages'
       path: '/packages'
@@ -793,6 +855,20 @@ declare module '@tanstack/react-router' {
       path: '/visiting'
       fullPath: '/visiting'
       preLoaderRoute: typeof VisitingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -912,6 +988,13 @@ declare module '@tanstack/react-router' {
       path: '/.lovable/oauth/consent'
       fullPath: '/.lovable/oauth/consent'
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/submit-consultation': {
@@ -1091,6 +1174,7 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   JournalRoute: JournalRouteWithChildren,
   LoginRoute: LoginRoute,
+  McpRoute: McpRoute,
   PackagesRoute: PackagesRoute,
   PoliciesRoute: PoliciesRoute,
   ProductsRoute: ProductsRoute,
@@ -1101,8 +1185,12 @@ const rootRouteChildren: RootRouteChildren = {
   TimelineRoute: TimelineRoute,
   TreatmentFinderRoute: TreatmentFinderRoute,
   VisitingRoute: VisitingRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   LocationsSlugRoute: LocationsSlugRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicSubmitConsultationRoute: ApiPublicSubmitConsultationRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
