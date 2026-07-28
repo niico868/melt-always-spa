@@ -47,6 +47,7 @@ import { Route as DashboardTherapistsRouteImport } from './routes/dashboard.ther
 import { Route as JournalIndexRouteImport } from './routes/journal.index'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicSubmitConsultationRouteImport } from './routes/api/public/submit-consultation'
 import { Route as DashboardAppointmentsIndexRouteImport } from './routes/dashboard.appointments.index'
 import { Route as DashboardAppointmentsIdRouteImport } from './routes/dashboard.appointments.$id'
@@ -248,6 +249,11 @@ const LocationsSlugRoute = LocationsSlugRouteImport.update({
   path: '/locations/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicSubmitConsultationRoute =
   ApiPublicSubmitConsultationRouteImport.update({
     id: '/api/public/submit-consultation',
@@ -341,6 +347,7 @@ export interface FileRoutesByFullPath {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard': typeof DashboardIndexRoute
   '/journal': typeof JournalIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
@@ -437,6 +445,7 @@ export interface FileRoutesById {
   '/locations/$slug': typeof LocationsSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
@@ -489,6 +498,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/.lovable/oauth/consent'
     | '/api/public/submit-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
@@ -534,6 +544,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard'
     | '/journal'
+    | '/.lovable/oauth/consent'
     | '/api/public/submit-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
@@ -584,6 +595,7 @@ export interface FileRouteTypes {
     | '/locations/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/.lovable/oauth/consent'
     | '/api/public/submit-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
@@ -620,6 +632,7 @@ export interface RootRouteChildren {
   TreatmentFinderRoute: typeof TreatmentFinderRoute
   VisitingRoute: typeof VisitingRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicSubmitConsultationRoute: typeof ApiPublicSubmitConsultationRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -894,6 +907,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/submit-consultation': {
       id: '/api/public/submit-consultation'
       path: '/api/public/submit-consultation'
@@ -1082,6 +1102,7 @@ const rootRouteChildren: RootRouteChildren = {
   TreatmentFinderRoute: TreatmentFinderRoute,
   VisitingRoute: VisitingRoute,
   LocationsSlugRoute: LocationsSlugRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicSubmitConsultationRoute: ApiPublicSubmitConsultationRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
