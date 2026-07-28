@@ -8,15 +8,16 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { Header } from "../components/Header";
-import { Footer } from "../components/Footer";
-import { WhatsAppFab } from "../components/WhatsAppFab";
-import { ScrollProgress } from "../components/ScrollProgress";
-import { AmbientAudio } from "../components/AmbientAudio";
+
+const Header = lazy(() => import("../components/Header").then((m) => ({ default: m.Header })));
+const Footer = lazy(() => import("../components/Footer").then((m) => ({ default: m.Footer })));
+const WhatsAppFab = lazy(() => import("../components/WhatsAppFab").then((m) => ({ default: m.WhatsAppFab })));
+const ScrollProgress = lazy(() => import("../components/ScrollProgress").then((m) => ({ default: m.ScrollProgress })));
+const AmbientAudio = lazy(() => import("../components/AmbientAudio").then((m) => ({ default: m.AmbientAudio })));
 
 function NotFoundComponent() {
   useEffect(() => {
@@ -150,7 +151,12 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isDashboard = pathname.startsWith("/dashboard");
+  const browserPath = typeof window === "undefined" ? "" : window.location.pathname;
+  const isDashboard =
+    pathname === "/dashboard" ||
+    pathname.startsWith("/dashboard/") ||
+    browserPath === "/dashboard" ||
+    browserPath.startsWith("/dashboard/");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -176,14 +182,18 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ScrollProgress />
-      <Header />
-      <main>
+      <Suspense fallback={null}>
+        <div data-public-chrome="site-progress"><ScrollProgress /></div>
+        <div data-public-chrome="site-header"><Header /></div>
+      </Suspense>
+      <main data-public-chrome="site-main">
         <Outlet />
       </main>
-      <Footer />
-      <WhatsAppFab />
-      <AmbientAudio />
+      <Suspense fallback={null}>
+        <div data-public-chrome="site-footer"><Footer /></div>
+        <div data-public-chrome="site-whatsapp"><WhatsAppFab /></div>
+        <div data-public-chrome="site-audio"><AmbientAudio /></div>
+      </Suspense>
     </QueryClientProvider>
   );
 }
