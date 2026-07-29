@@ -17,18 +17,19 @@ export const Route = createFileRoute("/visiting")({
 function Visiting() {
   const [done, setDone] = useState(false);
   const [form, setForm] = useState({
-    name: "", country: "", arrival: "", departure: "", occasion: "", interest: "",
+    name: "", email: "", country: "", arrival: "", departure: "", occasion: "", interest: "",
     concern: "", whatsapp: "", urgency: "", priorTreatments: "", priorList: [] as string[], medical: "",
   });
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
   const togglePrior = (t: string) =>
     setForm(f => ({ ...f, priorList: f.priorList.includes(t) ? f.priorList.filter(x => x !== t) : [...f.priorList, t] }));
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     const msg = [
       "Hi Melt Aways, I am planning treatment before visiting Trinidad.",
       `Name: ${form.name}`,
+      `Email: ${form.email}`,
       `Country: ${form.country}`,
       `Travel dates: ${form.arrival} to ${form.departure}`,
       `Occasion: ${form.occasion}`,
@@ -41,6 +42,30 @@ function Visiting() {
     ].join("\n");
     window.open(waLink(msg), "_blank", "noopener,noreferrer");
     setDone(true);
+    // Record the lead and trigger the consultation confirmation email
+    try {
+      await fetch("/api/public/submit-consultation", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          full_name: form.name,
+          phone: form.whatsapp,
+          email: form.email,
+          concern: form.concern,
+          areas: form.interest,
+          notes: [
+            `Visiting Trinidad — ${form.country}`,
+            `Travel: ${form.arrival} to ${form.departure}`,
+            form.occasion && `Occasion: ${form.occasion}`,
+            form.urgency && `Results timing: ${form.urgency}`,
+            form.medical && `Medical: ${form.medical}`,
+          ].filter(Boolean).join("\n"),
+          preferred_date: form.arrival,
+          location: "Visiting Trinidad",
+          suggested_package: form.interest,
+        }),
+      });
+    } catch { /* non-blocking */ }
   }
 
   return (
@@ -77,6 +102,7 @@ function Visiting() {
         <form onSubmit={submit} className="max-w-3xl mx-auto bg-background rounded-3xl p-8 lg:p-12 card-shadow border border-border/60 grid gap-5">
           <div className="flex items-center gap-3 text-primary"><Plane className="w-5 h-5" /><h2 className="text-xl text-ink">Plan My Visit</h2></div>
           <Row label="Full name"><input required value={form.name} onChange={e => set("name", e.target.value)} className={inp} /></Row>
+          <Row label="Email address"><input required type="email" value={form.email} onChange={e => set("email", e.target.value)} className={inp} placeholder="you@email.com" /></Row>
           <Row label="Country">
             <select required value={form.country} onChange={e => set("country", e.target.value)} className={inp}>
               <option value="">Select your country</option>
