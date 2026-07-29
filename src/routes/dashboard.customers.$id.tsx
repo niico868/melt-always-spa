@@ -218,14 +218,6 @@ function CompleteTreatmentButton({ customer }: { customer: any }) {
   );
 }
 
-function InfoRowUnused({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <div className="flex items-start gap-2 p-2 bg-gray-50 rounded-lg">
-      <span className="mt-0.5 text-gray-400">{icon}</span>
-      <div><div className="text-[10px] uppercase tracking-wide text-gray-400">{label}</div><div className="text-gray-800">{value}</div></div>
-    </div>
-  );
-}
 function Stat({ label, value }: { label: string; value: string }) {
   return <div className="p-3 bg-gray-50 rounded-lg"><div className="text-[10px] uppercase text-gray-400">{label}</div><div className="text-sm font-semibold text-gray-800">{value}</div></div>;
 }
