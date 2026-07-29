@@ -39,6 +39,16 @@ function Account() {
       if (params.get("welcome") === "1") {
         setShowWelcome(true);
         window.history.replaceState({}, "", "/account");
+        // One-time registration confirmation email
+        try {
+          const { sendTransactionalEmail } = await import("@/lib/email/send");
+          void sendTransactionalEmail({
+            templateName: "welcome-registered",
+            recipientEmail: data.user.email ?? "",
+            idempotencyKey: `welcome-${data.user.id}`,
+            templateData: { firstName: (name || data.user.email || "").split(/[ @]/)[0] },
+          });
+        } catch { /* non-blocking */ }
       }
     })();
   }, [nav]);
