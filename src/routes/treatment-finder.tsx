@@ -48,11 +48,32 @@ function TreatmentFinderPage() {
     });
   }
 
-  function submit() {
+  async function submit() {
     const suggested = suggestPackage(a);
     const qualifies = qualifiesForConsult(a);
     try { saveLead(toLead(a, suggested)); } catch {}
     setDone({ suggested, qualifies });
+    try {
+      await fetch("/api/public/submit-consultation", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          full_name: a.fullName,
+          phone: a.phone,
+          email: a.email,
+          concern: a.concerns,
+          areas: a.targetAreas.join(", "),
+          notes: [
+            a.goals.length && `Goals: ${a.goals.join(", ")}`,
+            a.timeline && `Timeline: ${a.timeline}`,
+            a.medications && `Medications: ${a.medications}`,
+            a.pregnancy && `Pregnancy: ${a.pregnancy}`,
+          ].filter(Boolean).join("\n"),
+          preferred_date: a.preferredDate,
+          suggested_package: suggested,
+        }),
+      });
+    } catch { /* non-blocking */ }
   }
 
   const canNext = (() => {
