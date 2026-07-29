@@ -373,54 +373,291 @@ export const SERVICES_CONTENT: Record<string, ServiceContent> = {
   },
   "lymphatic-drainage": {
     slug: "lymphatic-drainage",
-    tagline: "",
-    overview: "",
-    howItWorks: "",
-    benefits: [],
-    idealFor: [],
-    whatToExpect: "",
-    aftercare: "",
-    duration: "",
-    sessions: "",
-    faqs: [],
+    tagline: "Gentle support for fluid movement, swelling and recovery",
+    overview: "Lymphatic drainage is a gentle treatment intended to encourage lymph fluid through the body’s natural drainage pathways. Depending on the cause of your concern and your medical suitability, it may help reduce temporary puffiness, ease feelings of heaviness and support selected recovery or body-contouring programmes. Treatment may be performed manually, using controlled mechanical compression or through a planned combination of techniques. Unexplained, sudden or one-sided swelling should be medically assessed before treatment.",
+    howItWorks: "Manual lymphatic drainage uses light, slow and rhythmic movements applied in specific directions across the skin. These movements are intended to encourage lymph fluid towards pathways where it may drain more effectively. Mechanical treatment may use a compression garment that gently inflates and releases in a controlled sequence. The appropriate method, pressure and treatment direction are selected according to the area, cause of swelling, medical history and condition of the lymphatic system. This treatment differs from deep-tissue massage and should not require aggressive pressure.",
+    benefits: ["May reduce the appearance of temporary puffiness",
+    "Encourages the movement of excess fluid",
+    "May ease feelings of heaviness or tightness",
+    "Supports comfort in areas affected by temporary swelling",
+    "May assist selected post-treatment recovery plans",
+    "Can support body-contouring aftercare when appropriate",
+    "May create a temporarily smoother appearance",
+    "Can provide a gentle and relaxing treatment experience",
+    "May complement medically guided compression and movement],
+    idealFor: ["Temporary puffiness or fluid retention",
+    "Feelings of heaviness in suitable areas",
+    "Temporary swelling following an approved aesthetic treatment",
+    "Medically cleared post-surgical recovery",
+    "Clients requiring gentle rather than deep massage",
+    "Fluid-related fullness around the abdomen or waist",
+    "Suitable swelling affecting the arms or legs",
+    "Facial or neck puffiness",
+    "Clients receiving a structured lymphatic-care plan",
+    "Suitable areas of the back, hips or thighs"],
+    whatToExpect: "Your appointment begins with an assessment of the swelling, when it started, recent procedures, medication and relevant heart, kidney, circulatory or lymphatic conditions. For manual drainage, you will usually lie down or remain slightly elevated while the practitioner applies light, rhythmic movements to the skin. For mechanical treatment, a compression garment may be fitted around the selected area and adjusted to an appropriate pressure. You may feel gentle movement, light pressure or relaxation. Treatment should not feel aggressively deep or sharply painful. Tell your practitioner immediately if you experience pain, numbness, dizziness, nausea, difficulty breathing or another unexpected symptom.",
+    aftercare: "Maintain your normal hydration unless a healthcare provider has restricted your fluid intake. Continue gentle movement, such as comfortable walking, when appropriate, and avoid unusually strenuous exercise if you feel tired or light-headed. Keep the skin clean, use a suitable moisturiser and wear compression garments only when prescribed or recommended. Do not perform aggressive massage over the treated area. Follow your surgeon’s instructions when drainage forms part of post-surgical care. Seek urgent medical attention for chest pain, difficulty breathing, fainting or sudden one-sided swelling.",
+    duration: "Appointment length varies according to the method used, number and size of the areas treated, medical considerations and whether the session forms part of post-surgical care. Your expected treatment time will be confirmed following assessment.",
+    sessions: "Some clients may receive lymphatic drainage as an occasional wellness treatment, while others may require a structured programme based on surgery, diagnosed lymphedema or another medical concern. The recommended number and frequency of sessions depend on the cause and amount of swelling, treatment area, medical guidance, stage of recovery and response. More frequent treatment is not automatically more effective.",
+    faqs: [{
+      question: "When may I notice a difference?",
+      answer: "Some clients may notice a temporary reduction in puffiness, heaviness or tightness following treatment, while others experience a more subtle response. The amount and duration of improvement depend on the cause of the swelling, general health, recent procedures, activity level, treatment method and individual response."
+    },
+    {
+      question: "How long may the effects last?",
+      answer: "When the concern involves temporary fluid retention, the visible improvement may also be temporary. Activity, hormonal changes, sodium intake, heat, travel, surgery, compression use and underlying medical conditions may influence how long the effect remains noticeable."
+    },
+    {
+      question: "Does lymphatic drainage remove fat?",
+      answer: "No. Lymphatic drainage does not melt fat, permanently remove cellulite or produce true weight loss. Any temporary reduction in measurements or body weight is more likely to reflect changes in fluid and swelling rather than the removal of body fat."
+    },
+    {
+      question: "Does lymphatic drainage hurt?",
+      answer: "Manual lymphatic drainage should generally feel gentle and rhythmic. Mechanical compression may feel firm as the garment inflates, but it should not cause sharp pain, numbness or difficulty breathing. Tender post-surgical areas require adjusted pressure and appropriate medical guidance."
+    },
+    {
+      question: "Is there downtime?",
+      answer: "Most suitable clients can return to their regular activities after treatment. Temporary increased urination, mild tiredness, light-headedness, tenderness, skin redness or changes in the sensation of pressure may occur. Severe pain, significant bruising or worsening swelling should be reported."
+    },
+    {
+      question: "Can lymphatic drainage be performed after surgery?",
+      answer: "It may be included in selected recovery plans, but treatment should begin only after the surgeon or responsible medical provider confirms that it is appropriate. The timing, pressure and technique must reflect the operation, stage of healing, condition of incisions and the surgeon’s instructions."
+    },
+    {
+      question: "Can lymphatic drainage be performed after an aesthetic treatment?",
+      answer: "It may be suitable after certain aesthetic or body-contouring procedures when recommended by the treating practitioner. Suitability depends on the procedure, treatment area, timing, skin condition and cause of the swelling. It should not be performed over suspected infection or used to conceal signs of a complication."
+    },
+    {
+      question: "Is lymphatic drainage safe?",
+      answer: "Lymphatic drainage may be performed safely when the client is properly assessed and an appropriate technique and pressure are used. Possible adverse effects include skin irritation, tenderness, bruising, dizziness, numbness, worsening swelling, irritation of healing tissue and delayed recognition of an underlying medical condition."
+    },
+    {
+      question: "Who may need treatment postponed or medical clearance?",
+      answer: "Treatment may need to be postponed, adjusted or medically cleared if you have heart failure, kidney disease, an active infection, fever, suspected blood clot, sudden or one-sided swelling, uncontrolled high blood pressure, an open wound, severe circulatory disease, active cancer or diagnosed lymphedema. Recent surgery, lymph-node removal, pregnancy, restricted fluid intake, chest pain or difficulty breathing must also be disclosed."
+    }],
   },
   "slimming-injections": {
     slug: "slimming-injections",
-    tagline: "",
-    overview: "",
-    howItWorks: "",
-    benefits: [],
-    idealFor: [],
-    whatToExpect: "",
-    aftercare: "",
-    duration: "",
-    sessions: "",
-    faqs: [],
+    tagline: "Target small areas of resistant fat and improve body contour",
+    overview: "Fat melting is a broad term for non surgical and minimally invasive treatments designed to reduce or reshape selected pockets of fat. Depending on the treatment area, skin condition and your suitability, Melt Aways may recommend ultrasonic cavitation, radiofrequency body contouring, Endolift or a combination of appropriate techniques. These treatments are intended to refine body contours rather than produce major weight loss. A consultation is required to determine which option may be suitable and what level of change would be realistic.",
+    howItWorks: "Fat reduction treatments use different forms of controlled energy or tissue treatment to target localised fat. Some methods may disrupt or damage selected fat cells so their contents can be gradually processed by the body. Others primarily tighten the surrounding tissue, encourage collagen activity or improve the visible shape of the area. Your treatment begins with a body assessment, followed by a personalised recommendation based on the location and depth of the fat, skin firmness, medical history and desired outcome.",
+    benefits: ["May reduce the appearance of small pockets of resistant fat",
+    "Refines the contour of selected areas",
+    "May improve definition around the waist, abdomen or jawline",
+    "Supports a smoother and more balanced body shape",
+    "May improve skin firmness when combined with a tightening treatment",
+    "Can complement a wider body contouring programme",
+    "May support visible contour improvements after weight loss"],
+    idealFor: ["Lower or upper abdominal fullness",
+    "Fat around the waist and love handles",
+    "Small areas of back or bra line fullness",
+    "Upper arm fullness",
+    "Inner or outer thigh fullness",
+    "Small pockets of fat around the hips",
+    "Fullness beneath the chin",
+    "Reduced jawline definition",
+    "Localised fat remaining after weight loss",
+    "Uneven contours following changes in body weight"],
+    whatToExpect: "The treatment experience depends on the method selected. External body contouring may involve a handheld applicator being moved across the skin while your comfort and the treatment area are monitored. You may experience warmth, pressure, vibration, tingling, pulling or temporary tenderness. Ultrasonic cavitation may also produce a ringing sound during treatment. Endolift follows a different clinical process because a fine laser fibre is introduced beneath the skin and may require local anaesthetic. Results generally develop gradually, and temporary swelling or fluid changes may initially affect the appearance of the treated area.",
+    aftercare: "Aftercare will depend on the treatment performed. You may be advised to keep the area clean, maintain normal hydration unless medically restricted, resume light movement, avoid excessive heat and avoid rubbing sensitive skin. Compression garments, temporary exercise restrictions or additional recovery instructions may apply after minimally invasive treatment. Continue balanced eating and regular physical activity to help maintain your results. Contact Melt Aways if you develop severe pain, blistering, unusual discolouration, worsening swelling, fever or another unexpected reaction. The instructions provided by your practitioner should always take priority.",
+    duration: "Treatment time varies according to the method selected, the size and number of areas being treated and whether techniques are being combined. Your expected appointment length will be confirmed during consultation.",
+    sessions: "The number of sessions depends on the treatment, area and intended result. External treatments such as ultrasonic cavitation may be recommended as a spaced series, while some minimally invasive procedures may involve one treatment followed by a review. Additional sessions should be based on reassessment and how your body responds rather than a fixed package alone.",
+    faqs: [{
+      question: "When may I notice a difference?",
+      answer: "Some clients may notice temporary changes in the shape or feel of the area shortly after treatment. Meaningful fat reduction generally develops gradually as the body responds. Timing may be influenced by the selected treatment, amount and depth of fat, skin firmness, weight stability, lifestyle and the number of sessions completed."
+    },
+    {
+      question: "How long may the results last?",
+      answer: "Results may be maintained for an extended period, but the remaining fat cells can still enlarge if body weight increases. Stable weight, balanced nutrition, regular physical activity, adequate sleep and suitable maintenance treatments may help preserve the outcome."
+    },
+    {
+      question: "Does fat reduction hurt?",
+      answer: "Many external treatments produce manageable sensations such as warmth, pressure, vibration or tenderness. Endolift may involve local anaesthetic and can cause temporary swelling, tenderness or bruising. Tell your practitioner immediately if you experience burning, sharp pain or anything unusual."
+    },
+    {
+      question: "Is there downtime?",
+      answer: "External treatments often require little interruption to normal activities. Temporary redness, warmth, tenderness, swelling, bruising, tingling, numbness or skin sensitivity may occur. Minimally invasive treatments such as Endolift may require more recovery time and specific aftercare."
+    },
+    {
+      question: "Is fat melting a weight-loss treatment?",
+      answer: "No. Fat melting is intended to refine selected areas of localised fat rather than treat general weight gain or produce major weight loss. It does not replace exercise, balanced nutrition or medically supervised weight management."
+    },
+    {
+      question: "Are fat reduction treatments safe?",
+      answer: "Non surgical fat reduction may be performed safely when the client is appropriately assessed and suitable equipment is used by a properly trained practitioner. However, every treatment carries possible risks. The risks associated with the specific method should be explained before consent."
+    },
+    {
+      question: "Who may require medical clearance or postponed treatment?",
+      answer: "Treatment may need to be postponed or medically cleared if you are pregnant or breastfeeding, have an active infection, unexplained lump, hernia, bleeding disorder, uncontrolled diabetes, reduced sensation, liver or kidney disease, implanted electronic device, recent surgery, significant circulatory condition or another condition that could affect treatment or recovery."
+    }],
   },
   "peptides": {
     slug: "peptides",
-    tagline: "",
-    overview: "",
-    howItWorks: "",
-    benefits: [],
-    idealFor: [],
-    whatToExpect: "",
-    aftercare: "",
-    duration: "",
-    sessions: "",
-    faqs: [],
+    tagline: "Personalised peptide support for weight management, hormonal wellness and healthier-looking skin",
+    overview: "Peptides are short chains of amino acids that act as signalling molecules within the body. Depending on the product selected, peptide therapy can support medically supervised weight management, clinically identified hormone-related concerns or improvements in the condition and appearance of the skin. Because different peptides have different purposes, benefits and safety considerations, treatment must be recommended according to the exact product, your health history and your individual goals. Prescription or injectable peptide therapy requires assessment and supervision by an appropriately licensed medical professional.",
+    howItWorks: "Different peptides interact with specific receptors and biological pathways within the body. Weight-management peptides can influence appetite, fullness, digestion and metabolic activity. Hormone-related peptides can stimulate or regulate selected hormonal pathways when there is an appropriate clinical reason for treatment. Skincare peptides can support collagen activity, hydration, repair and the visible condition of the skin. Treatment begins with a consultation in which the clinician reviews your concerns, medical history, medications, allergies and relevant test results. If peptide therapy is considered suitable, the exact product, dosage, administration method, schedule and monitoring requirements will be explained.",
+    benefits: ["Can help regulate appetite and reduce persistent food cravings",
+    "Can support longer-lasting fullness and improved portion control",
+    "Can contribute to meaningful weight loss when paired with nutrition and lifestyle support",
+    "Can support reductions in waist circumference and improvements in overall body composition",
+    "Can help improve selected markers of metabolic health during medically supervised weight management",
+    "Can support healthy hormone activity when prescribed for a clinically identified hormonal concern",
+    "Can target specific hormone-related symptoms or deficiencies through a personalised medical plan",
+    "Can support energy, recovery, sexual wellness and physical wellbeing when an appropriate medical indication is identified",
+    "Certain skincare peptides can support collagen and elastin activity",
+    "Can soften the visible appearance of fine lines and early signs of ageing",
+    "Can support firmer, smoother and more resilient-looking skin",
+    "Can improve skin hydration, texture and overall radiance",
+    "Can complement professional skincare and anti-ageing treatment programmes",
+    "Provides a personalised approach based on the peptide selected, your health and your treatment goals"],
+    idealFor: ["Adults seeking medically supervised weight-management support",
+    "Persistent appetite or food cravings affecting weight-management efforts",
+    "Adults who require individual assessment before beginning injectable treatment",
+    "Clinically identified hormone-related concerns",
+    "Selected symptoms associated with an appropriate hormonal or metabolic condition",
+    "Clients seeking support for energy, recovery or sexual wellness where medically appropriate",
+    "Fine lines and early visible signs of ageing",
+    "Reduced skin firmness or elasticity",
+    "Dry, dull or uneven-looking skin",
+    "Clients seeking stronger collagen and skincare support",
+    "Adults prepared to complete recommended examinations or laboratory testing",
+    "Clients willing to follow prescribed dosing and monitoring requirements",
+    "Clients seeking professional guidance instead of purchasing unverified peptide products"],
+    whatToExpect: "Your first appointment includes a discussion about your health, concerns and desired outcome. The clinician can examine you, review existing laboratory results or request additional testing before recommending treatment. If peptide therapy is appropriate, you will be told the name of the product, its intended purpose, available evidence, expected benefits, limitations, alternatives and possible risks. Prescription peptides can be administered beneath the skin using a small needle, although the route and frequency depend on the selected medicine. Skincare peptides can instead be applied topically or included in a professional skincare programme. Temporary discomfort, redness, swelling, itching or bruising can occur around an injection site. Other effects depend on the particular peptide used."",
+    aftercare: "Use prescription peptide medication only as directed and do not change the dose, frequency or injection schedule without medical approval. Follow the storage instructions supplied with the product, as certain peptide medicines require refrigeration and protection from light. Wash your hands before administration, use a new sterile needle where applicable, rotate approved injection sites and dispose of used sharps in a suitable container. Do not share medication or use a product prescribed for another person. Attend monitoring appointments and complete any requested laboratory testing. For topical skincare peptides, follow the recommended application instructions and use appropriate sun protection. Seek urgent medical assistance if you experience difficulty breathing, facial or throat swelling, fainting, severe abdominal pain, persistent vomiting, chest pain, a severe headache or another serious reaction.",
+    duration: "The administration of an injection can be brief, but the initial medical consultation and follow-up appointments require additional time. Appointment length depends on the peptide being considered, the required health assessment, injection education and whether laboratory testing is needed. Topical peptide treatments vary according to the skincare procedure selected.",
+    sessions: "There is no single peptide programme suitable for every client. Treatment frequency and duration depend on the exact product, treatment purpose, prescribed dosage, response, side effects and monitoring results. Weight-management and hormone-related peptide treatments can require ongoing medical supervision. Skincare peptides can be used through a planned professional treatment series or suitable homecare routine. Treatment should be adjusted or discontinued when it is ineffective, poorly tolerated or no longer medically appropriate.",
+    faqs: [{
+      question: "What types of peptides are used in aesthetic and wellness care?",
+      answer: "Peptides used in this field generally fall into three broad groups: prescription medicines for medically supervised weight management, products that influence selected hormone-related pathways and topical skincare peptides intended to support collagen, hydration or skin renewal. These products do not have the same purpose, level of evidence, method of administration or regulatory status."
+    },
+    {
+      question: "Can peptides support weight loss?",
+      answer: "Yes. Certain prescription peptide-based medicines can support weight loss by helping regulate appetite, increasing fullness, reducing food cravings and influencing digestion or metabolic pathways. They work best as part of a medically supervised plan that also addresses nutrition, activity, sleep and long-term weight maintenance."
+    },
+    {
+      question: "How much weight can I lose with peptide therapy?",
+      answer: "The amount of weight lost depends on the exact medication, dosage, treatment duration, starting weight, health conditions, nutrition, physical activity and individual response. Results cannot be guaranteed, and the treatment should be regularly reviewed to determine whether it remains effective and appropriate."
+    },
+    {
+      question: "Can peptides support hormonal wellness?",
+      answer: "Certain peptide medicines can influence hormone release or selected hormone-related pathways. When an appropriate deficiency, symptom or medical indication is identified, treatment can support areas such as energy, recovery, sexual wellness, appetite regulation or general physical wellbeing. The exact concern should be medically assessed rather than treated using a general claim of hormone balancing."
+    },
+    {
+      question: "Can peptides improve muscle tone or recovery?",
+      answer: "Selected peptides are promoted for recovery, physical performance and body-composition support. However, the strength of evidence varies considerably between products. Peptide therapy does not replace resistance training, sufficient protein, balanced nutrition, rest or proper diagnosis and treatment of an injury."
+    },
+    {
+      question: "What can skincare peptides do?",
+      answer: "Certain topical skincare peptides can support collagen and elastin activity, improve hydration and strengthen the skin’s visible condition. With consistent use, they can help soften fine lines and support firmer, smoother and more radiant-looking skin. Results depend on the peptide formulation, concentration, skincare routine and condition of the skin."
+    },
+    {
+      question: "Are skincare peptides injected?",
+      answer: "Not necessarily. Many peptides used specifically for cosmetic skincare are applied topically through professional products, facials or a suitable homecare routine. Prescription peptides used for weight management or certain medical concerns can be administered by injection. The method depends on the exact product and its intended purpose."
+    },
+    {
+      question: "How long does peptide therapy take to work?",
+      answer: "The timeline depends on the peptide and the intended outcome. Changes in appetite can occur earlier with certain weight-management medicines, while visible weight loss develops over time. Hormone-related outcomes depend on the condition being treated and the body’s response. Skincare improvements generally require consistent use over several weeks or months."
+    },
+    {
+      question: "What side effects can peptide injections cause?",
+      answer: "Possible effects include injection-site pain, redness, itching, swelling, bruising, headache, dizziness, nausea, digestive changes, fatigue, altered appetite, fluid retention, changes in blood sugar, allergic reactions and unintended hormonal effects. The actual risks depend on the peptide, dosage, product quality, medical history and other medications."
+    },
+    {
+      question: "Are peptide injections safe?",
+      answer: "Safety depends on the identity and quality of the product, the evidence supporting its use, appropriate prescribing, sterile preparation, accurate dosing and ongoing medical monitoring. Injectable peptides should be obtained through a legitimate medical and pharmaceutical pathway. Products sold online for research use should not be injected."
+    },
+    {
+      question: "Who can be unsuitable for peptide therapy?",
+      answer: "Treatment can be unsuitable, postponed or require specialist clearance if you are pregnant or breastfeeding, under 18 or have certain cancers, uncontrolled diabetes, significant liver or kidney disease, pancreatic or gallbladder disease, an endocrine disorder, severe gastrointestinal illness, a serious cardiovascular condition or a history of severe allergic reactions. Suitability also depends on the exact peptide and your current medications."
+    },
+    {
+      question: "Can I purchase peptides online and inject them myself?",
+      answer: "This is not recommended. Products labelled for research use can have uncertain ingredients, strength, sterility and manufacturing quality. Incorrect dosing, contamination, improper storage and unsafe injection techniques can cause serious harm. Injectable peptide treatment should be prescribed and monitored by an appropriately licensed medical professional."
+    }],
   },
   "body-contouring": {
     slug: "body-contouring",
-    tagline: "",
-    overview: "",
-    howItWorks: "",
-    benefits: [],
-    idealFor: [],
-    whatToExpect: "",
-    aftercare: "",
-    duration: "",
-    sessions: "",
-    faqs: [],
+    tagline: "Shape, smooth and refine targeted areas",
+    overview: "Non surgical body contouring uses selected aesthetic technologies to improve the shape, firmness and visible definition of targeted areas without traditional surgery. Depending on your concerns and the treatment selected, it can reduce small areas of unwanted fat, support firmer looking skin, soften the appearance of cellulite, stimulate selected muscles or address temporary puffiness. At Melt Aways, your body is assessed before treatment to determine whether the area is mainly affected by localised fat, loose skin, reduced muscle tone, fluid retention or a combination of factors.",
+    howItWorks: "Body contouring is not one standard procedure. Your personalised plan can include ultrasound cavitation for localised fat, radiofrequency for skin firmness, vacuum assisted treatment for tissue mobilisation and the appearance of cellulite, muscle stimulation for visible conditioning or lymphatic drainage for temporary fluid retention. The selected handpiece, applicator or treatment pad is positioned over the targeted area and adjusted according to your body, comfort and the intended result. Each technology works differently, so the recommended method, settings, appointment length and number of sessions will depend on what the area actually requires.",
+    benefits: ["Can improve the visible shape of targeted body areas",
+    "Can reduce the appearance of small pockets of resistant fat",
+    "Can create a more defined waistline",
+    "Can support firmer and smoother looking skin",
+    "Can improve the appearance of mild skin looseness",
+    "Can soften the visible texture of cellulite",
+    "Can enhance existing curves and body contours",
+    "Can support muscle conditioning and visible definition",
+    "Can reduce the appearance of temporary puffiness when drainage is appropriate",
+    "Can address more than one body concern through a personalised programme",
+    "Provides a non surgical approach to contour refinement",
+    "Can complement a healthy and active lifestyle"],
+    idealFor: ["Small areas of localised or resistant fat",
+    "Limited definition around the waist",
+    "Fullness affecting the abdomen or flanks",
+    "Mildly loose or less firm looking skin",
+    "Visible cellulite or uneven texture",
+    "Reduced muscle tone in selected areas",
+    "Temporary puffiness or fluid related fullness",
+    "Changes in body shape following weight loss",
+    "Clients who are reasonably close to a stable weight",
+    "Concerns affecting the upper or lower abdomen",
+    "The waist, hips, flanks or lower back",
+    "The upper back or bra line area",
+    "The upper arms, thighs, buttocks or knees",
+    "Clients seeking targeted improvement without traditional surgery"],
+    whatToExpect: "Your appointment begins with an assessment of the area, your desired result, weight history, pregnancy history, previous procedures, lifestyle and relevant medical conditions. The practitioner will determine whether the concern is mainly related to fat, skin, muscle, fluid or natural body structure. The area can then be cleansed, photographed, measured or marked before a gel, protective layer or applicator is placed on the skin. Depending on the technology selected, you can experience warmth, cooling, suction, pressure, vibration, tingling or repeated muscle contractions. Treatment settings can be adjusted according to your comfort and response. Tell your practitioner immediately if you experience burning, sharp pain, excessive heat or severe discomfort.",
+    aftercare: "Follow the instructions provided for the particular technology used during your appointment. Keep the treated area clean and maintain your normal hydration unless medically restricted. Avoid scratching, rubbing, picking or applying harsh products to sensitive skin. Excessive heat, strenuous exercise, alcohol, massage or particular skincare products can need to be temporarily avoided depending on the procedure. Wear comfortable clothing if the area feels tender and continue normal light movement unless instructed otherwise. Contact Melt Aways if you experience blistering, severe or worsening pain, excessive swelling, unusual discolouration, increasing numbness or another unexpected reaction.",
+    duration: "Appointment length depends on the technology selected, the size and number of areas being treated and whether more than one suitable method is included. Your expected treatment time, preparation requirements and recovery period will be explained during your consultation.",
+    sessions: "Some body contouring procedures are planned as a carefully spaced series, while others can require fewer appointments. The number and frequency of sessions depend on the selected technology, size of the area, type of concern, desired improvement, safety limitations and your response. Progress can be reviewed throughout the programme so the plan can be adjusted where appropriate. More sessions do not automatically produce a better result.",
+    faqs: [{
+      question: "When can I notice results?",
+      answer: "Some clients can notice temporary smoothing, reduced puffiness or improved firmness shortly after a session. Changes involving localised fat reduction, muscle conditioning or collagen development generally become visible more gradually. The timeline depends on the technology, treatment area, tissue present, skin and muscle condition, general health, lifestyle and individual response."
+    },
+    {
+      question: "Is body contouring a weight loss treatment?",
+      answer: "No. Non surgical body contouring is intended to improve selected areas rather than cause major overall weight loss or treat obesity. It is generally most appropriate for clients who are reasonably close to a stable weight but have a particular area that lacks firmness, definition or proportion."
+    },
+    {
+      question: "What body contouring treatments can be used?",
+      answer: "Depending on the services available and your suitability, treatment can include ultrasound cavitation, radiofrequency, vacuum assisted therapy, muscle stimulation or lymphatic drainage. Each method addresses a different concern and should be recommended according to what is affecting the area."
+    },
+    {
+      question: "Can different body contouring treatments be combined?",
+      answer: "Yes, when each method has a clear purpose and the combination is suitable for your body. One treatment can target localised fat while another addresses skin firmness, muscle condition or temporary fluid retention. Combining several procedures without a clear reason does not guarantee a stronger result."
+    },
+    {
+      question: "Does body contouring hurt?",
+      answer: "Comfort levels vary according to the technology, treatment area and individual sensitivity. You can experience warmth, cooling, pressure, suction, vibration, tingling or strong muscle contractions. These sensations can feel unusual or intense, but treatment should not cause burning, sharp pain or severe discomfort."
+    },
+    {
+      question: "Is there downtime?",
+      answer: "Many non surgical body contouring treatments require little interruption to your normal routine. Depending on the procedure, temporary redness, swelling, tenderness, bruising, numbness, tingling, muscle soreness, skin sensitivity, firmness or small lumps beneath the skin can occur while the area settles."
+    },
+    {
+      question: "How long can the results last?",
+      answer: "The duration of improvement depends on the procedure and what happens after your programme. Results can be easier to maintain with a reasonably stable weight, regular physical activity, balanced nutrition, normal hydration and suitable maintenance care. Body contouring cannot prevent future changes caused by weight fluctuation, pregnancy, ageing, hormones or reduced skin firmness."
+    },
+    {
+      question: "Can body contouring remove cellulite?",
+      answer: "Selected treatments can soften the visible texture of cellulite and temporarily create a smoother appearance. Cellulite is influenced by connective tissue, fat distribution, skin quality, hormones and genetics, so complete or permanent removal cannot be guaranteed."
+    },
+    {
+      question: "Can body contouring tighten loose skin?",
+      answer: "Radiofrequency and certain other technologies can support collagen activity and improve the appearance of mild skin looseness. Non surgical treatments cannot reproduce the amount of tissue removal or lifting achieved through surgery, particularly when substantial excess skin is present."
+    },
+    {
+      question: "Is non surgical body contouring safe?",
+      answer: "Body contouring can be performed safely when the client is properly screened and trained practitioners use suitable equipment, settings and treatment protocols. Possible adverse effects vary by technology and can include burns, blistering, bruising, pigmentation changes, altered sensation, infection, scarring, persistent pain, muscle or nerve injury, uneven contours and an unsatisfactory cosmetic result."
+    },
+    {
+      question: "Who can be unsuitable for body contouring?",
+      answer: "Treatment can be postponed, changed or require medical clearance if you are pregnant or breastfeeding; have a pacemaker, implanted electronic device or metal near the area; or have heart, liver or kidney disease, a clotting disorder, uncontrolled diabetes, a hernia, impaired healing or reduced sensation. Active infection, open wounds, unexplained swelling, recent surgery and blood thinning medication must also be disclosed."
+    },
+    {
+      question: "Which body contouring treatment is right for me?",
+      answer: "The appropriate method depends on whether the area is affected mainly by localised fat, loose skin, reduced muscle tone, temporary fluid retention or natural body structure. Melt Aways will assess the area and recommend one suitable treatment or a structured programme based on your actual needs and realistic goals."
+    }],
   },
 };
