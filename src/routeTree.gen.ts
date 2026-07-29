@@ -38,6 +38,7 @@ import { Route as DashboardAppointmentsRouteImport } from './routes/dashboard.ap
 import { Route as DashboardAuditRouteImport } from './routes/dashboard.audit'
 import { Route as DashboardConsultationsRouteImport } from './routes/dashboard.consultations'
 import { Route as DashboardCustomersRouteImport } from './routes/dashboard.customers'
+import { Route as DashboardEmailPreviewsRouteImport } from './routes/dashboard.email-previews'
 import { Route as DashboardEmployeesRouteImport } from './routes/dashboard.employees'
 import { Route as DashboardInterestsRouteImport } from './routes/dashboard.interests'
 import { Route as DashboardMarketingRouteImport } from './routes/dashboard.marketing'
@@ -214,6 +215,11 @@ const DashboardConsultationsRoute = DashboardConsultationsRouteImport.update({
 const DashboardCustomersRoute = DashboardCustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEmailPreviewsRoute = DashboardEmailPreviewsRouteImport.update({
+  id: '/email-previews',
+  path: '/email-previews',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardEmployeesRoute = DashboardEmployeesRouteImport.update({
@@ -403,6 +409,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
   '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
+  '/dashboard/email-previews': typeof DashboardEmailPreviewsRoute
   '/dashboard/employees': typeof DashboardEmployeesRoute
   '/dashboard/interests': typeof DashboardInterestsRoute
   '/dashboard/marketing': typeof DashboardMarketingRoute
@@ -460,6 +467,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
+  '/dashboard/email-previews': typeof DashboardEmailPreviewsRoute
   '/dashboard/employees': typeof DashboardEmployeesRoute
   '/dashboard/interests': typeof DashboardInterestsRoute
   '/dashboard/marketing': typeof DashboardMarketingRoute
@@ -521,6 +529,7 @@ export interface FileRoutesById {
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/consultations': typeof DashboardConsultationsRoute
   '/dashboard/customers': typeof DashboardCustomersRouteWithChildren
+  '/dashboard/email-previews': typeof DashboardEmailPreviewsRoute
   '/dashboard/employees': typeof DashboardEmployeesRoute
   '/dashboard/interests': typeof DashboardInterestsRoute
   '/dashboard/marketing': typeof DashboardMarketingRoute
@@ -584,6 +593,7 @@ export interface FileRouteTypes {
     | '/dashboard/audit'
     | '/dashboard/consultations'
     | '/dashboard/customers'
+    | '/dashboard/email-previews'
     | '/dashboard/employees'
     | '/dashboard/interests'
     | '/dashboard/marketing'
@@ -641,6 +651,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/dashboard/audit'
     | '/dashboard/consultations'
+    | '/dashboard/email-previews'
     | '/dashboard/employees'
     | '/dashboard/interests'
     | '/dashboard/marketing'
@@ -701,6 +712,7 @@ export interface FileRouteTypes {
     | '/dashboard/audit'
     | '/dashboard/consultations'
     | '/dashboard/customers'
+    | '/dashboard/email-previews'
     | '/dashboard/employees'
     | '/dashboard/interests'
     | '/dashboard/marketing'
@@ -980,6 +992,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCustomersRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/email-previews': {
+      id: '/dashboard/email-previews'
+      path: '/email-previews'
+      fullPath: '/dashboard/email-previews'
+      preLoaderRoute: typeof DashboardEmailPreviewsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/employees': {
       id: '/dashboard/employees'
       path: '/employees'
@@ -1240,6 +1259,7 @@ interface DashboardRouteChildren {
   DashboardAuditRoute: typeof DashboardAuditRoute
   DashboardConsultationsRoute: typeof DashboardConsultationsRoute
   DashboardCustomersRoute: typeof DashboardCustomersRouteWithChildren
+  DashboardEmailPreviewsRoute: typeof DashboardEmailPreviewsRoute
   DashboardEmployeesRoute: typeof DashboardEmployeesRoute
   DashboardInterestsRoute: typeof DashboardInterestsRoute
   DashboardMarketingRoute: typeof DashboardMarketingRoute
@@ -1256,6 +1276,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAuditRoute: DashboardAuditRoute,
   DashboardConsultationsRoute: DashboardConsultationsRoute,
   DashboardCustomersRoute: DashboardCustomersRouteWithChildren,
+  DashboardEmailPreviewsRoute: DashboardEmailPreviewsRoute,
   DashboardEmployeesRoute: DashboardEmployeesRoute,
   DashboardInterestsRoute: DashboardInterestsRoute,
   DashboardMarketingRoute: DashboardMarketingRoute,
