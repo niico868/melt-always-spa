@@ -1,7 +1,7 @@
 import {
   LayoutDashboard, Calendar, ClipboardList, Users, CreditCard,
   Sparkles, Heart, UserCheck, BarChart2, Megaphone,
-  ScrollText, LogOut,
+  ScrollText, LogOut, Mail,
 } from "lucide-react";
 import { NavItem } from "./NavItem";
 import { useSession, signOutAndRedirect } from "@/lib/use-session";
@@ -42,6 +42,7 @@ export function Sidebar() {
         {NAV.map((n) => (
           <NavItem key={n.to} icon={n.icon} label={n.label} to={n.to} />
         ))}
+        {isAdmin && <NavItem icon={Mail} label="Email Previews" to="/dashboard/email-previews" />}
         {isAdmin && <NavItem icon={ScrollText} label="Audit Log" to="/dashboard/audit" />}
       </nav>
 
