@@ -106,8 +106,8 @@ function ServiceDetail() {
             <Accordion type="single" collapsible className="w-full">
               {c.faqs.map((f, i) => (
                 <AccordionItem key={i} value={`faq-${i}`}>
-                  <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-                  <AccordionContent className="text-taupe leading-relaxed">{f.a}</AccordionContent>
+                  <AccordionTrigger className="text-left">{f.question}</AccordionTrigger>
+                  <AccordionContent className="text-taupe leading-relaxed">{f.answer}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
