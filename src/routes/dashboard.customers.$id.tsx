@@ -174,6 +174,58 @@ function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string;
     </div>
   );
 }
+
+function CompleteTreatmentButton({ customer }: { customer: any }) {
+  const qc = useQueryClient();
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  if (customer.client_status === "treatment_plan_completed") return null;
+
+  async function markComplete() {
+    setBusy(true); setMsg(null);
+    try {
+      const { error } = await supabase
+        .from("customers")
+        .update({ client_status: "treatment_plan_completed", client_status_changed_at: new Date().toISOString() })
+        .eq("id", customer.id);
+      if (error) throw error;
+      if (customer.email) {
+        await sendTransactionalEmail({
+          templateName: "treatment-complete",
+          recipientEmail: customer.email,
+          idempotencyKey: `treatment-complete-${customer.id}`,
+          templateData: { firstName: String(customer.full_name || "").trim().split(/\s+/)[0] },
+        });
+      }
+      setMsg(customer.email ? "Marked complete — congratulations email sent." : "Marked complete (no email on file).");
+      qc.invalidateQueries({ queryKey: ["customer", customer.id] });
+      qc.invalidateQueries({ queryKey: ["customers"] });
+    } catch (e: any) {
+      setMsg(e?.message || "Could not update status.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <span className="inline-flex items-center gap-2">
+      <button onClick={markComplete} disabled={busy}
+        className="text-[11px] px-2 py-0.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 disabled:opacity-50">
+        {busy ? "Saving…" : "Mark treatment complete"}
+      </button>
+      {msg && <span className="text-[10px] text-gray-500">{msg}</span>}
+    </span>
+  );
+}
+
+function InfoRowUnused({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+  return (
+    <div className="flex items-start gap-2 p-2 bg-gray-50 rounded-lg">
+      <span className="mt-0.5 text-gray-400">{icon}</span>
+      <div><div className="text-[10px] uppercase tracking-wide text-gray-400">{label}</div><div className="text-gray-800">{value}</div></div>
+    </div>
+  );
+}
 function Stat({ label, value }: { label: string; value: string }) {
   return <div className="p-3 bg-gray-50 rounded-lg"><div className="text-[10px] uppercase text-gray-400">{label}</div><div className="text-sm font-semibold text-gray-800">{value}</div></div>;
 }
