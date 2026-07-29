@@ -46,17 +46,19 @@ function Services() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {SERVICES.map((s) => (
           <article key={s.slug} className="group bg-background rounded-3xl overflow-hidden border border-border/60 card-shadow flex flex-col">
-            <div className="aspect-[4/3] overflow-hidden bg-blush">
+            <Link to="/services/$slug" params={{ slug: s.slug }} className="aspect-[4/3] overflow-hidden bg-blush block">
               <img src={SERVICE_IMAGES[s.slug]} alt={s.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
-            </div>
+            </Link>
             <div className="p-7 flex flex-col flex-1">
-              <h3 className="text-xl text-ink">{s.name}</h3>
+              <h3 className="text-xl text-ink">
+                <Link to="/services/$slug" params={{ slug: s.slug }} className="hover:underline">{s.name}</Link>
+              </h3>
               <p className="mt-2 text-sm text-taupe flex-1 leading-relaxed">{s.desc}</p>
               <div className="mt-3 text-xs text-taupe/70">Service price pending · Duration pending</div>
               <div className="mt-4 flex items-center gap-3 text-sm">
-                <Link to="/booking" className="text-primary font-medium hover:underline">Book Consultation</Link>
+                <Link to="/services/$slug" params={{ slug: s.slug }} className="text-primary font-medium hover:underline">Learn more</Link>
                 <span className="text-border">·</span>
-                <Link to="/packages" className="text-ink font-medium hover:underline">View Packages</Link>
+                <Link to="/booking" className="text-ink font-medium hover:underline">Book</Link>
               </div>
             </div>
           </article>
