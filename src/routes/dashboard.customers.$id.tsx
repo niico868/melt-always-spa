@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { sendTransactionalEmail } from "@/lib/email/send";
 import { ArrowLeft, Pin, Trash2, Plus, Mail, Phone, MapPin, Cake, MessageCircle, AlertTriangle, Pencil } from "lucide-react";
 import { DashboardPage, PrimaryButton } from "@/components/dashboard/DashboardPage";
 import { Modal, Field, inputCls } from "@/components/dashboard/Modal";
@@ -137,6 +140,7 @@ function OverviewTab({ customer }: { customer: any }) {
         <div className="flex items-center gap-2">
           <span className={`inline-block text-[11px] px-2 py-0.5 rounded-full border capitalize font-medium ${csTone}`}>{cs}</span>
           {customer.last_activity_at && <span className="text-[10px] text-gray-400">Last activity {fmtDate(customer.last_activity_at)}</span>}
+          <CompleteTreatmentButton customer={customer} />
         </div>
         <div className="grid grid-cols-2 gap-2">
           {customer.phone && <InfoRow icon={<Phone size={12} />} label="Phone" value={customer.phone} />}
@@ -170,6 +174,50 @@ function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string;
     </div>
   );
 }
+
+function CompleteTreatmentButton({ customer }: { customer: any }) {
+  const qc = useQueryClient();
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  if (customer.client_status === "treatment_plan_completed") return null;
+
+  async function markComplete() {
+    setBusy(true); setMsg(null);
+    try {
+      const { error } = await supabase
+        .from("customers")
+        .update({ client_status: "treatment_plan_completed", client_status_changed_at: new Date().toISOString() })
+        .eq("id", customer.id);
+      if (error) throw error;
+      if (customer.email) {
+        await sendTransactionalEmail({
+          templateName: "treatment-complete",
+          recipientEmail: customer.email,
+          idempotencyKey: `treatment-complete-${customer.id}`,
+          templateData: { firstName: String(customer.full_name || "").trim().split(/\s+/)[0] },
+        });
+      }
+      setMsg(customer.email ? "Marked complete — congratulations email sent." : "Marked complete (no email on file).");
+      qc.invalidateQueries({ queryKey: ["customer", customer.id] });
+      qc.invalidateQueries({ queryKey: ["customers"] });
+    } catch (e: any) {
+      setMsg(e?.message || "Could not update status.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <span className="inline-flex items-center gap-2">
+      <button onClick={markComplete} disabled={busy}
+        className="text-[11px] px-2 py-0.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 disabled:opacity-50">
+        {busy ? "Saving…" : "Mark treatment complete"}
+      </button>
+      {msg && <span className="text-[10px] text-gray-500">{msg}</span>}
+    </span>
+  );
+}
+
 function Stat({ label, value }: { label: string; value: string }) {
   return <div className="p-3 bg-gray-50 rounded-lg"><div className="text-[10px] uppercase text-gray-400">{label}</div><div className="text-sm font-semibold text-gray-800">{value}</div></div>;
 }

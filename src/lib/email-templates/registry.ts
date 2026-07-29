@@ -5,6 +5,8 @@ import { template as consultationBooked } from './consultation-booked'
 import { template as consultationRecommendation } from './consultation-recommendation'
 import { template as treatmentPackageWelcome } from './treatment-package-welcome'
 import { template as treatmentReminder } from './treatment-reminder'
+import { template as treatmentComplete } from './treatment-complete'
+import { template as treatmentFollowup } from './treatment-followup'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -29,4 +31,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'consultation-recommendation': consultationRecommendation,
   'treatment-package-welcome': treatmentPackageWelcome,
   'treatment-reminder': treatmentReminder,
+  'treatment-complete': treatmentComplete,
+  'treatment-followup': treatmentFollowup,
 }
