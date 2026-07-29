@@ -2,7 +2,7 @@
 // Fill in the fields per service. Any field left as an empty string / empty
 // array will be hidden on the page — no need to delete sections you don't use.
 
-export type ServiceFaq = { q: string; a: string };
+export type ServiceFaq = { question: string; answer: string };
 
 export type ServiceContent = {
   slug: string;              // must match SERVICES slug in src/lib/site.ts
@@ -210,7 +210,7 @@ export const SERVICES_CONTENT: Record<string, ServiceContent> = {
   "breast-filler": {
     slug: "breast-filler",
     tagline: "Personalised fullness and contour enhancement without surgery",
-    overview: "Injectable breast enhancement is a medical aesthetic procedure that uses a selected filler to add limited volume or refine specific areas of the breasts without implants or fat-transfer surgery. Depending on your anatomy and medical suitability, it may be considered for subtle fullness, mild asymmetry or selected contour irregularities. It does not provide the lifting or enlargement possible with surgery. Because breast injections carry serious risks and may interfere with future breast screening, a detailed medical assessment, full product disclosure and informed consent are essential before treatment.,
+    overview: "Injectable breast enhancement is a medical aesthetic procedure that uses a selected filler to add limited volume or refine specific areas of the breasts without implants or fat-transfer surgery. Depending on your anatomy and medical suitability, it may be considered for subtle fullness, mild asymmetry or selected contour irregularities. It does not provide the lifting or enlargement possible with surgery. Because breast injections carry serious risks and may interfere with future breast screening, a detailed medical assessment, full product disclosure and informed consent are essential before treatment.",
     howItWorks: "Following a medical and breast assessment, the proposed treatment areas are photographed, measured and carefully marked. The exact filler, its regulatory status, expected duration, possible risks and available methods of managing complications should be explained before treatment. The skin is cleansed, and local anaesthesia or another comfort measure may be used. A qualified medical professional then places controlled amounts of filler into selected areas using medically appropriate injection equipment. Treatment may be staged to monitor healing, symmetry, tissue response and how the product settles before any additional filler is considered.",
     benefits: ["May provide a limited increase in breast fullness",
     "May improve mild differences in breast size",
