@@ -660,4 +660,41 @@ export const SERVICES_CONTENT: Record<string, ServiceContent> = {
       answer: "The appropriate method depends on whether the area is affected mainly by localised fat, loose skin, reduced muscle tone, temporary fluid retention or natural body structure. Melt Aways will assess the area and recommend one suitable treatment or a structured programme based on your actual needs and realistic goals."
     }],
   },
+  "iv-therapy": {
+    slug: "iv-therapy",
+    tagline: "Consultation-led intravenous infusions for hydration, wellness and recovery",
+    overview: "IV therapy delivers a tailored blend of fluids, vitamins, minerals or amino acids directly into the bloodstream through a small cannula. Because the infusion bypasses digestion, the selected nutrients become available to the body more efficiently than many oral options. At Melt Aways, every IV appointment begins with a health review so the drip recommended reflects your current wellness, hydration, lifestyle and any relevant medical history. IV therapy is intended to support general wellbeing and recovery rather than treat, diagnose or cure medical conditions.",
+    howItWorks: "During your consultation, your practitioner will discuss your goals, review your health history and confirm that IV therapy is appropriate for you. A suitable formulation is then prepared. A fine cannula is placed in a vein, usually in the arm or the back of the hand, and the infusion is delivered gradually while you rest in a comfortable treatment chair. Your vital signs, comfort and the infusion site are monitored throughout. Once the drip is complete, the cannula is removed and the site is dressed.",
+    benefits: [
+      "Supports hydration and fluid balance",
+      "Delivers selected vitamins and minerals directly to the bloodstream",
+      "May support energy levels and general wellbeing",
+      "May support recovery after travel, illness or strenuous activity",
+      "Can complement skin, hair and nail wellness routines",
+      "May support immune function as part of a broader lifestyle",
+      "Personalised formulations based on your consultation",
+      "Administered in a calm, private clinical setting"
+    ],
+    idealFor: [
+      "General wellness and hydration support",
+      "Fatigue related to lifestyle, travel or busy schedules",
+      "Recovery after dehydration, mild illness or long flights",
+      "Support alongside fitness, training or event preparation",
+      "Skin, hair and nail wellness routines",
+      "Occasional immune support",
+      "Clients seeking a considered, consultation-led approach to wellness"
+    ],
+    whatToExpect: "Your appointment begins with a short health check, including blood pressure and a review of any medication, allergies or relevant conditions. Once you are settled, the cannula is placed and the drip begins. Most infusions take between 30 and 60 minutes, during which you can relax, read or rest. You may feel a brief pinch on insertion, mild coolness along the arm as the fluid enters, or a temporary taste sensation depending on the formulation. Your practitioner will remain nearby and monitor you throughout.",
+    aftercare: "Keep the small dressing in place for a few hours and avoid heavy lifting with the treated arm for the rest of the day. Continue drinking water, eat as normal and resume light activity. Mild bruising or tenderness at the cannula site may occur and usually settles quickly. Contact Melt Aways promptly if you notice increasing redness, swelling, warmth, discharge, fever or any unexpected reaction. Instructions provided by your practitioner should always take priority.",
+    duration: "Most IV therapy sessions take 30 to 60 minutes, plus a short consultation and post-infusion rest. Your expected appointment length will be confirmed at booking based on the formulation selected.",
+    sessions: "Some clients choose a single IV session for occasional support, while others follow a spaced schedule as part of an ongoing wellness routine. Frequency should always be based on reassessment and how you respond rather than a fixed package alone.",
+    faqs: [
+      { question: "Does IV therapy hurt?", answer: "You may feel a brief pinch when the cannula is inserted and a cool sensation along the arm as the fluid enters. Most clients find the experience comfortable and relaxing." },
+      { question: "How quickly will I feel a difference?", answer: "Some clients notice improved hydration or a refreshed feeling soon after treatment. Other effects may be more gradual and depend on your baseline wellness, lifestyle, sleep, nutrition and the formulation selected." },
+      { question: "Is IV therapy a treatment for medical conditions?", answer: "No. IV therapy at Melt Aways is intended to support general wellness, hydration and recovery. It is not a substitute for medical care, prescribed treatment or advice from your doctor." },
+      { question: "Is there downtime?", answer: "Most clients return to their normal day after treatment. Mild bruising or tenderness at the cannula site may occur and usually settles quickly." },
+      { question: "Who may not be suitable for IV therapy?", answer: "IV therapy may need to be postponed or medically cleared if you are pregnant or breastfeeding, have kidney, liver or heart conditions, a bleeding or clotting disorder, an active infection, allergies to any of the ingredients, or take medication that may interact with the formulation. Always disclose your full health history at consultation." }
+    ],
+    disclaimer: "IV therapy is a wellness service and is not intended to diagnose, treat or cure any medical condition. A consultation is required and treatment is only provided when clinically appropriate."
+  },
 };

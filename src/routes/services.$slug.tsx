@@ -19,6 +19,7 @@ import lymphatic from "@/assets/treatments/Lymphatic_Drainage.png.asset.json";
 import slimming from "@/assets/treatments/Fat_Dissolving.png.asset.json";
 import peptides from "@/assets/treatments/Peptides.png.asset.json";
 import bodyContour from "@/assets/treatments/Body_Contouring.png.asset.json";
+import ivTherapy from "@/assets/treatments/IV_Therapy.jpg";
 
 const IMAGES: Record<string, string> = {
   "fat-melting": fatMelting.url,
@@ -32,6 +33,7 @@ const IMAGES: Record<string, string> = {
   "slimming-injections": slimming.url,
   "peptides": peptides.url,
   "body-contouring": bodyContour.url,
+  "iv-therapy": ivTherapy,
 };
 
 export const Route = createFileRoute("/services/$slug")({

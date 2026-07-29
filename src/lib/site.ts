@@ -65,6 +65,7 @@ export const SERVICES = [
   { slug: "slimming-injections", name: "Slimming Injections", desc: "A wellness and weight-support service that requires proper consultation before recommendation." },
   { slug: "peptides", name: "Peptides", desc: "Support anti-aging, wellness, and body goals through guided peptide-based treatment options." },
   { slug: "body-contouring", name: "Body-Contouring", desc: "Personalised treatment paths designed to help sculpt, define, and support your ideal body goals." },
+  { slug: "iv-therapy", name: "IV Therapy", desc: "Consultation-led intravenous infusions to support hydration, wellness, recovery and radiance." },
 ];
 
 export const PACKAGES = [
