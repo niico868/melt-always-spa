@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { sendTransactionalEmail } from "@/lib/email/send";
 import { ArrowLeft, Pin, Trash2, Plus, Mail, Phone, MapPin, Cake, MessageCircle, AlertTriangle, Pencil } from "lucide-react";
 import { DashboardPage, PrimaryButton } from "@/components/dashboard/DashboardPage";
 import { Modal, Field, inputCls } from "@/components/dashboard/Modal";
@@ -137,6 +140,7 @@ function OverviewTab({ customer }: { customer: any }) {
         <div className="flex items-center gap-2">
           <span className={`inline-block text-[11px] px-2 py-0.5 rounded-full border capitalize font-medium ${csTone}`}>{cs}</span>
           {customer.last_activity_at && <span className="text-[10px] text-gray-400">Last activity {fmtDate(customer.last_activity_at)}</span>}
+          <CompleteTreatmentButton customer={customer} />
         </div>
         <div className="grid grid-cols-2 gap-2">
           {customer.phone && <InfoRow icon={<Phone size={12} />} label="Phone" value={customer.phone} />}
