@@ -2,7 +2,7 @@
 // Fill in the fields per service. Any field left as an empty string / empty
 // array will be hidden on the page — no need to delete sections you don't use.
 
-export type ServiceFaq = { q: string; a: string };
+export type ServiceFaq = { question: string; answer: string };
 
 export type ServiceContent = {
   slug: string;              // must match SERVICES slug in src/lib/site.ts
