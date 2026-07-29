@@ -29,7 +29,7 @@ const SERVICE_IMAGES: Record<string, string> = {
   "iv-therapy": ivTherapy,
 };
 
-export const Route = createFileRoute("/services")({
+export const Route = createFileRoute("/services/")({
   head: () => ({ meta: [
     { title: "Services — Melt Aways" },
     { name: "description", content: "Body-contouring, fat melting, skin tightening, anti-aging, cavitation, lymphatic drainage and more — consultation-led at Melt Aways." },

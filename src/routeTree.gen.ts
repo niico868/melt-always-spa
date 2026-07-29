@@ -26,7 +26,6 @@ import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as ReviewsRouteImport } from './routes/reviews'
-import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TimelineRouteImport } from './routes/timeline'
@@ -51,6 +50,7 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as JournalIndexRouteImport } from './routes/journal.index'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
@@ -151,11 +151,6 @@ const ProductsRoute = ProductsRouteImport.update({
 const ReviewsRoute = ReviewsRouteImport.update({
   id: '/reviews',
   path: '/reviews',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SetPasswordRoute = SetPasswordRouteImport.update({
@@ -280,10 +275,15 @@ const LocationsSlugRoute = LocationsSlugRouteImport.update({
   path: '/locations/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesSlugRoute = ServicesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ServicesRoute,
+  id: '/services/$slug',
+  path: '/services/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   id: '/.lovable/oauth/consent',
@@ -385,7 +385,6 @@ export interface FileRoutesByFullPath {
   '/policies': typeof PoliciesRoute
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
-  '/services': typeof ServicesRouteWithChildren
   '/set-password': typeof SetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
@@ -411,6 +410,7 @@ export interface FileRoutesByFullPath {
   '/services/$slug': typeof ServicesSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
@@ -443,7 +443,6 @@ export interface FileRoutesByTo {
   '/policies': typeof PoliciesRoute
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
-  '/services': typeof ServicesRouteWithChildren
   '/set-password': typeof SetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
@@ -466,6 +465,7 @@ export interface FileRoutesByTo {
   '/services/$slug': typeof ServicesSlugRoute
   '/dashboard': typeof DashboardIndexRoute
   '/journal': typeof JournalIndexRoute
+  '/services': typeof ServicesIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
@@ -501,7 +501,6 @@ export interface FileRoutesById {
   '/policies': typeof PoliciesRoute
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
-  '/services': typeof ServicesRouteWithChildren
   '/set-password': typeof SetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
@@ -527,6 +526,7 @@ export interface FileRoutesById {
   '/services/$slug': typeof ServicesSlugRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
@@ -563,7 +563,6 @@ export interface FileRouteTypes {
     | '/policies'
     | '/products'
     | '/reviews'
-    | '/services'
     | '/set-password'
     | '/sitemap.xml'
     | '/timeline'
@@ -589,6 +588,7 @@ export interface FileRouteTypes {
     | '/services/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/services/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/submit-consultation'
@@ -621,7 +621,6 @@ export interface FileRouteTypes {
     | '/policies'
     | '/products'
     | '/reviews'
-    | '/services'
     | '/set-password'
     | '/sitemap.xml'
     | '/timeline'
@@ -644,6 +643,7 @@ export interface FileRouteTypes {
     | '/services/$slug'
     | '/dashboard'
     | '/journal'
+    | '/services'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/submit-consultation'
@@ -678,7 +678,6 @@ export interface FileRouteTypes {
     | '/policies'
     | '/products'
     | '/reviews'
-    | '/services'
     | '/set-password'
     | '/sitemap.xml'
     | '/timeline'
@@ -704,6 +703,7 @@ export interface FileRouteTypes {
     | '/services/$slug'
     | '/dashboard/'
     | '/journal/'
+    | '/services/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/submit-consultation'
@@ -739,7 +739,6 @@ export interface RootRouteChildren {
   PoliciesRoute: typeof PoliciesRoute
   ProductsRoute: typeof ProductsRoute
   ReviewsRoute: typeof ReviewsRoute
-  ServicesRoute: typeof ServicesRouteWithChildren
   SetPasswordRoute: typeof SetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TimelineRoute: typeof TimelineRoute
@@ -749,6 +748,8 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
+  ServicesSlugRoute: typeof ServicesSlugRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicSubmitConsultationRoute: typeof ApiPublicSubmitConsultationRoute
@@ -879,13 +880,6 @@ declare module '@tanstack/react-router' {
       path: '/reviews'
       fullPath: '/reviews'
       preLoaderRoute: typeof ReviewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/set-password': {
@@ -1056,12 +1050,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/': {
+      id: '/services/'
+      path: '/services'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services/$slug': {
       id: '/services/$slug'
-      path: '/$slug'
+      path: '/services/$slug'
       fullPath: '/services/$slug'
       preLoaderRoute: typeof ServicesSlugRouteImport
-      parentRoute: typeof ServicesRoute
+      parentRoute: typeof rootRouteImport
     }
     '/.lovable/oauth/consent': {
       id: '/.lovable/oauth/consent'
@@ -1262,18 +1263,6 @@ const JournalRouteChildren: JournalRouteChildren = {
 const JournalRouteWithChildren =
   JournalRoute._addFileChildren(JournalRouteChildren)
 
-interface ServicesRouteChildren {
-  ServicesSlugRoute: typeof ServicesSlugRoute
-}
-
-const ServicesRouteChildren: ServicesRouteChildren = {
-  ServicesSlugRoute: ServicesSlugRoute,
-}
-
-const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
-  ServicesRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -1292,7 +1281,6 @@ const rootRouteChildren: RootRouteChildren = {
   PoliciesRoute: PoliciesRoute,
   ProductsRoute: ProductsRoute,
   ReviewsRoute: ReviewsRoute,
-  ServicesRoute: ServicesRouteWithChildren,
   SetPasswordRoute: SetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TimelineRoute: TimelineRoute,
@@ -1303,6 +1291,8 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   LocationsSlugRoute: LocationsSlugRoute,
+  ServicesSlugRoute: ServicesSlugRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicSubmitConsultationRoute: ApiPublicSubmitConsultationRoute,
