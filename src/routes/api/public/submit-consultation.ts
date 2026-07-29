@@ -32,6 +32,21 @@ export const Route = createFileRoute("/api/public/submit-consultation")({
           console.error("submit-consultation failed", error);
           return new Response(JSON.stringify({ error: "Submission failed" }), { status: 500, headers: { "content-type": "application/json" } });
         }
+        // Send the consultation confirmation email (never block the submission on it)
+        const email = s(body.email);
+        if (email && email.includes("@")) {
+          try {
+            const { sendAppEmail } = await import("@/lib/email/send.server");
+            await sendAppEmail({
+              templateName: "consultation-booked",
+              recipientEmail: email,
+              idempotencyKey: `consultation-${data ?? email}-${new Date().toISOString().slice(0, 10)}`,
+              templateData: { firstName: full_name.trim().split(/\s+/)[0] },
+            });
+          } catch (e) {
+            console.error("consultation email failed", e);
+          }
+        }
         return new Response(JSON.stringify({ ok: true, id: data }), { headers: { "content-type": "application/json" } });
       },
     },
