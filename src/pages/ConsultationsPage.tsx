@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ClipboardList, Plus, Search, Check, Pencil, Trash2, Phone, Mail, CalendarPlus } from "lucide-react";
+import { ClipboardList, Plus, Search, Check, Pencil, Trash2, Phone, Mail, CalendarPlus, Crown, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,6 +16,11 @@ import { CONSULT_STATUSES } from "@/lib/dashboard-tables";
 
 type Range = "today" | "week" | "month" | "all";
 type Status = "all" | (typeof CONSULT_STATUSES)[number];
+type Category = "all" | "vip_treatment" | "general";
+
+export function categoryLabel(c?: string | null) {
+  return c === "vip_treatment" ? "VIP Treatment" : "General";
+}
 
 function rangeBounds(r: Range, specificDate?: string) {
   if (specificDate) {
@@ -40,18 +45,19 @@ function rangeBounds(r: Range, specificDate?: string) {
   return { gte: null as string | null, lt: null as string | null };
 }
 
-function useConsultations(range: Range, status: Status, q: string, specificDate: string) {
+function useConsultations(range: Range, status: Status, q: string, specificDate: string, category: Category) {
   return useQuery({
-    queryKey: ["consultations-page", range, status, q, specificDate],
+    queryKey: ["consultations-page", range, status, q, specificDate, category],
     queryFn: async () => {
       const { gte, lt } = rangeBounds(range, specificDate || undefined);
       let query = supabase
         .from("consultations")
-        .select("id, client_name, service_name, status, submitted_at, customer_id, service_id, customers(id, full_name, email, phone), services(id, name, base_price)")
+        .select("id, client_name, service_name, status, submitted_at, customer_id, service_id, source, category, consultation_type, programme_interest, form_data, customers(id, full_name, email, phone), services(id, name, base_price)")
         .order("submitted_at", { ascending: false });
       if (gte) query = query.gte("submitted_at", gte);
       if (lt) query = query.lt("submitted_at", lt);
       if (status !== "all") query = query.eq("status", status);
+      if (category !== "all") query = query.eq("category", category);
       const { data, error } = await query;
       if (error) throw error;
       const rows = data ?? [];
@@ -100,14 +106,17 @@ export function ConsultationsPage() {
   const [editing, setEditing] = useState<any | null>(null);
   const [bookFrom, setBookFrom] = useState<any | null>(null);
   const [specificDate, setSpecificDate] = useState<string>("");
+  const [category, setCategory] = useState<Category>("all");
+  const [viewing, setViewing] = useState<any | null>(null);
 
-  const { data: rawRows = [], isLoading } = useConsultations(range, status, q, specificDate);
+  const { data: rawRows = [], isLoading } = useConsultations(range, status, q, specificDate, category);
   const [colFilters, setColFilters] = useState<ColumnFilters>({});
   const filterDefs: FilterDef[] = [
     { key: "client", label: "Client", type: "text", get: (r: any) => r.client_name ?? "" },
     { key: "email", label: "Email", type: "text", get: (r: any) => r.customers?.email ?? "" },
     { key: "phone", label: "Phone", type: "text", get: (r: any) => r.customers?.phone ?? "" },
     { key: "service", label: "Service", get: (r: any) => r.services?.name ?? r.service_name ?? "" },
+    { key: "category", label: "Category", get: (r: any) => categoryLabel(r.category) },
     { key: "status", label: "Status", get: (r: any) => r.status ?? "" },
     { key: "date", label: "Submitted", type: "text", get: (r: any) => new Date(r.submitted_at).toLocaleDateString() },
   ];
@@ -202,6 +211,14 @@ export function ConsultationsPage() {
             {CONSULT_STATUSES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={category} onValueChange={(v) => setCategory(v as Category)}>
+          <SelectTrigger className="w-full md:w-[160px] h-9 text-xs" aria-label="Filter by category"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All categories</SelectItem>
+            <SelectItem value="vip_treatment">VIP Treatment</SelectItem>
+            <SelectItem value="general">General</SelectItem>
+          </SelectContent>
+        </Select>
         <ColumnFilterButton defs={filterDefs} rows={rawRows as any[]} filters={colFilters} onChange={setColFilters} />
         <SortResetChip sort={sort} onReset={() => setSort(null)} />
       </div>
@@ -215,16 +232,17 @@ export function ConsultationsPage() {
                 <SortableTh sortKey="client" label="Client" type="text" currentSort={sort} onToggle={toggleSort} />
                 <SortableTh sortKey="contact" label="Contact" type="text" currentSort={sort} onToggle={toggleSort} />
                 <SortableTh sortKey="service" label="Service interest" type="text" currentSort={sort} onToggle={toggleSort} />
+                <th className="text-left font-medium px-3 py-2">Category</th>
                 <SortableTh sortKey="status" label="Status" type="status" currentSort={sort} onToggle={toggleSort} />
                 <th className="text-right font-medium px-3 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {isLoading && (
-                <tr><td colSpan={6} className="px-3 py-6 text-center text-xs text-gray-400">Loading…</td></tr>
+                <tr><td colSpan={7} className="px-3 py-6 text-center text-xs text-gray-400">Loading…</td></tr>
               )}
               {!isLoading && sortedRows.length === 0 && (
-                <tr><td colSpan={6} className="px-3 py-10 text-center text-xs text-gray-400">
+                <tr><td colSpan={7} className="px-3 py-10 text-center text-xs text-gray-400">
                   <ClipboardList className="mx-auto mb-2" size={20} />
                   No consultations in this view.
                 </td></tr>
@@ -253,12 +271,32 @@ export function ConsultationsPage() {
                         {!email && !phone && <span className="text-gray-400">No contact on file</span>}
                       </div>
                     </td>
-                    <td className="px-3 py-2 text-gray-700">{c.services?.name ?? c.service_name ?? "—"}</td>
+                    <td className="px-3 py-2 text-gray-700">
+                      <div>{c.services?.name ?? c.service_name ?? "—"}</div>
+                      {c.category === "vip_treatment" && (
+                        <div className="text-[11px] text-gray-500 leading-snug">
+                          {[c.form_data?.goals?.primary_goal, (c.form_data?.goals?.target_areas ?? []).join(", "), c.form_data?.readiness?.start_period,
+                            [c.form_data?.readiness?.open_three_months === "yes" ? "3-mo" : "", c.form_data?.readiness?.open_six_months === "yes" ? "6-mo" : ""].filter(Boolean).join(" / "),
+                          ].filter(Boolean).join(" · ")}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-3 py-2">
+                      {c.category === "vip_treatment" ? (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
+                          <Crown size={11} /> VIP Treatment
+                        </span>
+                      ) : (
+                        <span className="text-[11px] text-gray-500">General</span>
+                      )}
+                    </td>
                     <td className="px-3 py-2">
                       <span className={`border rounded-full px-2 py-0.5 text-[11px] font-medium ${statusClasses(c.status)}`}>{c.status}</span>
                     </td>
                     <td className="px-3 py-2">
                       <div className="flex gap-1 items-center justify-end">
+                        <button title="View submission" onClick={() => setViewing(c)}
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500"><Eye size={14} /></button>
                         {c.status === "Not Started" && (
                           <button title="Mark contacted" onClick={() => updateStatus.mutate({ id: c.id, status: "Contacted" })}
                             className="p-1.5 rounded hover:bg-amber-50 text-amber-600"><Check size={14} /></button>
@@ -302,7 +340,97 @@ export function ConsultationsPage() {
           qc.invalidateQueries({ queryKey: ["dashboard"] });
         }}
       />
+
+      <SubmissionDetailModal consultation={viewing} onClose={() => setViewing(null)} />
     </div>
+  );
+}
+
+// ---------- Full submission viewer ----------
+
+function humanize(k: string) {
+  return k.replace(/_/g, " ").replace(/^./, (m) => m.toUpperCase());
+}
+
+function DetailRow({ label, value }: { label: string; value: any }) {
+  let text: string;
+  if (value === null || value === undefined || value === "") text = "—";
+  else if (Array.isArray(value)) text = value.length ? value.join(", ") : "—";
+  else if (typeof value === "boolean") text = value ? "Yes" : "No";
+  else if (typeof value === "object") text = JSON.stringify(value);
+  else text = String(value);
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,220px)_1fr] gap-1 sm:gap-3 py-1.5 border-b border-gray-100 last:border-0">
+      <div className="text-[11px] uppercase tracking-wide text-gray-500">{label}</div>
+      <div className="text-sm text-gray-900 break-words whitespace-pre-wrap">{text}</div>
+    </div>
+  );
+}
+
+function DetailSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mt-4">
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-[#E8246A]">{title}</h3>
+      <div className="mt-1.5">{children}</div>
+    </section>
+  );
+}
+
+function SubmissionDetailModal({ consultation, onClose }: { consultation: any | null; onClose: () => void }) {
+  const c = consultation;
+  const fd = (c?.form_data ?? {}) as any;
+  const isVip = c?.category === "vip_treatment";
+  return (
+    <Modal open={!!c} onClose={onClose} title={isVip ? "VIP consultation submission" : "Consultation submission"}>
+      {!c ? null : (
+        <div className="max-h-[70vh] overflow-auto pr-1">
+          <DetailSection title="Submission">
+            <DetailRow label="Client" value={c.client_name} />
+            <DetailRow label="Category" value={categoryLabel(c.category)} />
+            <DetailRow label="Consultation type" value={c.consultation_type ?? c.service_name} />
+            <DetailRow label="Source" value={c.source} />
+            <DetailRow label="Programme interest" value={c.programme_interest} />
+            <DetailRow label="Status" value={c.status} />
+            <DetailRow label="Submitted" value={new Date(c.submitted_at).toLocaleString()} />
+            <DetailRow label="Email" value={c.customers?.email ?? fd.contact_email} />
+            <DetailRow label="Phone" value={c.customers?.phone ?? fd.contact_phone} />
+            {fd.is_test ? <DetailRow label="Test record" value="Yes — marked test data" /> : null}
+          </DetailSection>
+
+          {fd.contact && (
+            <DetailSection title="Contact preferences">
+              {Object.entries(fd.contact).map(([k, v]) => <DetailRow key={k} label={humanize(k)} value={v} />)}
+            </DetailSection>
+          )}
+          {fd.goals && (
+            <DetailSection title="Goals and areas of concern">
+              {Object.entries(fd.goals).map(([k, v]) => <DetailRow key={k} label={humanize(k)} value={v} />)}
+            </DetailSection>
+          )}
+          {fd.readiness && (
+            <DetailSection title="Programme readiness and availability">
+              {Object.entries(fd.readiness).map(([k, v]) => <DetailRow key={k} label={humanize(k)} value={v} />)}
+            </DetailSection>
+          )}
+          {fd.health && (
+            <DetailSection title="Health screening">
+              {Object.entries(fd.health as Record<string, any>).map(([k, v]) => (
+                <DetailRow key={k} label={humanize(k)} value={v?.answer === "yes" ? `Yes — ${v.details || "no detail given"}` : v?.answer === "no" ? "No" : "—"} />
+              ))}
+              <DetailRow label="Anything else" value={fd.health_other} />
+            </DetailSection>
+          )}
+          {fd.consent && (
+            <DetailSection title="Consent">
+              {Object.entries(fd.consent).map(([k, v]) => <DetailRow key={k} label={humanize(k)} value={v} />)}
+            </DetailSection>
+          )}
+          {!isVip && !fd.contact && (
+            <p className="mt-4 text-xs text-gray-500">No structured questionnaire was captured for this submission.</p>
+          )}
+        </div>
+      )}
+    </Modal>
   );
 }
 

@@ -299,32 +299,47 @@ export type Database = {
       }
       consultations: {
         Row: {
+          category: string
           client_name: string
+          consultation_type: string | null
           created_at: string
           customer_id: string | null
+          form_data: Json
           id: string
+          programme_interest: string | null
           service_id: string | null
           service_name: string | null
+          source: string
           status: string
           submitted_at: string
         }
         Insert: {
+          category?: string
           client_name: string
+          consultation_type?: string | null
           created_at?: string
           customer_id?: string | null
+          form_data?: Json
           id?: string
+          programme_interest?: string | null
           service_id?: string | null
           service_name?: string | null
+          source?: string
           status?: string
           submitted_at?: string
         }
         Update: {
+          category?: string
           client_name?: string
+          consultation_type?: string | null
           created_at?: string
           customer_id?: string | null
+          form_data?: Json
           id?: string
+          programme_interest?: string | null
           service_id?: string | null
           service_name?: string | null
+          source?: string
           status?: string
           submitted_at?: string
         }
