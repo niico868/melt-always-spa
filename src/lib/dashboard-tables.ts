@@ -314,6 +314,9 @@ export function useUpdateConsultationStatus() {
 export const CONSULT_STATUSES = [
   "Not Started", "Contacted", "Booked", "Completed",
   "Follow-Up Required", "Not Suitable", "Lost",
+  // VIP Transformation Program flow
+  "Review Required", "Consultation Scheduled", "Consultation Completed",
+  "VIP Plan Proposed", "Enrolled", "Not Enrolled", "Follow Up Later",
 ] as const;
 
 export const APPT_STATUSES = [
