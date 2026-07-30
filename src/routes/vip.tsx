@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Crown, Check, Phone, ClipboardList, CalendarClock, LineChart, RefreshCw } from "lucide-react";
 import { Section } from "@/components/Section";
 import { SITE, waLink } from "@/lib/site";
-import vipImage from "@/assets/treatments/Muscle_Toning.png.asset.json";
 
 const TITLE = "VIP Transformation Program | Meltaways Spa";
 const DESC =
@@ -88,7 +87,7 @@ function VipPage() {
   return (
     <main>
       <Section className="!pt-14 !pb-10">
-        <div className="rounded-[2rem] overflow-hidden border border-border/60 bg-cream/60 card-shadow lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.9fr)]">
+        <div className="rounded-[2rem] overflow-hidden border border-border/60 bg-cream/60 card-shadow">
           <div className="p-8 lg:p-12 flex flex-col justify-center">
             <p className="text-[11px] sm:text-xs uppercase tracking-[0.3em] text-primary font-semibold">
               Meltaways VIP Transformation Program
@@ -117,15 +116,6 @@ function VipPage() {
                 <Phone className="w-4 h-4" aria-hidden /> Call or WhatsApp 378-5630
               </a>
             </div>
-          </div>
-          <div className="relative min-h-[280px] lg:min-h-full bg-cream order-first lg:order-none">
-            <img
-              src={vipImage.url}
-              alt="Meltaways therapist performing a body sculpting treatment"
-              className="w-full h-full object-cover"
-              loading="eager"
-            />
-            <div className="absolute inset-y-0 left-0 hidden lg:block w-28 bg-gradient-to-r from-cream via-cream/70 to-transparent" aria-hidden />
           </div>
         </div>
       </Section>
