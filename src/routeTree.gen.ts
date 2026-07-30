@@ -30,6 +30,7 @@ import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as TreatmentFinderRouteImport } from './routes/treatment-finder'
+import { Route as VipRouteImport } from './routes/vip'
 import { Route as VisitingRouteImport } from './routes/visiting'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -174,6 +175,11 @@ const TimelineRoute = TimelineRouteImport.update({
 const TreatmentFinderRoute = TreatmentFinderRouteImport.update({
   id: '/treatment-finder',
   path: '/treatment-finder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VipRoute = VipRouteImport.update({
+  id: '/vip',
+  path: '/vip',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VisitingRoute = VisitingRouteImport.update({
@@ -409,6 +415,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
+  '/vip': typeof VipRoute
   '/visiting': typeof VisitingRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -470,6 +477,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
+  '/vip': typeof VipRoute
   '/visiting': typeof VisitingRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -531,6 +539,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/timeline': typeof TimelineRoute
   '/treatment-finder': typeof TreatmentFinderRoute
+  '/vip': typeof VipRoute
   '/visiting': typeof VisitingRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -596,6 +605,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/timeline'
     | '/treatment-finder'
+    | '/vip'
     | '/visiting'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -657,6 +667,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/timeline'
     | '/treatment-finder'
+    | '/vip'
     | '/visiting'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -717,6 +728,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/timeline'
     | '/treatment-finder'
+    | '/vip'
     | '/visiting'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -781,6 +793,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TimelineRoute: typeof TimelineRoute
   TreatmentFinderRoute: typeof TreatmentFinderRoute
+  VipRoute: typeof VipRoute
   VisitingRoute: typeof VisitingRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -948,6 +961,13 @@ declare module '@tanstack/react-router' {
       path: '/treatment-finder'
       fullPath: '/treatment-finder'
       preLoaderRoute: typeof TreatmentFinderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vip': {
+      id: '/vip'
+      path: '/vip'
+      fullPath: '/vip'
+      preLoaderRoute: typeof VipRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/visiting': {
@@ -1348,6 +1368,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TimelineRoute: TimelineRoute,
   TreatmentFinderRoute: TreatmentFinderRoute,
+  VipRoute: VipRoute,
   VisitingRoute: VisitingRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
