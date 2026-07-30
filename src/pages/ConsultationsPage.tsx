@@ -211,6 +211,14 @@ export function ConsultationsPage() {
             {CONSULT_STATUSES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={category} onValueChange={(v) => setCategory(v as Category)}>
+          <SelectTrigger className="w-full md:w-[160px] h-9 text-xs" aria-label="Filter by category"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All categories</SelectItem>
+            <SelectItem value="vip_treatment">VIP Treatment</SelectItem>
+            <SelectItem value="general">General</SelectItem>
+          </SelectContent>
+        </Select>
         <ColumnFilterButton defs={filterDefs} rows={rawRows as any[]} filters={colFilters} onChange={setColFilters} />
         <SortResetChip sort={sort} onReset={() => setSort(null)} />
       </div>
@@ -224,16 +232,17 @@ export function ConsultationsPage() {
                 <SortableTh sortKey="client" label="Client" type="text" currentSort={sort} onToggle={toggleSort} />
                 <SortableTh sortKey="contact" label="Contact" type="text" currentSort={sort} onToggle={toggleSort} />
                 <SortableTh sortKey="service" label="Service interest" type="text" currentSort={sort} onToggle={toggleSort} />
+                <th className="text-left font-medium px-3 py-2">Category</th>
                 <SortableTh sortKey="status" label="Status" type="status" currentSort={sort} onToggle={toggleSort} />
                 <th className="text-right font-medium px-3 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {isLoading && (
-                <tr><td colSpan={6} className="px-3 py-6 text-center text-xs text-gray-400">Loading…</td></tr>
+                <tr><td colSpan={7} className="px-3 py-6 text-center text-xs text-gray-400">Loading…</td></tr>
               )}
               {!isLoading && sortedRows.length === 0 && (
-                <tr><td colSpan={6} className="px-3 py-10 text-center text-xs text-gray-400">
+                <tr><td colSpan={7} className="px-3 py-10 text-center text-xs text-gray-400">
                   <ClipboardList className="mx-auto mb-2" size={20} />
                   No consultations in this view.
                 </td></tr>
@@ -264,10 +273,21 @@ export function ConsultationsPage() {
                     </td>
                     <td className="px-3 py-2 text-gray-700">{c.services?.name ?? c.service_name ?? "—"}</td>
                     <td className="px-3 py-2">
+                      {c.category === "vip_treatment" ? (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
+                          <Crown size={11} /> VIP Treatment
+                        </span>
+                      ) : (
+                        <span className="text-[11px] text-gray-500">General</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-2">
                       <span className={`border rounded-full px-2 py-0.5 text-[11px] font-medium ${statusClasses(c.status)}`}>{c.status}</span>
                     </td>
                     <td className="px-3 py-2">
                       <div className="flex gap-1 items-center justify-end">
+                        <button title="View submission" onClick={() => setViewing(c)}
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500"><Eye size={14} /></button>
                         {c.status === "Not Started" && (
                           <button title="Mark contacted" onClick={() => updateStatus.mutate({ id: c.id, status: "Contacted" })}
                             className="p-1.5 rounded hover:bg-amber-50 text-amber-600"><Check size={14} /></button>
@@ -311,7 +331,97 @@ export function ConsultationsPage() {
           qc.invalidateQueries({ queryKey: ["dashboard"] });
         }}
       />
+
+      <SubmissionDetailModal consultation={viewing} onClose={() => setViewing(null)} />
     </div>
+  );
+}
+
+// ---------- Full submission viewer ----------
+
+function humanize(k: string) {
+  return k.replace(/_/g, " ").replace(/^./, (m) => m.toUpperCase());
+}
+
+function DetailRow({ label, value }: { label: string; value: any }) {
+  let text: string;
+  if (value === null || value === undefined || value === "") text = "—";
+  else if (Array.isArray(value)) text = value.length ? value.join(", ") : "—";
+  else if (typeof value === "boolean") text = value ? "Yes" : "No";
+  else if (typeof value === "object") text = JSON.stringify(value);
+  else text = String(value);
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,220px)_1fr] gap-1 sm:gap-3 py-1.5 border-b border-gray-100 last:border-0">
+      <div className="text-[11px] uppercase tracking-wide text-gray-500">{label}</div>
+      <div className="text-sm text-gray-900 break-words whitespace-pre-wrap">{text}</div>
+    </div>
+  );
+}
+
+function DetailSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mt-4">
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-[#E8246A]">{title}</h3>
+      <div className="mt-1.5">{children}</div>
+    </section>
+  );
+}
+
+function SubmissionDetailModal({ consultation, onClose }: { consultation: any | null; onClose: () => void }) {
+  const c = consultation;
+  const fd = (c?.form_data ?? {}) as any;
+  const isVip = c?.category === "vip_treatment";
+  return (
+    <Modal open={!!c} onClose={onClose} title={isVip ? "VIP consultation submission" : "Consultation submission"}>
+      {!c ? null : (
+        <div className="max-h-[70vh] overflow-auto pr-1">
+          <DetailSection title="Submission">
+            <DetailRow label="Client" value={c.client_name} />
+            <DetailRow label="Category" value={categoryLabel(c.category)} />
+            <DetailRow label="Consultation type" value={c.consultation_type ?? c.service_name} />
+            <DetailRow label="Source" value={c.source} />
+            <DetailRow label="Programme interest" value={c.programme_interest} />
+            <DetailRow label="Status" value={c.status} />
+            <DetailRow label="Submitted" value={new Date(c.submitted_at).toLocaleString()} />
+            <DetailRow label="Email" value={c.customers?.email ?? fd.contact_email} />
+            <DetailRow label="Phone" value={c.customers?.phone ?? fd.contact_phone} />
+            {fd.is_test ? <DetailRow label="Test record" value="Yes — marked test data" /> : null}
+          </DetailSection>
+
+          {fd.contact && (
+            <DetailSection title="Contact preferences">
+              {Object.entries(fd.contact).map(([k, v]) => <DetailRow key={k} label={humanize(k)} value={v} />)}
+            </DetailSection>
+          )}
+          {fd.goals && (
+            <DetailSection title="Goals and areas of concern">
+              {Object.entries(fd.goals).map(([k, v]) => <DetailRow key={k} label={humanize(k)} value={v} />)}
+            </DetailSection>
+          )}
+          {fd.readiness && (
+            <DetailSection title="Programme readiness and availability">
+              {Object.entries(fd.readiness).map(([k, v]) => <DetailRow key={k} label={humanize(k)} value={v} />)}
+            </DetailSection>
+          )}
+          {fd.health && (
+            <DetailSection title="Health screening">
+              {Object.entries(fd.health as Record<string, any>).map(([k, v]) => (
+                <DetailRow key={k} label={humanize(k)} value={v?.answer === "yes" ? `Yes — ${v.details || "no detail given"}` : v?.answer === "no" ? "No" : "—"} />
+              ))}
+              <DetailRow label="Anything else" value={fd.health_other} />
+            </DetailSection>
+          )}
+          {fd.consent && (
+            <DetailSection title="Consent">
+              {Object.entries(fd.consent).map(([k, v]) => <DetailRow key={k} label={humanize(k)} value={v} />)}
+            </DetailSection>
+          )}
+          {!isVip && !fd.contact && (
+            <p className="mt-4 text-xs text-gray-500">No structured questionnaire was captured for this submission.</p>
+          )}
+        </div>
+      )}
+    </Modal>
   );
 }
 
