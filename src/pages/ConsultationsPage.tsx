@@ -106,14 +106,17 @@ export function ConsultationsPage() {
   const [editing, setEditing] = useState<any | null>(null);
   const [bookFrom, setBookFrom] = useState<any | null>(null);
   const [specificDate, setSpecificDate] = useState<string>("");
+  const [category, setCategory] = useState<Category>("all");
+  const [viewing, setViewing] = useState<any | null>(null);
 
-  const { data: rawRows = [], isLoading } = useConsultations(range, status, q, specificDate);
+  const { data: rawRows = [], isLoading } = useConsultations(range, status, q, specificDate, category);
   const [colFilters, setColFilters] = useState<ColumnFilters>({});
   const filterDefs: FilterDef[] = [
     { key: "client", label: "Client", type: "text", get: (r: any) => r.client_name ?? "" },
     { key: "email", label: "Email", type: "text", get: (r: any) => r.customers?.email ?? "" },
     { key: "phone", label: "Phone", type: "text", get: (r: any) => r.customers?.phone ?? "" },
     { key: "service", label: "Service", get: (r: any) => r.services?.name ?? r.service_name ?? "" },
+    { key: "category", label: "Category", get: (r: any) => categoryLabel(r.category) },
     { key: "status", label: "Status", get: (r: any) => r.status ?? "" },
     { key: "date", label: "Submitted", type: "text", get: (r: any) => new Date(r.submitted_at).toLocaleDateString() },
   ];
