@@ -56,6 +56,7 @@ import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ApiPublicSubmitConsultationRouteImport } from './routes/api/public/submit-consultation'
+import { Route as ApiPublicSubmitVipConsultationRouteImport } from './routes/api/public/submit-vip-consultation'
 import { Route as DashboardAppointmentsIndexRouteImport } from './routes/dashboard.appointments.index'
 import { Route as DashboardAppointmentsIdRouteImport } from './routes/dashboard.appointments.$id'
 import { Route as DashboardCustomersIndexRouteImport } from './routes/dashboard.customers.index'
@@ -309,6 +310,12 @@ const ApiPublicSubmitConsultationRoute =
     path: '/api/public/submit-consultation',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicSubmitVipConsultationRoute =
+  ApiPublicSubmitVipConsultationRouteImport.update({
+    id: '/api/public/submit-vip-consultation',
+    path: '/api/public/submit-vip-consultation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardAppointmentsIndexRoute =
   DashboardAppointmentsIndexRouteImport.update({
     id: '/',
@@ -428,6 +435,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
+  '/api/public/submit-vip-consultation': typeof ApiPublicSubmitVipConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
   '/dashboard/sales/$id': typeof DashboardSalesIdRoute
@@ -485,6 +493,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
+  '/api/public/submit-vip-consultation': typeof ApiPublicSubmitVipConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
   '/dashboard/sales/$id': typeof DashboardSalesIdRoute
@@ -548,6 +557,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/submit-consultation': typeof ApiPublicSubmitConsultationRoute
+  '/api/public/submit-vip-consultation': typeof ApiPublicSubmitVipConsultationRoute
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
   '/dashboard/sales/$id': typeof DashboardSalesIdRoute
@@ -612,6 +622,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/submit-consultation'
+    | '/api/public/submit-vip-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
     | '/dashboard/sales/$id'
@@ -669,6 +680,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/submit-consultation'
+    | '/api/public/submit-vip-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
     | '/dashboard/sales/$id'
@@ -731,6 +743,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/submit-consultation'
+    | '/api/public/submit-vip-consultation'
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
     | '/dashboard/sales/$id'
@@ -778,6 +791,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicSubmitConsultationRoute: typeof ApiPublicSubmitConsultationRoute
+  ApiPublicSubmitVipConsultationRoute: typeof ApiPublicSubmitVipConsultationRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksTreatmentFollowupRoute: typeof ApiPublicHooksTreatmentFollowupRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -1118,6 +1132,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicSubmitConsultationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/submit-vip-consultation': {
+      id: '/api/public/submit-vip-consultation'
+      path: '/api/public/submit-vip-consultation'
+      fullPath: '/api/public/submit-vip-consultation'
+      preLoaderRoute: typeof ApiPublicSubmitVipConsultationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/appointments/': {
       id: '/dashboard/appointments/'
       path: '/'
@@ -1338,6 +1359,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicSubmitConsultationRoute: ApiPublicSubmitConsultationRoute,
+  ApiPublicSubmitVipConsultationRoute: ApiPublicSubmitVipConsultationRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksTreatmentFollowupRoute: ApiPublicHooksTreatmentFollowupRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
