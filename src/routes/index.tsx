@@ -11,6 +11,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
 import { HeroMedia } from "@/components/HeroCarousel";
 import { CertProviderStrip } from "@/components/CertProviderStrip";
+import { VipProgram } from "@/components/VipProgram";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BA_IMAGES } from "@/lib/ba";
 import heroBanner from "@/assets/hero-banner-treatment.png.asset.json";
@@ -43,8 +44,9 @@ function Index() {
   return (
     <div className="overflow-hidden">
       <Hero />
-      <Reveal><VisitingTrinidad /></Reveal>
       <Reveal><RealResults /></Reveal>
+      <Reveal><VipProgram /></Reveal>
+      <Reveal><VisitingTrinidad /></Reveal>
       <Reveal><Method /></Reveal>
       <Reveal><FeaturedTreatments /></Reveal>
       <CertProviderStrip />
