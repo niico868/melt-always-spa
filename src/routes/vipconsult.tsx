@@ -108,7 +108,13 @@ function VipConsultPage() {
   const setHealth = (key: string, patch: Partial<{ answer: YesNo; details: string }>) =>
     setF((p) => ({
       ...p,
-      health: { ...p.health, [key]: { answer: "", details: "", ...p.health[key], ...patch } },
+      health: {
+        ...p.health,
+        [key]: {
+          answer: patch.answer ?? p.health[key]?.answer ?? "",
+          details: patch.details ?? p.health[key]?.details ?? "",
+        },
+      },
     }));
 
   function next() {
