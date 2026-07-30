@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ClipboardList, Plus, Search, Check, Pencil, Trash2, Phone, Mail, CalendarPlus } from "lucide-react";
+import { ClipboardList, Plus, Search, Check, Pencil, Trash2, Phone, Mail, CalendarPlus, Crown, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,6 +16,11 @@ import { CONSULT_STATUSES } from "@/lib/dashboard-tables";
 
 type Range = "today" | "week" | "month" | "all";
 type Status = "all" | (typeof CONSULT_STATUSES)[number];
+type Category = "all" | "vip_treatment" | "general";
+
+export function categoryLabel(c?: string | null) {
+  return c === "vip_treatment" ? "VIP Treatment" : "General";
+}
 
 function rangeBounds(r: Range, specificDate?: string) {
   if (specificDate) {
@@ -40,18 +45,19 @@ function rangeBounds(r: Range, specificDate?: string) {
   return { gte: null as string | null, lt: null as string | null };
 }
 
-function useConsultations(range: Range, status: Status, q: string, specificDate: string) {
+function useConsultations(range: Range, status: Status, q: string, specificDate: string, category: Category) {
   return useQuery({
-    queryKey: ["consultations-page", range, status, q, specificDate],
+    queryKey: ["consultations-page", range, status, q, specificDate, category],
     queryFn: async () => {
       const { gte, lt } = rangeBounds(range, specificDate || undefined);
       let query = supabase
         .from("consultations")
-        .select("id, client_name, service_name, status, submitted_at, customer_id, service_id, customers(id, full_name, email, phone), services(id, name, base_price)")
+        .select("id, client_name, service_name, status, submitted_at, customer_id, service_id, source, category, consultation_type, programme_interest, form_data, customers(id, full_name, email, phone), services(id, name, base_price)")
         .order("submitted_at", { ascending: false });
       if (gte) query = query.gte("submitted_at", gte);
       if (lt) query = query.lt("submitted_at", lt);
       if (status !== "all") query = query.eq("status", status);
+      if (category !== "all") query = query.eq("category", category);
       const { data, error } = await query;
       if (error) throw error;
       const rows = data ?? [];
