@@ -271,7 +271,16 @@ export function ConsultationsPage() {
                         {!email && !phone && <span className="text-gray-400">No contact on file</span>}
                       </div>
                     </td>
-                    <td className="px-3 py-2 text-gray-700">{c.services?.name ?? c.service_name ?? "—"}</td>
+                    <td className="px-3 py-2 text-gray-700">
+                      <div>{c.services?.name ?? c.service_name ?? "—"}</div>
+                      {c.category === "vip_treatment" && (
+                        <div className="text-[11px] text-gray-500 leading-snug">
+                          {[c.form_data?.goals?.primary_goal, (c.form_data?.goals?.target_areas ?? []).join(", "), c.form_data?.readiness?.start_period,
+                            [c.form_data?.readiness?.open_three_months === "yes" ? "3-mo" : "", c.form_data?.readiness?.open_six_months === "yes" ? "6-mo" : ""].filter(Boolean).join(" / "),
+                          ].filter(Boolean).join(" · ")}
+                        </div>
+                      )}
+                    </td>
                     <td className="px-3 py-2">
                       {c.category === "vip_treatment" ? (
                         <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
