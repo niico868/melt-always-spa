@@ -57,6 +57,18 @@ export const conciergeWaLink = () => waLink(CONCIERGE_MESSAGE);
 
 export const CONCIERGE_WA = waLink(CONCIERGE_MESSAGE);
 
+/**
+ * Click handler for any WhatsApp anchor: resolves the correct link in the browser
+ * at click time (desktop -> WhatsApp Web login, mobile -> app).
+ */
+export function waClick(message?: string) {
+  return (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    window.open(waLink(message), "_blank", "noopener,noreferrer");
+  };
+}
+
+
 
 export const NAV_LEFT = [
   { to: "/visiting", label: "Visiting", flag: true },
