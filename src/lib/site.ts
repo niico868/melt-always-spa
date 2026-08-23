@@ -26,17 +26,37 @@ export const SITE = {
   logoMAS: logoAsset.url,
 };
 
-export function waLink(message?: string) {
-  return message
-    ? `https://wa.me/18683785630?text=${encodeURIComponent(message)}`
-    : SITE.whatsapp;
+/** True for phones/tablets, where the wa.me deep link opens the native app. */
+function isMobileDevice() {
+  if (typeof navigator === "undefined") return true; // SSR: keep the universal wa.me link
+  return /Android|iPhone|iPad|iPod|Mobile|Silk|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent,
+  );
 }
+
+/**
+ * WhatsApp link that works everywhere:
+ * - phones/tablets -> wa.me (opens the app)
+ * - desktop -> web.whatsapp.com (opens WhatsApp Web / login screen, never the api error page)
+ */
+export function waLink(message?: string) {
+  const text = message ? encodeURIComponent(message) : encodeURIComponent(DEFAULT_WA_MESSAGE);
+  return isMobileDevice()
+    ? `https://wa.me/${SITE.phoneDigits}?text=${text}`
+    : `https://web.whatsapp.com/send?phone=${SITE.phoneDigits}&text=${text}&type=phone_number&app_absent=0`;
+}
+
+const DEFAULT_WA_MESSAGE = "Hi Melt Aways, I would like to book a consultation.";
 
 // Concierge prefilled message for visiting / foreign clients.
 export const CONCIERGE_MESSAGE =
   "Hi Melt Aways, I’m interested in planning treatment before visiting Trinidad. My travel dates are ___ and I’d like help choosing the right service.";
 
+/** Must be called at render/click time so device detection runs in the browser. */
+export const conciergeWaLink = () => waLink(CONCIERGE_MESSAGE);
+
 export const CONCIERGE_WA = waLink(CONCIERGE_MESSAGE);
+
 
 export const NAV_LEFT = [
   { to: "/visiting", label: "Visiting", flag: true },
