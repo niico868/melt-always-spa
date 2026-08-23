@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MessageCircle, Clock, Calendar, Sparkles, Heart } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { CONCIERGE_WA } from "@/lib/site";
+import { CONCIERGE_WA, CONCIERGE_MESSAGE, waClick } from "@/lib/site";
 
 export const Route = createFileRoute("/timeline")({
   head: () => ({ meta: [
@@ -52,7 +52,7 @@ function Timeline() {
           <Link to="/visiting" className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">
             Plan My Visit
           </Link>
-          <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer"
+          <a href={CONCIERGE_WA} onClick={waClick(CONCIERGE_MESSAGE)} target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 transition">
             <MessageCircle className="w-4 h-4" /> Speak With Our Treatment Concierge
           </a>
@@ -79,7 +79,7 @@ function Timeline() {
         <p className="mt-3 text-taupe">Results vary. Suitability is confirmed during consultation.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link to="/visiting" className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">Plan My Visit</Link>
-          <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 transition">
+          <a href={CONCIERGE_WA} onClick={waClick(CONCIERGE_MESSAGE)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 transition">
             <MessageCircle className="w-4 h-4" /> Speak With Our Treatment Concierge
           </a>
         </div>

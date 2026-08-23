@@ -6,7 +6,7 @@ import {
   ClipboardList, UserCog, Wand2, LineChart, Sprout, Star, Quote,
 } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { REVIEWS, CONCIERGE_WA } from "@/lib/site";
+import { REVIEWS, CONCIERGE_WA, CONCIERGE_MESSAGE, waClick } from "@/lib/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
 import { HeroMedia } from "@/components/HeroCarousel";
@@ -477,7 +477,7 @@ function VisitingTrinidad() {
             <Link to="/visiting" className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium hover:opacity-90 lift-on-hover soft-shadow">
               <Plane className="w-4 h-4" /> Plan My Visit
             </Link>
-            <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-6 py-3 font-medium hover:opacity-90 lift-on-hover">
+            <a href={CONCIERGE_WA} onClick={waClick(CONCIERGE_MESSAGE)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-fresh text-fresh-foreground px-6 py-3 font-medium hover:opacity-90 lift-on-hover">
               <MessageCircle className="w-4 h-4" /> Concierge
             </a>
           </div>
