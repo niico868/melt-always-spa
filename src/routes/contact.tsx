@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { MapPin, Clock, Phone, Mail, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { SITE, waLink } from "@/lib/site";
+import { SITE, waLink, waClick } from "@/lib/site";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({ meta: [
@@ -69,7 +69,7 @@ function Contact() {
               <a href={SITE.tiktok} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full bg-background text-xs font-bold w-9 h-9 flex items-center justify-center" aria-label="TikTok">TT</a>
             </div>
             <div className="flex gap-3 mt-6">
-              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#25D366] text-white px-5 py-3 text-sm font-medium inline-flex items-center gap-2"><MessageCircle className="w-4 h-4" />WhatsApp</a>
+              <a href={SITE.whatsapp} onClick={waClick()} target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#25D366] text-white px-5 py-3 text-sm font-medium inline-flex items-center gap-2"><MessageCircle className="w-4 h-4" />WhatsApp</a>
               <Link to="/booking" className="rounded-full bg-primary text-primary-foreground px-5 py-3 text-sm font-medium">Book Consultation</Link>
             </div>
           </div>

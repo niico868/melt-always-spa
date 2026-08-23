@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Plane, MessageCircle, Check } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { CONCIERGE_WA, waLink } from "@/lib/site";
+import { CONCIERGE_WA, CONCIERGE_MESSAGE, waLink, waClick } from "@/lib/site";
 
 export const Route = createFileRoute("/visiting")({
   head: () => ({ meta: [
@@ -78,7 +78,7 @@ function Visiting() {
           you plan the right treatment schedule around your trip, event dates, and availability.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer"
+          <a href={CONCIERGE_WA} onClick={waClick(CONCIERGE_MESSAGE)} target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">
             <MessageCircle className="w-4 h-4" /> Speak With Our Treatment Concierge
           </a>

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { MessageCircle } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
-import { CONCIERGE_WA } from "@/lib/site";
+import { CONCIERGE_WA, CONCIERGE_MESSAGE, waClick } from "@/lib/site";
 
 type Page = {
   slug: string;
@@ -162,7 +162,7 @@ function LocationPage() {
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link to="/booking" className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">Book Consultation</Link>
             <Link to="/visiting" className="rounded-full border border-ink/20 px-6 py-3 font-medium hover:bg-blush transition">Visiting Trinidad? Plan My Visit</Link>
-            <a href={CONCIERGE_WA} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 transition">
+            <a href={CONCIERGE_WA} onClick={waClick(CONCIERGE_MESSAGE)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-6 py-3 font-medium hover:opacity-90 transition">
               <MessageCircle className="w-4 h-4" /> Speak With Our Treatment Concierge
             </a>
           </div>
