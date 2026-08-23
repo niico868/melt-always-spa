@@ -8,7 +8,7 @@ import { useCustomers, useUpsertCustomer, useDeleteCustomer, type Customer } fro
 import { useCanWrite } from "@/lib/use-my-roles";
 
 export const Route = createFileRoute("/dashboard/customers/")({
-  validateSearch: (s: Record<string, unknown>) => ({ new: s.new === "1" || s.new === 1 ? "1" : undefined }),
+  validateSearch: (s: Record<string, unknown>): { new?: "1" } => (s.new === "1" || s.new === 1 ? { new: "1" } : {}),
   component: CustomersPage,
 });
 

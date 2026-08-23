@@ -9,7 +9,7 @@ import { StatusBadge } from "./dashboard.sales";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard/sales/")({
-  validateSearch: (s: Record<string, unknown>) => ({ new: s.new === "1" || s.new === 1 ? "1" : undefined }),
+  validateSearch: (s: Record<string, unknown>): { new?: "1" } => (s.new === "1" || s.new === 1 ? { new: "1" } : {}),
   component: SalesPage,
 });
 
