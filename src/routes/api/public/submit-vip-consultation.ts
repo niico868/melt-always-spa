@@ -173,7 +173,24 @@ export const Route = createFileRoute("/api/public/submit-vip-consultation")({
           } catch (e) {
             console.error("vip internal alert failed", e);
           }
+          try {
+            const { sendWhatsAppBookingAlert } = await import("@/lib/notify/whatsapp.server");
+            await sendWhatsAppBookingAlert({
+              bookingType: "VIP Transformation Program request",
+              clientName: full_name,
+              clientPhone: phone,
+              clientEmail: email,
+              service: "VIP Transformation Program",
+              preferredDate: form_data.contact.preferred_date,
+              preferredTime: form_data.contact.preferred_time,
+              location: form_data.contact.location,
+              notes,
+            });
+          } catch (e) {
+            console.error("vip whatsapp alert failed", e);
+          }
         }
+
 
         return json({ ok: true, id: inserted.id });
       },
