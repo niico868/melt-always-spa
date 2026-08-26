@@ -34,4 +34,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'treatment-reminder': treatmentReminder,
   'treatment-complete': treatmentComplete,
   'treatment-followup': treatmentFollowup,
+  'internal-new-booking': { ...internalNewBooking, to: 'meltawaystt@gmail.com' },
 }
