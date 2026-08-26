@@ -151,6 +151,28 @@ export const Route = createFileRoute("/api/public/submit-vip-consultation")({
           } catch (e) {
             console.error("vip consultation email failed", e);
           }
+          try {
+            const { sendAppEmail } = await import("@/lib/email/send.server");
+            await sendAppEmail({
+              templateName: "internal-new-booking",
+              recipientEmail: "meltawaystt@gmail.com",
+              idempotencyKey: `internal-vip-${inserted.id}`,
+              templateData: {
+                clientName: full_name,
+                clientPhone: phone,
+                clientEmail: email,
+                bookingType: "VIP Transformation Program request",
+                service: "VIP Transformation Program",
+                preferredDate: form_data.contact.preferred_date,
+                preferredTime: form_data.contact.preferred_time,
+                location: form_data.contact.location,
+                notes,
+                submittedAt: form_data.submitted_at,
+              },
+            });
+          } catch (e) {
+            console.error("vip internal alert failed", e);
+          }
         }
 
         return json({ ok: true, id: inserted.id });
