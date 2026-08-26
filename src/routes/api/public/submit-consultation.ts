@@ -47,6 +47,30 @@ export const Route = createFileRoute("/api/public/submit-consultation")({
             console.error("consultation email failed", e);
           }
         }
+        // Internal alert to the business inbox
+        try {
+          const { sendAppEmail } = await import("@/lib/email/send.server");
+          await sendAppEmail({
+            templateName: "internal-new-booking",
+            recipientEmail: "meltawaystt@gmail.com",
+            idempotencyKey: `internal-booking-${data ?? Date.now()}`,
+            templateData: {
+              clientName: full_name.trim(),
+              clientPhone: s(body.phone),
+              clientEmail: email,
+              bookingType: "Consultation request",
+              service: s(body.suggested_package) || s(body.concern),
+              preferredDate: s(body.preferred_date),
+              preferredTime: s(body.preferred_time),
+              location: s(body.location),
+              notes: s(body.notes),
+              submittedAt: new Date().toISOString(),
+            },
+          });
+        } catch (e) {
+          console.error("internal booking alert failed", e);
+        }
+
         return new Response(JSON.stringify({ ok: true, id: data }), { headers: { "content-type": "application/json" } });
       },
     },
