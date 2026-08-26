@@ -7,6 +7,7 @@ import { template as treatmentPackageWelcome } from './treatment-package-welcome
 import { template as treatmentReminder } from './treatment-reminder'
 import { template as treatmentComplete } from './treatment-complete'
 import { template as treatmentFollowup } from './treatment-followup'
+import { template as internalNewBooking } from './internal-new-booking'
 
 export interface TemplateEntry {
   component: ComponentType<any>
