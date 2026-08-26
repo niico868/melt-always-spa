@@ -71,6 +71,25 @@ export const Route = createFileRoute("/api/public/submit-consultation")({
           console.error("internal booking alert failed", e);
         }
 
+        // WhatsApp alert to the business number
+        try {
+          const { sendWhatsAppBookingAlert } = await import("@/lib/notify/whatsapp.server");
+          await sendWhatsAppBookingAlert({
+            bookingType: "Consultation request",
+            clientName: full_name.trim(),
+            clientPhone: s(body.phone),
+            clientEmail: email,
+            service: s(body.suggested_package) || s(body.concern),
+            preferredDate: s(body.preferred_date),
+            preferredTime: s(body.preferred_time),
+            location: s(body.location),
+            notes: s(body.notes),
+          });
+        } catch (e) {
+          console.error("whatsapp booking alert failed", e);
+        }
+
+
         return new Response(JSON.stringify({ ok: true, id: data }), { headers: { "content-type": "application/json" } });
       },
     },
