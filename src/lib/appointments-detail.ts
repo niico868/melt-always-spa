@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { invalidateAppointments, invalidateInvoices } from "@/lib/query-keys";
 import { supabase } from "@/integrations/supabase/client";
 
 export type ApptDetail = Awaited<ReturnType<typeof fetchAppointmentDetail>>;
@@ -58,10 +59,8 @@ export function useAllEmployees() {
 }
 
 function inv(qc: ReturnType<typeof useQueryClient>, id: string) {
-  qc.invalidateQueries({ queryKey: ["appt-detail", id] });
-  qc.invalidateQueries({ queryKey: ["appointments"] });
-  qc.invalidateQueries({ queryKey: ["appointments-day"] });
-  qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
+  invalidateAppointments(qc, { id });
+  invalidateInvoices(qc);
 }
 
 export function useUpdateAppointment(id: string) {

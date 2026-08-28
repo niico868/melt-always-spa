@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CalendarDays, Plus, Search, Check, X, Pencil, Trash2, Clock, List, Calendar as CalIcon, MessageCircle, ExternalLink } from "lucide-react";
+import { invalidateAppointments } from "@/lib/query-keys";
 import { supabase } from "@/integrations/supabase/client";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { buildWhatsAppUrl } from "@/lib/appointments-detail";
@@ -214,9 +215,7 @@ export function AppointmentsPage() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
-      qc.invalidateQueries({ queryKey: ["appointments-day"] });
-      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      invalidateAppointments(qc);
       toast.success("Appointment updated");
     },
     onError: (e: any) => toast.error(e.message ?? "Failed to update"),
@@ -228,9 +227,7 @@ export function AppointmentsPage() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
-      qc.invalidateQueries({ queryKey: ["appointments-day"] });
-      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      invalidateAppointments(qc);
       toast.success("Appointment deleted");
     },
     onError: (e: any) => toast.error(e.message ?? "Failed to delete"),
@@ -425,9 +422,7 @@ export function AppointmentsPage() {
         onOpenChange={setOpen}
         editing={editing}
         onSaved={() => {
-          qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
-          qc.invalidateQueries({ queryKey: ["appointments-day"] });
-          qc.invalidateQueries({ queryKey: ["dashboard"] });
+          invalidateAppointments(qc);
         }}
       />
     </div>

@@ -1,6 +1,7 @@
 import { Check, Pencil } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { invalidateAppointments } from "@/lib/query-keys";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useUpcomingAppointments } from "@/lib/dashboard-queries";
@@ -21,9 +22,7 @@ export function UpcomingAppointments() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["dashboard"] });
-      qc.invalidateQueries({ queryKey: ["appointments-list-v2"] });
-      qc.invalidateQueries({ queryKey: ["appointments-day"] });
+      invalidateAppointments(qc);
       toast.success("Appointment confirmed");
     },
     onError: (e: any) => toast.error(e.message ?? "Failed"),

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ClipboardList, Plus, Search, Check, Pencil, Trash2, Phone, Mail, CalendarPlus, Crown, Eye } from "lucide-react";
+import { invalidateAppointments, invalidateConsultations, invalidateCustomers } from "@/lib/query-keys";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import {
@@ -145,8 +146,7 @@ export function ConsultationsPage() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["consultations-page"] });
-      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      invalidateConsultations(qc);
       toast.success("Consultation updated");
     },
     onError: (e: any) => toast.error(e.message ?? "Failed to update"),
@@ -158,8 +158,7 @@ export function ConsultationsPage() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["consultations-page"] });
-      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      invalidateConsultations(qc);
       toast.success("Consultation deleted");
     },
     onError: (e: any) => toast.error(e.message ?? "Failed to delete"),
@@ -326,8 +325,7 @@ export function ConsultationsPage() {
         onOpenChange={setOpen}
         editing={editing}
         onSaved={() => {
-          qc.invalidateQueries({ queryKey: ["consultations-page"] });
-          qc.invalidateQueries({ queryKey: ["dashboard"] });
+          invalidateConsultations(qc);
         }}
       />
 
@@ -335,9 +333,8 @@ export function ConsultationsPage() {
         consultation={bookFrom}
         onOpenChange={(v) => { if (!v) setBookFrom(null); }}
         onBooked={() => {
-          qc.invalidateQueries({ queryKey: ["consultations-page"] });
-          qc.invalidateQueries({ queryKey: ["appointments"] });
-          qc.invalidateQueries({ queryKey: ["dashboard"] });
+          invalidateConsultations(qc);
+          invalidateAppointments(qc);
         }}
       />
 
@@ -595,8 +592,8 @@ function BookFromConsultationDialog({
     if (consultation?.id) {
       await supabase.from("consultations").update({ customer_id: newId }).eq("id", consultation.id);
     }
-    qc.invalidateQueries({ queryKey: ["cons-lookups"] });
-    qc.invalidateQueries({ queryKey: ["consultations-page"] });
+    invalidateConsultations(qc);
+    invalidateCustomers(qc);
     return newId;
   }
 
