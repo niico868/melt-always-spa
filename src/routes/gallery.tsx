@@ -36,15 +36,10 @@ function Gallery() {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {items.map((it, i) => (
                 <button key={i} onClick={() => setLightbox(it.src)}
-                  className="group text-left bg-background rounded-2xl overflow-hidden border border-border/60 card-shadow hover:-translate-y-0.5 transition">
+                  className="group bg-background rounded-2xl overflow-hidden border border-border/60 card-shadow hover:-translate-y-0.5 transition">
                   <div className="aspect-[3/4] overflow-hidden bg-blush">
                     <img src={it.src} alt={`${title} before and after`} loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
-                  </div>
-                  <div className="p-3 text-[11px] text-taupe space-y-0.5">
-                    <div className="text-ink font-medium text-xs">{it.category}</div>
-                    <div>{it.sessions}</div>
-                    <div>{it.timeframe}</div>
                   </div>
                 </button>
               ))}
