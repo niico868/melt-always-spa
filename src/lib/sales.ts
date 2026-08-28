@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { invalidateInvoices } from "@/lib/query-keys";
 import { supabase } from "@/integrations/supabase/client";
 
 export type InvoiceRow = {
@@ -82,9 +83,7 @@ export function useInvoice(id: string | undefined) {
 }
 
 function inv(qc: ReturnType<typeof useQueryClient>, id?: string) {
-  qc.invalidateQueries({ queryKey: ["invoices-list"] });
-  qc.invalidateQueries({ queryKey: ["dashboard"] });
-  if (id) qc.invalidateQueries({ queryKey: ["invoice", id] });
+  invalidateInvoices(qc, { id });
 }
 
 export function useCreateInvoice() {

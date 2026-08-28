@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { invalidateCustomers } from "@/lib/query-keys";
 import { supabase } from "@/integrations/supabase/client";
 import { sendTransactionalEmail } from "@/lib/email/send";
 import { ArrowLeft, Pin, Trash2, Plus, Mail, Phone, MapPin, Cake, MessageCircle, AlertTriangle, Pencil } from "lucide-react";
@@ -198,8 +199,7 @@ function CompleteTreatmentButton({ customer }: { customer: any }) {
         });
       }
       setMsg(customer.email ? "Marked complete — congratulations email sent." : "Marked complete (no email on file).");
-      qc.invalidateQueries({ queryKey: ["customer", customer.id] });
-      qc.invalidateQueries({ queryKey: ["customers"] });
+      invalidateCustomers(qc, customer.id);
     } catch (e: any) {
       setMsg(e?.message || "Could not update status.");
     } finally {

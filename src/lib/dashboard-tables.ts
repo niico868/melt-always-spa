@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { invalidateConsultations, invalidateCustomers, invalidateServices, invalidateStaff } from "@/lib/query-keys";
 import { supabase } from "@/integrations/supabase/client";
 
 // ---------- Customers ----------
@@ -71,7 +72,7 @@ export function useUpsertCustomer() {
       }
       return data as string;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["customers"] }),
+    onSuccess: (_d: any, v: any) => invalidateCustomers(qc, v?.id),
   });
 }
 
@@ -82,7 +83,7 @@ export function useDeleteCustomer() {
       const { error } = await supabase.from("customers").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["customers"] }),
+    onSuccess: (_d: any, v: any) => invalidateCustomers(qc, v?.id),
   });
 }
 
@@ -107,7 +108,7 @@ export function useAddCustomerNote() {
       const { error } = await (supabase.from as any)("customer_notes").insert({ ...row, author_id: userData.user?.id ?? null });
       if (error) throw error;
     },
-    onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ["customer_notes", v.customer_id] }),
+    onSuccess: (_d, v) => invalidateCustomers(qc, v.customer_id),
   });
 }
 export function useDeleteCustomerNote() {
@@ -117,7 +118,7 @@ export function useDeleteCustomerNote() {
       const { error } = await (supabase.from as any)("customer_notes").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ["customer_notes", v.customer_id] }),
+    onSuccess: (_d, v) => invalidateCustomers(qc, v.customer_id),
   });
 }
 
@@ -145,7 +146,7 @@ export function useAddCustomerTreatment() {
       const { error } = await (supabase.from as any)("customer_treatments").insert(row);
       if (error) throw error;
     },
-    onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ["customer_treatments", v.customer_id] }),
+    onSuccess: (_d, v) => invalidateCustomers(qc, v.customer_id),
   });
 }
 
@@ -230,7 +231,7 @@ export function useUpsertService() {
         if (error) throw error;
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["services"] }),
+    onSuccess: () => invalidateServices(qc),
   });
 }
 export function useDeleteService() {
@@ -240,7 +241,7 @@ export function useDeleteService() {
       const { error } = await supabase.from("services").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["services"] }),
+    onSuccess: () => invalidateServices(qc),
   });
 }
 
@@ -269,7 +270,7 @@ export function useUpsertEmployee() {
         if (error) throw error;
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["employees"] }),
+    onSuccess: () => invalidateStaff(qc),
   });
 }
 export function useDeleteEmployee() {
@@ -279,7 +280,7 @@ export function useDeleteEmployee() {
       const { error } = await supabase.from("employees").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["employees"] }),
+    onSuccess: () => invalidateStaff(qc),
   });
 }
 
@@ -305,8 +306,7 @@ export function useUpdateConsultationStatus() {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["consultations"] });
-      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      invalidateConsultations(qc);
     },
   });
 }
