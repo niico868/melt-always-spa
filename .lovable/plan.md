@@ -1,101 +1,42 @@
-## What I found on the walk-through
+# Dashboard stability & cleanup
 
-The bones of the journey exist (public booking → consultation → appointment → auto-invoice → auto-treatment log → customer profile tabs), but four categories of disconnect make it feel unstitched:
+## Short answer on "detaching the dashboard"
 
-**A. No "Client Status" concept anywhere.** Every module tracks its own object status, but there's nothing that answers "where is this person in their relationship with the clinic?" — the trigger surface for all your planned automations.
+The dashboard is already visually detached: `__root.tsx` skips the public header/footer/WhatsApp/audio for any `/dashboard*` path, and `dashboard.tsx` renders its own shell with `ssr: false`. Splitting it into a separate app (own subdomain/project) would not fix the current bugs — those come from inside the dashboard code, not from the website wrapper — and it would cost you a duplicated auth setup, duplicated backend client, and a second deploy to maintain. Recommendation: keep one app, and instead harden the boundary that already exists (details below). If you later want `hub.meltawaysspa.com`, that can be done as a domain alias without splitting the codebase.
 
-**B. Status vocabularies conflict.**
-- Appointments enum is `Pending / Confirmed / Completed / Cancelled` — missing `Checked In`, `In Progress`, `No Show`, `Rescheduled`.
-- Consultations is edited with two different lists on two pages (`New / Contacted / Booked / Closed` on Consultations vs. `New Lead / Follow-Up Needed / Consultation Booked / Package Offered / Paid / Lost Lead / Not Suitable` on Interests), over the same column.
-- No Treatment status object at all — "treatment" today is just a completed appointment row.
-- Payment status lives only on the invoice (`Sent / PartiallyPaid / Paid / Void`) — no `Deposit Paid`, `Unpaid`, `Refunded` labels.
+## What's actually causing the bugginess
 
-**C. Orphaned data feeds.** The `sales` table is read by 3 surfaces (Dashboard "Recent sales", "Top services" chart, Customer profile Sales tab & lifetime-spend stat) but **nothing in the app ever writes to it.** Real money flows through `invoices` + `payments`. Those widgets are structurally always empty.
+Confirmed by reading the code:
 
-**D. Missing cross-links.**
-- Invoice detail → no link back to source appointment.
-- Customer profile → no invoice list, no link into `/dashboard/sales/$id`.
-- Dashboard "Recent sales" row → no click-through.
-- Consultation without matched customer → no way to create one inline before booking.
-- Interests page → no "Create appointment" action (only Consultations page has it).
-- Marketing page is 100% localStorage placeholder, no real segmentation.
-- Reports "No-show / cancel rate" is a hard-coded 13%.
+1. **Stale data after saves — mismatched cache keys.** Several screens save successfully but the list doesn't update, because the refresh call targets a key nobody uses:
+   - Appointment detail and consultations refresh `["appointments"]`, but the list reads `["appointments-list-v2"]`.
+   - Consultations refresh `["consultations-page"]`; the shared table hook reads `["consultations","all"]`.
+   - Customer profile refreshes `["customer", id]`, but the data is stored under `["customers", id]`.
+   - Sales/payments refresh `["dashboard"]` but not `["customer_sales", id]`, so a customer's sales tab stays old.
+2. **Duplicate/competing data layers.** The same entities are fetched three different ways — `dashboard-queries.ts`, `dashboard-tables.ts`, and inline queries inside `AppointmentsPage.tsx` (583 lines) and `ConsultationsPage.tsx` (691 lines). Same data, different keys, different shapes, so one screen updates and another doesn't.
+3. **Orphaned routes.** `/dashboard/therapists` and `/dashboard/settings` were removed from the sidebar but the pages still exist and are reachable by URL; `therapists` overlaps with the Accounts (employees) page.
+4. **Fragile mobile shell.** `dashboard.tsx` gates rendering on a session plus a 4s MFA timeout, and `__root.tsx` double-checks the path via `window.location` — on slow mobile networks this can leave the "Loading dashboard…" state or flash public chrome.
+5. **No error surfacing.** Failed mutations are silent in several places (no toast), so a blocked write looks like "the button does nothing".
 
----
+## Plan
 
-## The plan
+**Step 1 — Unify cache keys (biggest win).**
+Create one `src/lib/query-keys.ts` with canonical keys (appointments, appointment detail, consultations, customers, customer sub-tabs, invoices, services, employees, dashboard). Replace every literal key string in `dashboard-queries.ts`, `dashboard-tables.ts`, `sales.ts`, `appointments-detail.ts`, `AppointmentsPage.tsx`, `ConsultationsPage.tsx`, and the dashboard route files. After each mutation, invalidate the entity prefix plus `dashboard`, so lists, detail views, and the homepage KPIs all refresh together.
 
-### 1. Client Status lifecycle (foundation for automations)
-- Add `client_status` enum on `customers`: `lead, registered, consultation_booked, consultation_completed, active_treatment, treatment_plan_completed, maintenance, inactive, archived`.
-- Add `client_status_changed_at` and `last_activity_at` columns.
-- Auto-transition rules via DB triggers:
-  - Public booking form insert → `lead`.
-  - `auth.users` insert linked to a customer → `registered`.
-  - Appointment insert (kind=consultation) → `consultation_booked`.
-  - Appointment status → `Completed` (consultation) → `consultation_completed`.
-  - First non-consultation appointment `Confirmed`/`Completed` → `active_treatment`.
-  - All planned treatments in a plan `Completed` → `treatment_plan_completed`.
-  - Time-based (nightly cron via `pg_cron`): >90 days idle after plan → `maintenance`; >12 months idle → `inactive`.
-- Manual override + `archived` transition available in Customer profile.
-- Emits a `client_status_changed` row into a new `client_events` table — this is the single event source every future automation subscribes to (no need to wire email today).
+**Step 2 — Remove redundancy.**
+Delete `dashboard.therapists.tsx` and `dashboard.settings.tsx` (Accounts already covers staff). Remove duplicate fetch helpers left over after Step 1 so each entity has exactly one read hook.
 
-### 2. Split & unify object statuses
-- **Appointment**: `Pending, Confirmed, Checked In, In Progress, Completed, Cancelled, No Show, Rescheduled`.
-- **Consultation**: `Not Started, Booked, Completed, Follow-Up Required, Converted to Treatment`. Single source of truth (`CONSULT_STATUSES`) used by both Consultations page and Interests page — drops the two conflicting vocabularies.
-- **New Treatment object**: promote `customer_treatments` (currently auto-log only) to a first-class record with status `Planned, Scheduled, In Progress, Completed, Paused, Discontinued` and an optional `treatment_plan_id` grouping. Auto-log stays but now creates `Completed` rows in a plan when linked.
-- **Payment status** exposed on invoice list: derive `Unpaid / Deposit Paid / Partially Paid / Paid / Refunded` from existing `payments` rows (no schema change beyond adding `Refunded` label when net paid ≤ 0 after refund).
+**Step 3 — Consistent write feedback.**
+Add a shared mutation wrapper that shows a success toast and, on failure, an error toast with the backend message. Apply to every create/update/delete on appointments, consultations, customers, invoices/payments, services, and accounts, and disable buttons while a save is in flight so double-taps can't fire twice.
 
-### 3. Fix the orphaned `sales` widgets
-- Rewrite `useRecentSales`, `useTopServices`, and `useCustomerSales` in `src/lib/dashboard-queries.ts` / `dashboard-tables.ts` to read from `payments` + `invoices` + `invoice_items` (grouping by linked service for Top Services).
-- Delete or archive the unused `sales` table after callers migrate. Keeps one revenue source of truth.
+**Step 4 — Harden the dashboard shell.**
+Simplify the `__root.tsx` dashboard check to the router pathname only (drop the `window.location` duplicate). In `dashboard.tsx`, stop blocking render on the MFA check (run it in the background), and show a clear "Couldn't load — retry" state instead of an indefinite "Loading dashboard…".
 
-### 4. Add the missing cross-links
-- **Invoice detail** (`dashboard.sales.$id.tsx`): "Open appointment" and "Open customer" buttons.
-- **Customer profile** (`dashboard.customers.$id.tsx`): add **Invoices** tab (real `invoices` filtered by `customer_id`, each row links to `/dashboard/sales/$id`); recompute lifetime spend/visits from real invoices+payments.
-- **Dashboard "Recent sales"**: row click → `/dashboard/sales/$id`.
-- **Consultations page**: in `BookFromConsultationDialog`, add an "Add new customer" inline option when the consultation has no `customer_id`.
-- **Interests page**: add the same "Create appointment" button that Consultations has.
-- **Reports page**: replace the hard-coded no-show rate with a live query (`count(status='No Show') / count(*)` last 90d), plus consultation→appointment conversion rate.
+**Step 5 — Verify.**
+Walk the full journey in a headless browser signed in as staff: create a consultation → convert to customer → book an appointment → mark done → create invoice → add payment → confirm the homepage KPIs, customer profile tabs, and sales list all reflect it without a manual refresh. Capture screenshots at desktop and mobile widths.
 
-### 5. Prep for automated messaging (no send yet)
-- The `client_events` table + Client Status transitions above are the triggers your future email/SMS/WhatsApp automations will listen to. Each automation is a subscriber to one event type — no code change to the journey when we add them later.
-- Placeholder trigger map, disabled today:
-  ```text
-  registered              → welcome
-  consultation_booked     → confirmation + reminder T-24h
-  consultation_completed  → recommendation email
-  active_treatment        → prep + reminder per appointment
-  treatment_plan_completed→ congrats + review request
-  maintenance             → maintenance reminder
-  inactive                → re-engagement
-  ```
-- When you're ready, we scaffold Lovable app-email templates against these events — no journey changes needed.
+## Technical notes
 
-### Out of scope for this pass (call out explicitly)
-- Actual email/SMS sending, template design, unsubscribe pages — deferred until you say "wire it up".
-- Full Marketing page rebuild — that's a separate module once real segmentation from Client Status exists.
-
----
-
-## Technical details
-
-**Migration order (single migration file):**
-1. `CREATE TYPE public.client_status AS ENUM (...)`; add columns + backfill from existing appointments (customers with a completed non-consult appointment → `active_treatment`, etc.).
-2. `CREATE TABLE public.client_events (id, customer_id, event_type, from_status, to_status, metadata jsonb, created_at)` with GRANT + RLS (staff read/insert, admin all).
-3. `CREATE TYPE public.appointment_status` (rename existing text column), migrate values (`Scheduled`→`Pending` stays, add new members).
-4. `CREATE TYPE public.consultation_status` — migrate the two vocabularies to the unified set via `CASE` map.
-5. `ALTER TABLE customer_treatments ADD COLUMN status public.treatment_status DEFAULT 'Completed', treatment_plan_id uuid`; new `treatment_plans` table.
-6. Triggers: `tg_customer_client_status_from_event()` fires on `appointments`/`consultations`/`auth.users`; each transition writes to `client_events` + updates `customers.client_status`.
-7. `pg_cron` nightly job → mark `inactive` / `maintenance` based on `last_activity_at`.
-
-**Code touchpoints (post-migration):**
-- `src/lib/dashboard-queries.ts` — rewrite `useRecentSales`, `useTopServices`.
-- `src/lib/dashboard-tables.ts` — replace `useCustomerSales` with invoice-based version; add `useCustomerInvoices`.
-- `src/pages/ConsultationsPage.tsx` — unified status list + inline new-customer.
-- `src/routes/dashboard.interests.tsx` — shared status list + create-appointment action.
-- `src/routes/dashboard.customers.$id.tsx` — new Invoices tab, live spend.
-- `src/routes/dashboard.sales.$id.tsx` — appointment/customer link buttons + row click on Recent Sales.
-- `src/routes/dashboard.reports.tsx` — real conversion/no-show queries.
-- `src/routes/dashboard.appointments.$id.tsx` + `AppointmentsPage.tsx` — expanded status dropdown.
-
-No changes to `src/integrations/supabase/*` (auto-generated).
+- No schema/migration changes; this is client-side data-layer and UI work.
+- No change to the public website's look or behaviour.
+- Files touched: `src/lib/query-keys.ts` (new), `dashboard-queries.ts`, `dashboard-tables.ts`, `sales.ts`, `appointments-detail.ts`, `src/pages/AppointmentsPage.tsx`, `src/pages/ConsultationsPage.tsx`, dashboard route files, `src/routes/__root.tsx`, `src/routes/dashboard.tsx`.
