@@ -26,28 +26,32 @@ export const SignupEmail = ({
   confirmationUrl,
 }: SignupEmailProps) => (
   <Html lang="en" dir="ltr">
-    <Head />
+    <Head>
+      <style>{darkModeCss}</style>
+    </Head>
     <Preview>Confirm your email for {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Heading style={h1}>Confirm your email</Heading>
         <Text style={text}>
-          Welcome to{' '}
+          Thanks for signing up for{' '}
           <Link href={siteUrl} style={link}>
-            <strong>Melt Aways Spa</strong>
+            <strong>{siteName}</strong>
           </Link>
-          . Please verify (
+          !
+        </Text>
+        <Text style={text}>
+          Please confirm your email address (
           <Link href={`mailto:${recipient}`} style={link}>
             {recipient}
           </Link>
-          ) to activate your account and securely access your bookings,
-          treatment information and account details.
+          ) by clicking the button below:
         </Text>
-        <Button style={button} href={confirmationUrl}>
-          Verify email address
+        <Button className="dm-btn" style={button} href={confirmationUrl}>
+          Verify Email
         </Button>
         <Text style={footer}>
-          If you didn't create this account, no action is required.
+          If you didn't create an account, you can safely ignore this email.
         </Text>
       </Container>
     </Body>
@@ -75,8 +79,17 @@ const button = {
   backgroundColor: '#000000',
   color: '#ffffff',
   fontSize: '14px',
+  border: '1px solid #000000',
   borderRadius: '8px',
   padding: '12px 20px',
   textDecoration: 'none',
 }
 const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+// Rendered as a text child, which React may HTML-escape: keep this CSS free of >, &, and quotes.
+const darkModeCss = `
+  @media (prefers-color-scheme: dark) {
+    .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  }
+  [data-ogsc] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  [data-ogsb] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+`
