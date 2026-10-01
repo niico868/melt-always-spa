@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { invalidateCustomers } from "@/lib/query-keys";
 import { supabase } from "@/integrations/supabase/client";
-import { sendTransactionalEmail } from "@/lib/email/send";
+import { sendTreatmentCompleteEmail } from "@/lib/email/app-emails.functions";
 import { ArrowLeft, Pin, Trash2, Plus, Mail, Phone, MapPin, Cake, MessageCircle, AlertTriangle, Pencil } from "lucide-react";
 import { DashboardPage, PrimaryButton } from "@/components/dashboard/DashboardPage";
 import { Modal, Field, inputCls } from "@/components/dashboard/Modal";
@@ -191,12 +191,7 @@ function CompleteTreatmentButton({ customer }: { customer: any }) {
         .eq("id", customer.id);
       if (error) throw error;
       if (customer.email) {
-        await sendTransactionalEmail({
-          templateName: "treatment-complete",
-          recipientEmail: customer.email,
-          idempotencyKey: `treatment-complete-${customer.id}`,
-          templateData: { firstName: String(customer.full_name || "").trim().split(/\s+/)[0] },
-        });
+        await sendTreatmentCompleteEmail({ data: { customerId: customer.id } });
       }
       setMsg(customer.email ? "Marked complete — congratulations email sent." : "Marked complete (no email on file).");
       invalidateCustomers(qc, customer.id);
