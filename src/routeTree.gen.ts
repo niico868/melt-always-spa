@@ -65,6 +65,7 @@ import { Route as DashboardCustomersIndexRouteImport } from './routes/dashboard.
 import { Route as DashboardCustomersIdRouteImport } from './routes/dashboard.customers.$id'
 import { Route as DashboardSalesIndexRouteImport } from './routes/dashboard.sales.index'
 import { Route as DashboardSalesIdRouteImport } from './routes/dashboard.sales.$id'
+import { Route as LovableEmailEventsRouteImport } from './routes/lovable/email/events'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicHooksTreatmentFollowupRouteImport } from './routes/api/public/hooks/treatment-followup'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
@@ -359,6 +360,11 @@ const DashboardSalesIdRoute = DashboardSalesIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => DashboardSalesRoute,
 } as any)
+const LovableEmailEventsRoute = LovableEmailEventsRouteImport.update({
+  id: '/lovable/email/events',
+  path: '/lovable/email/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -453,6 +459,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
   '/dashboard/sales/$id': typeof DashboardSalesIdRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/dashboard/appointments/': typeof DashboardAppointmentsIndexRoute
   '/dashboard/customers/': typeof DashboardCustomersIndexRoute
@@ -513,6 +520,7 @@ export interface FileRoutesByTo {
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
   '/dashboard/sales/$id': typeof DashboardSalesIdRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/dashboard/appointments': typeof DashboardAppointmentsIndexRoute
   '/dashboard/customers': typeof DashboardCustomersIndexRoute
@@ -579,6 +587,7 @@ export interface FileRoutesById {
   '/dashboard/appointments/$id': typeof DashboardAppointmentsIdRoute
   '/dashboard/customers/$id': typeof DashboardCustomersIdRoute
   '/dashboard/sales/$id': typeof DashboardSalesIdRoute
+  '/lovable/email/events': typeof LovableEmailEventsRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/dashboard/appointments/': typeof DashboardAppointmentsIndexRoute
   '/dashboard/customers/': typeof DashboardCustomersIndexRoute
@@ -646,6 +655,7 @@ export interface FileRouteTypes {
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
     | '/dashboard/sales/$id'
+    | '/lovable/email/events'
     | '/lovable/email/suppression'
     | '/dashboard/appointments/'
     | '/dashboard/customers/'
@@ -706,6 +716,7 @@ export interface FileRouteTypes {
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
     | '/dashboard/sales/$id'
+    | '/lovable/email/events'
     | '/lovable/email/suppression'
     | '/dashboard/appointments'
     | '/dashboard/customers'
@@ -771,6 +782,7 @@ export interface FileRouteTypes {
     | '/dashboard/appointments/$id'
     | '/dashboard/customers/$id'
     | '/dashboard/sales/$id'
+    | '/lovable/email/events'
     | '/lovable/email/suppression'
     | '/dashboard/appointments/'
     | '/dashboard/customers/'
@@ -818,6 +830,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicSubmitConsultationRoute: typeof ApiPublicSubmitConsultationRoute
   ApiPublicSubmitVipConsultationRoute: typeof ApiPublicSubmitVipConsultationRoute
+  LovableEmailEventsRoute: typeof LovableEmailEventsRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksTreatmentFollowupRoute: typeof ApiPublicHooksTreatmentFollowupRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -1221,6 +1234,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSalesIdRouteImport
       parentRoute: typeof DashboardSalesRoute
     }
+    '/lovable/email/events': {
+      id: '/lovable/email/events'
+      path: '/lovable/email/events'
+      fullPath: '/lovable/email/events'
+      preLoaderRoute: typeof LovableEmailEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -1402,6 +1422,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicSubmitConsultationRoute: ApiPublicSubmitConsultationRoute,
   ApiPublicSubmitVipConsultationRoute: ApiPublicSubmitVipConsultationRoute,
+  LovableEmailEventsRoute: LovableEmailEventsRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksTreatmentFollowupRoute: ApiPublicHooksTreatmentFollowupRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
