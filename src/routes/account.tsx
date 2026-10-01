@@ -41,13 +41,10 @@ function Account() {
         window.history.replaceState({}, "", "/account");
         // One-time registration confirmation email
         try {
-          const { sendTransactionalEmail } = await import("@/lib/email/send");
-          void sendTransactionalEmail({
-            templateName: "welcome-registered",
-            recipientEmail: data.user.email ?? "",
-            idempotencyKey: `welcome-${data.user.id}`,
-            templateData: { firstName: (name || data.user.email || "").split(/[ @]/)[0] },
-          });
+          const { sendWelcomeEmail } = await import("@/lib/email/app-emails.functions");
+          void sendWelcomeEmail({
+            data: { firstName: (name || data.user.email || "").split(/[ @]/)[0] },
+          }).catch(() => {});
         } catch { /* non-blocking */ }
       }
     })();
