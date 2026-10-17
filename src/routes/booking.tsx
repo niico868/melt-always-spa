@@ -34,6 +34,7 @@ const prettyDate = (date: string) =>
   new Date(`${date}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 function Booking() {
+  const { service: preselect } = Route.useSearch();
   const [services, setServices] = useState<Service[]>([]);
   const [hours, setHours] = useState<Hours>({ days: [2, 3, 4, 5, 6], open: "10:00", close: "16:00" });
   const [loadErr, setLoadErr] = useState(false);
