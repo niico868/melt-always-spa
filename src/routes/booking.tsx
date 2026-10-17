@@ -49,18 +49,24 @@ function Booking() {
   const [done, setDone] = useState<{ service: string; date: string; time: string } | null>(null);
 
   useEffect(() => {
-    fetch(API).then((r) => (r.ok ? r.json() : Promise.reject()))
+    fetch(BOOKING_API_URL).then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => {
-        setServices(d.services ?? []);
+        const list: Service[] = d.services ?? [];
+        setServices(list);
         if (d.hours) setHours((h) => ({ ...h, ...d.hours }));
+        if (preselect) {
+          const target = normalizeServiceName(preselect);
+          const match = list.find((s) => normalizeServiceName(s.name) === target);
+          if (match) setServiceId(match.id);
+        }
       })
       .catch(() => setLoadErr(true));
-  }, []);
+  }, [preselect]);
 
   const loadDay = useCallback(async (d: string) => {
     setLoadingDay(true);
     try {
-      const r = await fetch(`${API}?date=${d}`);
+      const r = await fetch(`${BOOKING_API_URL}?date=${d}`);
       const j = await r.json();
       setBusy(j.busy ?? []);
       setClosed(!!j.closed);
