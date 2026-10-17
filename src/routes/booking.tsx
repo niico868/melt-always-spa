@@ -11,9 +11,8 @@ import {
 import { BOOKING_API_URL, normalizeServiceName } from "@/lib/booking-api";
 
 export const Route = createFileRoute("/booking")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    service: typeof search.service === "string" ? search.service : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { service?: string } =>
+    typeof search.service === "string" ? { service: search.service } : {},
   head: () => ({ meta: [
     { title: "Book an Appointment — Melt Aways" },
     { name: "description", content: "Choose a treatment, pick an open time and book your Melt Aways appointment online." },
