@@ -75,6 +75,24 @@ function TreatmentFinderPage() {
         }),
       });
     } catch { /* non-blocking */ }
+    // Also forward the enquiry to the salon booking API (non-blocking, silent on failure)
+    void postEnquiry({
+      source: "treatment-finder",
+      name: a.fullName,
+      phone: a.phone,
+      email: a.email,
+      message: [
+        `Suggested plan: ${suggested}`,
+        a.goals.length && `Goals: ${a.goals.join(", ")}`,
+        a.targetAreas.length && `Target areas: ${a.targetAreas.join(", ")}`,
+        a.timeline && `Timeline: ${a.timeline}`,
+        a.age && `Age: ${a.age}`,
+        a.concerns && `Concerns: ${a.concerns}`,
+        a.medications && `Medications: ${a.medications}`,
+        a.pregnancy && `Pregnancy: ${a.pregnancy}`,
+        a.preferredDate && `Preferred date: ${a.preferredDate}`,
+      ].filter(Boolean).join(". "),
+    });
   }
 
   const canNext = (() => {

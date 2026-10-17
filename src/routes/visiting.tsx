@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Plane, MessageCircle, Check } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { CONCIERGE_WA, CONCIERGE_MESSAGE, waLink, waClick } from "@/lib/site";
+import { postEnquiry } from "@/lib/booking-api";
 
 export const Route = createFileRoute("/visiting")({
   head: () => ({ meta: [
@@ -66,6 +67,23 @@ function Visiting() {
         }),
       });
     } catch { /* non-blocking */ }
+    // Also forward the enquiry to the salon booking API (non-blocking, silent on failure)
+    void postEnquiry({
+      source: "visit",
+      name: form.name,
+      phone: form.whatsapp,
+      email: form.email,
+      message: [
+        `Country: ${form.country}`,
+        `Travel dates: ${form.arrival} to ${form.departure}`,
+        form.occasion && `Occasion: ${form.occasion}`,
+        form.interest && `Treatment interest: ${form.interest}`,
+        form.concern && `Main concern: ${form.concern}`,
+        form.urgency && `Results timing: ${form.urgency}`,
+        form.priorTreatments && `Prior body treatments: ${form.priorTreatments}${form.priorTreatments === "Yes" && form.priorList.length ? " — " + form.priorList.join(", ") : ""}`,
+        form.medical && `Medical: ${form.medical}`,
+      ].filter(Boolean).join(". "),
+    });
   }
 
   return (
