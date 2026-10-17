@@ -8,9 +8,11 @@ import {
   availableSlots, formatTime, isDateDisabled, toIso, type Busy,
 } from "@/lib/booking-slots";
 
-const API = "https://2239d9ea-225d-4cc2-824c-272308050a88.supabase.co/functions/v1/website-booking";
+import { BOOKING_API_URL, normalizeServiceName } from "@/lib/booking-api";
 
 export const Route = createFileRoute("/booking")({
+  validateSearch: (search: Record<string, unknown>): { service?: string } =>
+    typeof search.service === "string" ? { service: search.service } : {},
   head: () => ({ meta: [
     { title: "Book an Appointment — Melt Aways" },
     { name: "description", content: "Choose a treatment, pick an open time and book your Melt Aways appointment online." },
@@ -31,6 +33,7 @@ const prettyDate = (date: string) =>
   new Date(`${date}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 function Booking() {
+  const { service: preselect } = Route.useSearch();
   const [services, setServices] = useState<Service[]>([]);
   const [hours, setHours] = useState<Hours>({ days: [2, 3, 4, 5, 6], open: "10:00", close: "16:00" });
   const [loadErr, setLoadErr] = useState(false);
@@ -45,18 +48,24 @@ function Booking() {
   const [done, setDone] = useState<{ service: string; date: string; time: string } | null>(null);
 
   useEffect(() => {
-    fetch(API).then((r) => (r.ok ? r.json() : Promise.reject()))
+    fetch(BOOKING_API_URL).then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => {
-        setServices(d.services ?? []);
+        const list: Service[] = d.services ?? [];
+        setServices(list);
         if (d.hours) setHours((h) => ({ ...h, ...d.hours }));
+        if (preselect) {
+          const target = normalizeServiceName(preselect);
+          const match = list.find((s) => normalizeServiceName(s.name) === target);
+          if (match) setServiceId(match.id);
+        }
       })
       .catch(() => setLoadErr(true));
-  }, []);
+  }, [preselect]);
 
   const loadDay = useCallback(async (d: string) => {
     setLoadingDay(true);
     try {
-      const r = await fetch(`${API}?date=${d}`);
+      const r = await fetch(`${BOOKING_API_URL}?date=${d}`);
       const j = await r.json();
       setBusy(j.busy ?? []);
       setClosed(!!j.closed);
@@ -84,22 +93,47 @@ function Booking() {
     const f = new FormData(e.currentTarget);
     setSubmitting(true);
     try {
-      const r = await fetch(API, {
+      const name = String(f.get("name") || "").trim();
+      const phone = String(f.get("phone") || "").trim();
+      const email = String(f.get("email") || "").trim();
+      const notes = String(f.get("notes") || "").trim();
+      const r = await fetch(BOOKING_API_URL, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          name: String(f.get("name") || "").trim(),
-          phone: String(f.get("phone") || "").trim(),
-          email: String(f.get("email") || "").trim(),
-          notes: String(f.get("notes") || "").trim(),
+          name,
+          phone,
+          email,
+          notes,
           company: String(f.get("company") || ""),
           service_id: service.id,
+          service_name: service.name,
           starts_at: toIso(date, time),
         }),
       });
       if (r.status === 201) {
         setDone({ service: service.name, date, time });
         window.scrollTo({ top: 0, behavior: "smooth" });
+        // Also save to Lovable Cloud and send the owner's email + WhatsApp alerts.
+        // Never blocks the confirmation; only runs after a 201.
+        try {
+          await fetch("/api/public/submit-consultation", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              full_name: name,
+              phone,
+              email,
+              concern: service.name,
+              notes,
+              preferred_date: date,
+              preferred_time: formatTime(time),
+              suggested_package: service.name,
+            }),
+          });
+        } catch (e) {
+          console.log("Lovable Cloud booking save failed:", e);
+        }
       } else if (r.status === 409) {
         setError("Sorry, that time was just taken. Please pick another time.");
         setTime("");
@@ -160,7 +194,7 @@ function Booking() {
                       <button type="button" key={s.id} onClick={() => { setServiceId(s.id); setTime(""); }}
                         className={`text-left rounded-2xl border px-4 py-3 transition ${serviceId === s.id ? "bg-blush border-primary" : "bg-cream/40 border-input hover:border-primary/50"}`}>
                         <span className="block text-ink font-medium">{s.name}</span>
-                        <span className="block text-sm text-taupe">TT${Number(s.price).toLocaleString()} · {s.duration_min} min</span>
+                        <span className="block text-sm text-taupe">{Number(s.price) > 0 ? `TT$${Number(s.price).toLocaleString()}` : "Price on consultation"} · {s.duration_min} min</span>
                       </button>
                     ))}
                   </div>

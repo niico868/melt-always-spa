@@ -60,7 +60,7 @@ function Services() {
               <div className="mt-4 flex items-center gap-3 text-sm">
                 <Link to="/services/$slug" params={{ slug: s.slug }} className="text-primary font-medium hover:underline">Learn more</Link>
                 <span className="text-border">·</span>
-                <Link to="/booking" className="text-ink font-medium hover:underline">Book</Link>
+                <Link to="/booking" search={{ service: s.name }} className="text-ink font-medium hover:underline">Book</Link>
               </div>
             </div>
           </article>

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check, Sparkles, MessageCircle } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { saveLead, waLink, PACKAGES } from "@/lib/site";
+import { postEnquiry } from "@/lib/booking-api";
 import {
   FINDER_GOALS, FINDER_AREAS, suggestPackage, qualifiesForConsult, toLead,
   type FinderAnswers,
@@ -74,11 +75,29 @@ function TreatmentFinderPage() {
         }),
       });
     } catch { /* non-blocking */ }
+    // Also forward the enquiry to the salon booking API (non-blocking, silent on failure)
+    void postEnquiry({
+      source: "treatment-finder",
+      name: a.fullName,
+      phone: a.phone,
+      email: a.email,
+      message: [
+        `Suggested plan: ${suggested}`,
+        a.goals.length && `Goals: ${a.goals.join(", ")}`,
+        a.targetAreas.length && `Target areas: ${a.targetAreas.join(", ")}`,
+        a.timeline && `Timeline: ${a.timeline}`,
+        a.age && `Age: ${a.age}`,
+        a.concerns && `Concerns: ${a.concerns}`,
+        a.medications && `Medications: ${a.medications}`,
+        a.pregnancy && `Pregnancy: ${a.pregnancy}`,
+        a.preferredDate && `Preferred date: ${a.preferredDate}`,
+      ].filter(Boolean).join(". "),
+    });
   }
 
   const canNext = (() => {
     switch (step) {
-      case 0: return a.fullName.trim().length > 1 && (a.email.includes("@") || a.phone.length >= 7);
+      case 0: return a.fullName.trim().length > 1 && a.phone.length >= 7;
       case 1: return a.goals.length > 0;
       case 2: return a.targetAreas.length > 0;
       case 3: return a.timeline !== "";

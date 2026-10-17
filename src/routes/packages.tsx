@@ -60,7 +60,7 @@ function Packages() {
             </div>
             <div className="lg:w-1/3 lg:text-right flex flex-col gap-2 lg:items-end">
               <span className="text-xs text-taupe italic">Price shared after consultation</span>
-              <Link to="/booking" className="inline-flex justify-center rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium soft-shadow hover:opacity-90 transition">
+              <Link to="/booking" search={{ service: p.name }} className="inline-flex justify-center rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium soft-shadow hover:opacity-90 transition">
                 Book Consultation
               </Link>
             </div>

@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Crown, Phone, Check, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { Section } from "@/components/Section";
 import { waLink } from "@/lib/site";
+import { postEnquiry } from "@/lib/booking-api";
 import {
   VIP_GOALS, VIP_AREAS, VIP_HEALTH_QUESTIONS, VIP_START_PERIODS,
   emptyVipForm, validateVipStep, type VipFormState, type YesNo,
@@ -152,6 +153,24 @@ function VipConsultPage() {
       if (!res.ok) throw new Error(json?.error || "Submission failed");
       setStatus("done");
       window.scrollTo({ top: 0, behavior: "smooth" });
+      // Also forward the enquiry to the salon booking API (non-blocking, silent on failure)
+      void postEnquiry({
+        source: "consultation",
+        name: f.full_name,
+        phone: f.phone,
+        email: f.email,
+        message: [
+          "VIP consultation request",
+          f.primary_goal && `Primary goal: ${f.primary_goal}`,
+          f.goals.length && `Goals: ${f.goals.join(", ")}`,
+          f.target_areas.length && `Target areas: ${f.target_areas.join(", ")}`,
+          f.start_period && `Start: ${f.start_period}`,
+          f.preferred_date && `Preferred date: ${f.preferred_date}`,
+          f.preferred_time && `Preferred time: ${f.preferred_time}`,
+          f.location && `Location: ${f.location}`,
+        ].filter(Boolean).join(". "),
+        company: honeypot,
+      });
     } catch (err: any) {
       setStatus("error");
       setErrMsg(err?.message || "Something went wrong. Please call or WhatsApp us instead.");

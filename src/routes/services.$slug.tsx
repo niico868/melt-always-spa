@@ -120,7 +120,7 @@ function ServiceDetail() {
           <p className="font-script text-3xl text-gold">Start with consultation</p>
           <h2 className="mt-2 text-2xl text-ink">Let our team recommend the right direction for you.</h2>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link to="/booking" className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">Book Consultation</Link>
+            <Link to="/booking" search={{ service: service.name }} className="rounded-full bg-primary text-primary-foreground px-6 py-3 font-medium soft-shadow hover:opacity-90 transition">Book Consultation</Link>
             <Link to="/services" className="rounded-full border border-ink/20 px-6 py-3 font-medium hover:bg-blush transition">All treatments</Link>
           </div>
           {c.disclaimer ? (
