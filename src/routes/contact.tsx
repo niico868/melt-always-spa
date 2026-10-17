@@ -3,6 +3,7 @@ import { useState } from "react";
 import { MapPin, Clock, Phone, Mail, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { SITE, waLink, waClick } from "@/lib/site";
+import { postEnquiry } from "@/lib/booking-api";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({ meta: [
@@ -26,6 +27,15 @@ function Contact() {
     ].join("\n");
     window.open(waLink(msg), "_blank", "noopener,noreferrer");
     setSent(true);
+    // Also forward the enquiry to the salon booking API (non-blocking, silent on failure)
+    void postEnquiry({
+      source: "contact",
+      name: String(f.get("name") || ""),
+      phone: String(f.get("phone") || ""),
+      email: String(f.get("email") || ""),
+      message: String(f.get("message") || ""),
+      company: String(f.get("company") || ""),
+    });
   }
   return (
     <Section>
@@ -85,8 +95,10 @@ function Contact() {
             <>
               <input required name="name" placeholder="Full name" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
               <input required type="email" name="email" placeholder="Email" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
-              <input name="phone" placeholder="Phone (optional)" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
+              <input required type="tel" name="phone" placeholder="Phone" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
               <textarea required name="message" rows={5} placeholder="How can we help?" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
+              <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true"
+                defaultValue="" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, opacity: 0 }} />
               <button className="w-full rounded-full bg-primary text-primary-foreground px-6 py-4 font-medium soft-shadow inline-flex items-center justify-center gap-2">
                 <MessageCircle className="w-4 h-4" /> Submit and Message Us
               </button>
