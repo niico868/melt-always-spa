@@ -195,7 +195,7 @@ function Booking() {
                       <button type="button" key={s.id} onClick={() => { setServiceId(s.id); setTime(""); }}
                         className={`text-left rounded-2xl border px-4 py-3 transition ${serviceId === s.id ? "bg-blush border-primary" : "bg-cream/40 border-input hover:border-primary/50"}`}>
                         <span className="block text-ink font-medium">{s.name}</span>
-                        <span className="block text-sm text-taupe">TT${Number(s.price).toLocaleString()} · {s.duration_min} min</span>
+                        <span className="block text-sm text-taupe">{Number(s.price) > 0 ? `TT$${Number(s.price).toLocaleString()}` : "Price on consultation"} · {s.duration_min} min</span>
                       </button>
                     ))}
                   </div>
