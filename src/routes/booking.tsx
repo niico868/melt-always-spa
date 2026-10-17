@@ -8,9 +8,12 @@ import {
   availableSlots, formatTime, isDateDisabled, toIso, type Busy,
 } from "@/lib/booking-slots";
 
-const API = "https://2239d9ea-225d-4cc2-824c-272308050a88.supabase.co/functions/v1/website-booking";
+import { BOOKING_API_URL, normalizeServiceName } from "@/lib/booking-api";
 
 export const Route = createFileRoute("/booking")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    service: typeof search.service === "string" ? search.service : undefined,
+  }),
   head: () => ({ meta: [
     { title: "Book an Appointment — Melt Aways" },
     { name: "description", content: "Choose a treatment, pick an open time and book your Melt Aways appointment online." },
