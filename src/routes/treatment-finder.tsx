@@ -97,7 +97,7 @@ function TreatmentFinderPage() {
 
   const canNext = (() => {
     switch (step) {
-      case 0: return a.fullName.trim().length > 1 && (a.email.includes("@") || a.phone.length >= 7);
+      case 0: return a.fullName.trim().length > 1 && a.phone.length >= 7;
       case 1: return a.goals.length > 0;
       case 2: return a.targetAreas.length > 0;
       case 3: return a.timeline !== "";
