@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check, Sparkles, MessageCircle } from "lucide-react";
 import { Section, Eyebrow } from "@/components/Section";
 import { saveLead, waLink, PACKAGES } from "@/lib/site";
+import { postEnquiry } from "@/lib/booking-api";
 import {
   FINDER_GOALS, FINDER_AREAS, suggestPackage, qualifiesForConsult, toLead,
   type FinderAnswers,
