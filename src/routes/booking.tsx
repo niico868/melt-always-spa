@@ -105,7 +105,7 @@ function Booking() {
           phone,
           email,
           notes,
-          company: String(f.get("company") || ""),
+          mk_hp: String(f.get("mk_hp") || ""),
           service_id: service.id,
           service_name: service.name,
           starts_at: toIso(date, time),
@@ -242,7 +242,7 @@ function Booking() {
           <div className="sm:col-span-2"><label className="text-sm font-medium text-ink">Email</label><input name="email" type="email" className={inputCls} /></div>
           <div className="sm:col-span-2"><label className="text-sm font-medium text-ink">Notes</label><textarea name="notes" rows={3} className={inputCls} /></div>
         </div>
-        <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true"
+        <input type="text" name="mk_hp" tabIndex={-1} autoComplete="off" aria-hidden="true"
           defaultValue="" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, opacity: 0 }} />
 
         {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
