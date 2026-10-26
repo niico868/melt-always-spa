@@ -19,7 +19,7 @@ export const Route = createFileRoute("/api/public/submit-vip-consultation")({
         }
 
         // Honeypot — silently accept, store nothing.
-        if (s(body.company_website)) return json({ ok: true, id: null });
+        if (s(body.mk_hp)) return json({ ok: true, id: null });
 
         const full_name = s(body.full_name, 200);
         const phone = s(body.phone, 40);

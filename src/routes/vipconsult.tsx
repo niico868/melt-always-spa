@@ -147,7 +147,7 @@ function VipConsultPage() {
       const res = await fetch("/api/public/submit-vip-consultation", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...f, company_website: honeypot }),
+        body: JSON.stringify({ ...f, mk_hp: honeypot }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.error || "Submission failed");
@@ -169,7 +169,7 @@ function VipConsultPage() {
           f.preferred_time && `Preferred time: ${f.preferred_time}`,
           f.location && `Location: ${f.location}`,
         ].filter(Boolean).join(". "),
-        company: honeypot,
+        mk_hp: honeypot,
       });
     } catch (err: any) {
       setStatus("error");
@@ -249,7 +249,7 @@ function VipConsultPage() {
             <input
               type="text" tabIndex={-1} autoComplete="off" aria-hidden
               value={honeypot} onChange={(e) => setHoneypot(e.target.value)}
-              name="company_website" className="hidden"
+              name="mk_hp" className="hidden"
             />
 
             {step === 1 && (

@@ -34,7 +34,7 @@ function Contact() {
       phone: String(f.get("phone") || ""),
       email: String(f.get("email") || ""),
       message: String(f.get("message") || ""),
-      company: String(f.get("company") || ""),
+      mk_hp: String(f.get("mk_hp") || ""),
     });
   }
   return (
@@ -97,7 +97,7 @@ function Contact() {
               <input required type="email" name="email" placeholder="Email" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
               <input required type="tel" name="phone" placeholder="Phone" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
               <textarea required name="message" rows={5} placeholder="How can we help?" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
-              <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true"
+              <input type="text" name="mk_hp" tabIndex={-1} autoComplete="off" aria-hidden="true"
                 defaultValue="" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, opacity: 0 }} />
               <button className="w-full rounded-full bg-primary text-primary-foreground px-6 py-4 font-medium soft-shadow inline-flex items-center justify-center gap-2">
                 <MessageCircle className="w-4 h-4" /> Submit and Message Us

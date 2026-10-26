@@ -24,13 +24,13 @@ export async function postEnquiry(payload: {
   phone: string;
   email?: string;
   message: string;
-  company?: string;
+  mk_hp?: string;
 }): Promise<void> {
   try {
     await fetch(BOOKING_API_URL, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ type: "enquiry", company: "", ...payload }),
+      body: JSON.stringify({ type: "enquiry", mk_hp: "", ...payload }),
     });
   } catch (err) {
     console.log("Salon booking API enquiry forward failed:", err);
