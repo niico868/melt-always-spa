@@ -4,8 +4,8 @@ import { REVIEWS } from "@/lib/site";
 
 export const Route = createFileRoute("/reviews")({
   head: () => ({ meta: [
-    { title: "Reviews — Melt Aways" },
-    { name: "description", content: "Real stories from Melt Aways clients in Trinidad & Tobago." },
+    { title: "Reviews — Melt Elite Aesthetics" },
+    { name: "description", content: "Real stories from Melt Elite Aesthetics clients in Trinidad & Tobago." },
   ]}),
   component: Reviews,
 });

@@ -31,8 +31,8 @@ const SERVICE_IMAGES: Record<string, string> = {
 
 export const Route = createFileRoute("/services/")({
   head: () => ({ meta: [
-    { title: "Services — Melt Aways" },
-    { name: "description", content: "Body-contouring, fat melting, skin tightening, anti-aging, cavitation, lymphatic drainage and more — consultation-led at Melt Aways." },
+    { title: "Services — Melt Elite Aesthetics" },
+    { name: "description", content: "Body-contouring, fat melting, skin tightening, anti-aging, cavitation, lymphatic drainage and more — consultation-led at Melt Elite Aesthetics." },
   ]}),
   component: Services,
 });

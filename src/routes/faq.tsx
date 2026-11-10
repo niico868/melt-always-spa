@@ -6,8 +6,8 @@ import { FAQS } from "@/lib/site";
 
 export const Route = createFileRoute("/faq")({
   head: () => ({ meta: [
-    { title: "FAQ — Melt Aways" },
-    { name: "description", content: "Common questions about consultations, treatments, results, and booking at Melt Aways." },
+    { title: "FAQ — Melt Elite Aesthetics" },
+    { name: "description", content: "Common questions about consultations, treatments, results, and booking at Melt Elite Aesthetics." },
   ]}),
   component: Faq,
 });

@@ -4,8 +4,8 @@ import { POLICIES } from "@/lib/site";
 
 export const Route = createFileRoute("/policies")({
   head: () => ({ meta: [
-    { title: "Policies — Melt Aways" },
-    { name: "description", content: "Booking, consultation, deposit, cancellation, refund and privacy policies for Melt Aways." },
+    { title: "Policies — Melt Elite Aesthetics" },
+    { name: "description", content: "Booking, consultation, deposit, cancellation, refund and privacy policies for Melt Elite Aesthetics." },
   ]}),
   component: Policies,
 });
