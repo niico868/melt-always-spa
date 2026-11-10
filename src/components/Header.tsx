@@ -62,10 +62,14 @@ export function Header() {
         {/* RIGHT NAV + ACTIONS */}
         <div className="hidden lg:flex items-center justify-end gap-7">
           <nav className="flex items-center gap-7">
-            {NAV_RIGHT.map((n: any) => (
+            {NAV_RIGHT.filter((n) => n.to !== "/booking").map((n: any) => (
               <NavLink key={n.to} to={n.to} label={n.label} flag={n.flag} linkClass={linkClass} />
             ))}
           </nav>
+          {/* Primary action: always visible, always the same words as the hero. */}
+          <Link to="/booking" className="inline-flex items-center rounded-full bg-fresh text-fresh-foreground px-5 py-2.5 text-[13px] font-semibold tracking-[0.04em] btn-lux soft-shadow whitespace-nowrap">
+            Book Consultation
+          </Link>
           {user ? (
             <div className="flex items-center gap-3">
               <Link to={accountLink} className="inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 text-[13px] font-semibold text-foreground/85 hover:border-primary hover:text-primary transition">
@@ -74,8 +78,8 @@ export function Header() {
               <button onClick={() => { signOut(); nav({ to: "/" }); }} className="text-[13px] font-semibold text-taupe hover:text-primary">Sign out</button>
             </div>
           ) : (
-            <Link to="/login" className="inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 text-[13px] font-semibold text-foreground/85 hover:border-primary hover:text-primary transition">
-              <User className="w-4 h-4" /> Account
+            <Link to="/login" aria-label="Client account sign in" title="Client account" className="inline-flex items-center justify-center rounded-full border border-border bg-background/80 w-10 h-10 text-foreground/85 hover:border-primary hover:text-primary transition">
+              <User className="w-4 h-4" />
             </Link>
           )}
         </div>
