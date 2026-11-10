@@ -7,9 +7,9 @@ import { postEnquiry } from "@/lib/booking-api";
 
 export const Route = createFileRoute("/visiting")({
   head: () => ({ meta: [
-    { title: "Visiting Trinidad — Plan Your Treatment | Melt Aways" },
+    { title: "Visiting Trinidad — Plan Your Treatment | Melt Elite Aesthetics" },
     { name: "description", content: "Visiting Trinidad for Carnival, Christmas, Summer Trips, or Weddings? Book your consultation before you arrive and let our team plan the right treatment schedule." },
-    { property: "og:title", content: "Visiting Trinidad — Plan Your Treatment | Melt Aways" },
+    { property: "og:title", content: "Visiting Trinidad — Plan Your Treatment | Melt Elite Aesthetics" },
     { property: "og:description", content: "Plan body sculpting, skin tightening and facial treatments before you land in Trinidad." },
   ]}),
   component: Visiting,
@@ -28,7 +28,7 @@ function Visiting() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const msg = [
-      "Hi Melt Aways, I am planning treatment before visiting Trinidad.",
+      "Hi Melt Elite Aesthetics, I am planning treatment before visiting Trinidad.",
       `Name: ${form.name}`,
       `Email: ${form.email}`,
       `Country: ${form.country}`,

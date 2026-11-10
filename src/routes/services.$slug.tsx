@@ -45,10 +45,10 @@ export const Route = createFileRoute("/services/$slug")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Treatment not found — Melt Aways" }, { name: "robots", content: "noindex" }] };
+      return { meta: [{ title: "Treatment not found — Melt Elite Aesthetics" }, { name: "robots", content: "noindex" }] };
     }
     const { service, content } = loaderData;
-    const title = `${service.name} — Melt Aways`;
+    const title = `${service.name} — Melt Elite Aesthetics`;
     const desc = content.tagline || service.desc;
     return {
       meta: [

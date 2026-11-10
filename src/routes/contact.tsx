@@ -7,8 +7,8 @@ import { postEnquiry } from "@/lib/booking-api";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({ meta: [
-    { title: "Contact — Melt Aways" },
-    { name: "description", content: "Visit Melt Aways at #240 Eastern Main Road, El Dorado. Call, WhatsApp, or send us a message." },
+    { title: "Contact — Melt Elite Aesthetics" },
+    { name: "description", content: "Visit Melt Elite Aesthetics at #240 Eastern Main Road, El Dorado. Call, WhatsApp, or send us a message." },
   ]}),
   component: Contact,
 });
@@ -19,7 +19,7 @@ function Contact() {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const msg = [
-      "Hi Melt Aways, I just sent a message from the contact form.",
+      "Hi Melt Elite Aesthetics, I just sent a message from the contact form.",
       `Name: ${f.get("name") || ""}`,
       `Email: ${f.get("email") || ""}`,
       `Phone: ${f.get("phone") || ""}`,
@@ -53,7 +53,7 @@ function Contact() {
               <div className="mt-4 aspect-[16/10] rounded-2xl overflow-hidden bg-cream w-full">
                 <iframe
                   src={l.embed}
-                  title={`Map of Melt Aways ${l.name}`}
+                  title={`Map of Melt Elite Aesthetics ${l.name}`}
                   width="100%" height="100%"
                   style={{ border: 0, display: "block" }}
                   loading="lazy"

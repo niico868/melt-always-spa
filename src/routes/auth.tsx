@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Sign in — Melt Aways Dashboard" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Sign in — Melt Elite Aesthetics Dashboard" }, { name: "robots", content: "noindex" }] }),
   component: AuthPage,
 });
 
