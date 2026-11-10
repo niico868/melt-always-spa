@@ -8,7 +8,7 @@ import { postEnquiry } from "@/lib/booking-api";
 export const Route = createFileRoute("/contact")({
   head: () => ({ meta: [
     { title: "Contact — Melt Aways" },
-    { name: "description", content: "Visit Melt Aways in Woodbrook or St Augustine. Call, WhatsApp, or send us a message." },
+    { name: "description", content: "Visit Melt Aways at #240 Eastern Main Road, El Dorado. Call, WhatsApp, or send us a message." },
   ]}),
   component: Contact,
 });
@@ -93,10 +93,10 @@ function Contact() {
             <p className="text-ink">Thank you. We've received your message and will be in touch soon.</p>
           ) : (
             <>
-              <input required name="name" placeholder="Full name" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
-              <input required type="email" name="email" placeholder="Email" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
-              <input required type="tel" name="phone" placeholder="Phone" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
-              <textarea required name="message" rows={5} placeholder="How can we help?" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
+              <input required name="name" placeholder="Full name" aria-label="Full name" autoComplete="name" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
+              <input required type="email" name="email" placeholder="Email" aria-label="Email" autoComplete="email" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
+              <input required type="tel" name="phone" placeholder="Phone" aria-label="Phone" autoComplete="tel" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
+              <textarea required name="message" rows={5} placeholder="How can we help?" aria-label="Your message" className="w-full rounded-2xl border border-input bg-cream/40 px-4 py-3 outline-none focus:border-primary" />
               <input type="text" name="mk_hp" tabIndex={-1} autoComplete="off" aria-hidden="true"
                 defaultValue="" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, opacity: 0 }} />
               <button className="w-full rounded-full bg-primary text-primary-foreground px-6 py-4 font-medium soft-shadow inline-flex items-center justify-center gap-2">

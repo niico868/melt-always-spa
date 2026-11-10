@@ -10,8 +10,32 @@ import {
 } from "@tanstack/react-router";
 import { lazy, Suspense, useEffect, type ReactNode } from "react";
 
+import { MotionConfig } from "framer-motion";
+
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SITE, SITE_URL } from "../lib/site";
+
+/** Structured data so Google can show the spa as a local business (map pack, knowledge panel). */
+const LOCAL_BUSINESS_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "DaySpa",
+  name: "Melt Aways Spa",
+  alternateName: ["Meltaways Spa", "Melt Elite Aesthetics"],
+  url: SITE_URL,
+  logo: `${SITE_URL}${SITE.logo}`,
+  telephone: "+1-868-378-5630",
+  email: SITE.email,
+  priceRange: "$$",
+  areaServed: "Trinidad and Tobago",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "#240 Eastern Main Road",
+    addressLocality: "El Dorado",
+    addressCountry: "TT",
+  },
+  sameAs: [SITE.instagram, SITE.facebook, SITE.tiktok],
+};
 
 const Header = lazy(() => import("../components/Header").then((m) => ({ default: m.Header })));
 const Footer = lazy(() => import("../components/Footer").then((m) => ({ default: m.Footer })));
@@ -114,17 +138,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "preload", as: "font", type: "font/ttf", href: "/fonts/GreatVibes.ttf", crossOrigin: "anonymous" },
-      { rel: "preload", as: "font", type: "font/ttf", href: "/fonts/Inter.ttf", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Great+Vibes&family=Inter:wght@400;500;600;700;800&display=swap",
       },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+    ],
+    scripts: [
       {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap",
+        type: "application/ld+json",
+        children: JSON.stringify(LOCAL_BUSINESS_JSONLD),
       },
     ],
   }),
@@ -180,8 +205,15 @@ function RootComponent() {
     );
   }
 
+  // One canonical URL per page (no trailing slash, no query string) so search
+  // engines don't split ranking between duplicates. React 19 hoists this into <head>.
+  const canonical = `${SITE_URL}${pathname === "/" ? "/" : pathname.replace(/\/+$/, "")}`;
+
   return (
     <QueryClientProvider client={queryClient}>
+      <link rel="canonical" href={canonical} />
+      {/* Honour the visitor's "reduce motion" setting for all Framer Motion reveals. */}
+      <MotionConfig reducedMotion="user">
       <Suspense fallback={null}>
         <div data-public-chrome="site-progress"><ScrollProgress /></div>
         <div data-public-chrome="site-header"><Header /></div>
@@ -194,6 +226,7 @@ function RootComponent() {
         <div data-public-chrome="site-whatsapp"><WhatsAppFab /></div>
         <div data-public-chrome="site-audio"><AmbientAudio /></div>
       </Suspense>
+      </MotionConfig>
     </QueryClientProvider>
   );
 }

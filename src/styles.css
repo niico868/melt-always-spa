@@ -6,19 +6,16 @@
 
 /* Melt Aways — luxury blush wellness design system */
 
-@font-face {
-  font-family: "Inter";
-  src: url("/fonts/Inter.ttf") format("truetype-variations");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Great Vibes";
-  src: url("/fonts/GreatVibes.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: block;
+/* Inter, Great Vibes and Cormorant Garamond are served as subsetted WOFF2
+   from Google Fonts (see __root.tsx) with font-display: swap, so headlines
+   are never hidden while fonts load on slow mobile connections. */
+
+/* Slide-in reveal animations start off-screen; never let them create a
+   horizontal scrollbar on phones. `clip` (unlike `hidden`) keeps sticky
+   positioning working. */
+html,
+body {
+  overflow-x: clip;
 }
 
 @theme inline {
